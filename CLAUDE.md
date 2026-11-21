@@ -11,7 +11,9 @@ No hay archivos descargables. Todo el contenido se consume dentro de la platafor
 
 ## Stack
 
-- Next.js (App Router) + TypeScript estricto
+- Next.js 16 (App Router) + TypeScript estricto. **Ojo:** es más nuevo que lo que conoces; antes de usar una API de Next lee la guía correspondiente en `node_modules/next/dist/docs/` (ver `AGENTS.md`). En particular:
+  - `cacheComponents` está activado: todo lo que lea cookies, cabeceras, la sesión o la base de datos va dentro de `<Suspense>` (y las lecturas de BD sin caché llaman antes a `await connection()`).
+  - El middleware se llama `src/proxy.ts`. Solo hace una comprobación optimista de la cookie; la autorización real va en el servidor.
 - PostgreSQL + Drizzle ORM
 - Better Auth (email/contraseña, sesiones) con roles
 - Stripe: pago único por curso **y** suscripción a todo el catálogo
@@ -38,29 +40,34 @@ Un alumno tiene acceso a un curso si se cumple alguna de estas condiciones:
 - Tiene una `enrollment` con `source = 'purchase'` (compra única, acceso de por vida), o
 - Tiene una `subscription` con `status IN ('active', 'trialing')` y el curso está incluido en el catálogo (`courses.included_in_subscription = true`).
 
-Centralizar esta lógica en `lib/access.ts` → `canAccessCourse(userId, courseId)`. Todo (vídeo, quiz, foro) pasa por ahí.
+Esta lógica está en `src/lib/access.ts` → `canAccessCourse(userId, courseId)`, que usa las reglas puras de `src/lib/access-rules.ts` (con tests). Todo (vídeo, quiz, foro) pasa por ahí. Además, el admin ve todo y los profesores ven sus cursos; los borradores solo los ven ellos.
+
+La sesión se lee con `getCurrentUser()`, `requireUser()` y `requireRole()` de `src/lib/session.ts`.
 
 El acceso lo conceden **solo los webhooks de Stripe** (`checkout.session.completed`, `customer.subscription.*`, `invoice.payment_failed`), nunca la redirección de éxito del checkout. Verificar siempre la firma del webhook y que el procesado sea idempotente (guardar `stripe_event_id`).
 
 ## Modelo de datos
 
+La fuente de verdad es `src/db/schema.ts` (Drizzle). Resumen:
+
 ```
-users (id, email, name, role)
-courses (id, slug, title, description, cover_image, price_cents, currency,
-         included_in_subscription, status: draft|published|archived, created_at)
+user, session, account, verification   -- tablas de Better Auth; user.role: admin|teacher|student
+courses (id, slug, title, description, cover_image, price_cents (null = pendiente), currency,
+         included_in_subscription, status: draft|published|archived, import_notes)
 course_teachers (course_id, user_id)
-modules (id, course_id, title, position)
-lessons (id, module_id, title, description, position,
-         video_provider: r2|stream, video_key, duration_seconds)
+modules (id, course_id, external_id, title, position)
+lessons (id, course_id, module_id, external_id, title, description, position,
+         video_provider: r2|stream, video_key, duration_seconds, source_file)
 quizzes (id, lesson_id)               -- uno por lección, opcional
-questions (id, quiz_id, prompt, explanation, position)
+questions (id, quiz_id, external_id, prompt, explanation, position)
 options (id, question_id, text, is_correct, position)
 
-enrollments (user_id, course_id, source: purchase|subscription, stripe_payment_id, created_at)
+enrollments (user_id, course_id, source: purchase|manual, stripe_payment_id)   -- el acceso por suscripción no crea enrollment
 subscriptions (user_id, stripe_subscription_id, status, current_period_end)
+stripe_events (id, type)   -- idempotencia de webhooks
 
-lesson_progress (user_id, lesson_id, watched_seconds, max_position_seconds,
-                 percent_watched, completed_at, last_seen_at)
+lesson_progress (user_id, lesson_id, watched_ranges, watched_seconds, time_spent_seconds,
+                 max_position_seconds, completed_at, last_seen_at)
 watch_events (id, user_id, lesson_id, session_id, from_second, to_second, created_at)
 quiz_attempts (id, user_id, quiz_id, score, total, answers jsonb, created_at)
 
@@ -70,7 +77,11 @@ forum_threads (id, course_id, user_id, title, pinned, locked, created_at)
 forum_posts (id, thread_id, user_id, body, is_teacher, created_at)
 ```
 
-`position` es un entero; al reordenar desde el panel se reescriben las posiciones del grupo en una transacción.
+`position` es un entero que empieza en 0; al reordenar desde el panel se reescriben las posiciones del grupo en una transacción.
+
+`external_id` es el `id` estable del manifiesto: así se reimporta sin perder progreso.
+
+Cambios de esquema: editar `src/db/schema.ts`, luego `npm run db:generate` (crea la migración en `drizzle/`) y `npm run db:migrate`.
 
 ## Importar un curso con Claude Code
 
@@ -87,20 +98,26 @@ mi-curso/
     02-...
 ```
 
-Si la carpeta no sigue exactamente esta convención, **inferir** la estructura (orden por prefijo numérico en los nombres, títulos a partir de encabezados del HTML) y listar en el resumen final todo lo que se ha supuesto. Si falta algo imprescindible (precio, vídeo de una lección), dejarlo marcado con `"TODO"` en el manifiesto y avisar; no inventarlo.
+Si la carpeta no sigue exactamente esta convención, **inferir** la estructura (orden por prefijo numérico en los nombres, títulos a partir de encabezados del HTML) y listar en el resumen final todo lo que se ha supuesto. Si falta algo imprescindible no inventarlo: precio → `"priceCents": null`; vídeo → `"key": "TODO"`; y explicarlo en `notes`. El validador lo muestra como aviso.
 
 ### Pasos
 
 1. Leer la carpeta completa.
-2. Generar `content/courses/<slug>/course.json` siguiendo `lib/course-manifest.schema.ts`.
+2. Generar `content/courses/<slug>/course.json` siguiendo `src/lib/course-manifest.schema.ts` (ejemplo: `content/courses/nextjs-desde-cero/course.json`).
 3. Crear un quiz por lección a partir del HTML correspondiente (reglas abajo).
 4. Validar: `npm run course:validate content/courses/<slug>/course.json`.
-5. Importar: `npm run course:import content/courses/<slug>/course.json` → se crea **siempre como `draft`**.
-6. Mostrar un resumen: módulos, lecciones, preguntas por lección, suposiciones y TODOs.
+5. Importar: `npm run course:import -- content/courses/<slug>/course.json` → se crea **siempre como `draft`**.
+6. Mostrar un resumen: módulos, lecciones, preguntas por lección, suposiciones, TODOs y la ruta `/admin/cursos/<id>` para revisarlo.
+
+Opciones de importación (siempre después de `--`):
+- `--allow-published`: actualizar un curso ya publicado (por defecto se rechaza). Pedir confirmación al admin antes de usarlo.
+- `--prune`: borrar lecciones y módulos que ya no están en el manifiesto. **Borra también el progreso de los alumnos en esas lecciones**: pedir confirmación antes.
+
+Los profesores se asignan por email y solo si ya tienen cuenta (si no, el script lo avisa). La importación solo añade profesores, nunca los quita.
 
 Nunca publicar un curso desde Claude Code. La publicación la hace el admin desde el panel.
 
-Reimportar un curso existente (mismo `slug`) actualiza el borrador sin tocar el progreso de los alumnos: las lecciones se emparejan por su `id` estable del manifiesto.
+Reimportar un curso existente (mismo `slug`) actualiza el borrador sin tocar el progreso de los alumnos: módulos, lecciones y preguntas se emparejan por su `id` estable del manifiesto, y las opciones por posición. Una reimportación sobrescribe los textos que se hayan editado en el panel.
 
 ### Reglas para los quizzes
 
@@ -152,12 +169,14 @@ Panel de admin (y panel del profesor, filtrado a sus cursos):
 
 ```
 npm run dev
+npm run db:generate              # crea una migración tras cambiar src/db/schema.ts
 npm run db:migrate
-npm run db:seed
 npm run course:validate <ruta course.json>
-npm run course:import <ruta course.json>
+npm run course:import -- <ruta course.json> [--allow-published] [--prune]
+npm run user:role <email> <admin|teacher|student>
 npm run test
 npm run lint
+npm run typecheck
 ```
 
 ## Convenciones
@@ -166,4 +185,14 @@ npm run lint
 - Mutaciones con server actions validadas con Zod.
 - Nada de secretos en el cliente. Variables de entorno en `.env.local` (nunca se commitea); documentarlas en `.env.example`.
 - Textos de la interfaz en español.
-- Tests para: `canAccessCourse`, webhooks de Stripe, cálculo de progreso e importación de manifiestos.
+- Tests (Vitest, `src/**/*.test.ts`) para: reglas de acceso, webhooks de Stripe, cálculo de progreso y manifiestos.
+- El código que usan los scripts (`src/db`, `src/lib/course-*.ts`) no puede importar `server-only`.
+
+## Estado del proyecto
+
+- [x] Fase 1: Next.js, base de datos, autenticación con roles, importación de cursos, vista de revisión en `/admin/cursos/<id>`
+- [ ] Fase 2: reproductor protegido (R2/Stream), progreso y quizzes tras cada vídeo
+- [ ] Fase 3: Stripe (compra única y suscripción) y control de acceso
+- [ ] Fase 4: panel de admin (editar, reordenar, publicar, asignar profesores)
+- [ ] Fase 5: dudas por lección y foro por curso
+- [ ] Fase 6: panel de métricas
