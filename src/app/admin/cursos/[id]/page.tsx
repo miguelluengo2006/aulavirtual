@@ -53,7 +53,12 @@ async function CourseDetail({ params }: { params: Promise<{ id: string }> }) {
         ← Volver
       </Link>
       <header className="space-y-1">
-        <h1 className="text-2xl font-semibold">{course.title}</h1>
+        <div className="flex items-baseline justify-between gap-4">
+          <h1 className="text-2xl font-semibold">{course.title}</h1>
+          <Link href={`/cursos/${course.slug}`} className="text-sm underline">
+            Ver como alumno
+          </Link>
+        </div>
         <p className="text-stone-600">{course.description}</p>
         <p className="text-sm text-stone-500">
           {course.status === "draft" ? "Borrador" : course.status} ·{" "}

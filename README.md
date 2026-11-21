@@ -21,6 +21,16 @@ Abre http://localhost:3000, crea tu cuenta y hazte admin:
 npm run user:role tu@email.com admin
 ```
 
+## Subir un vídeo
+
+Necesitas [ffmpeg](https://ffmpeg.org) instalado y las variables `R2_*` en `.env.local` (ver `CLAUDE.md` → Vídeo, incluida la política CORS del bucket).
+
+```bash
+npm run video:prepare -- ~/videos/intro.mp4 cursos/mi-curso/introduccion --upload
+```
+
+Convierte el vídeo a HLS cifrado, lo sube a R2 y te da el bloque `video` para el `course.json`.
+
 ## Importar un curso
 
 Pídele a Claude Code que prepare un curso a partir de una carpeta, o hazlo a mano:
@@ -42,5 +52,6 @@ El curso entra como borrador; revísalo en `/admin`.
 | `npm run course:validate <ruta>` | Valida un `course.json` |
 | `npm run course:import -- <ruta>` | Importa un curso como borrador |
 | `npm run user:role <email> <rol>` | Cambia el rol (`admin`, `teacher`, `student`) |
+| `npm run video:prepare -- <vídeo> <carpeta> --upload` | Convierte un vídeo a HLS cifrado y lo sube a R2 |
 | `npm test` | Tests |
 | `npm run typecheck` / `npm run lint` | Comprobaciones |

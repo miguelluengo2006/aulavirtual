@@ -14,11 +14,15 @@
     "db:studio": "drizzle-kit studio",
     "course:validate": "tsx scripts/course-validate.ts",
     "course:import": "tsx scripts/course-import.ts",
-    "user:role": "tsx scripts/user-role.ts"
+    "user:role": "tsx scripts/user-role.ts",
+    "video:prepare": "tsx scripts/video-prepare.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1175.0",
+    "@aws-sdk/s3-request-presigner": "^3.1175.0",
     "better-auth": "^1.7.27",
     "drizzle-orm": "^0.45.4",
+    "hls.js": "^1.7.4",
     "next": "16.4.6",
     "pg": "^8.23.1",
     "react": "19.3.0",

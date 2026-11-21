@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# vídeos convertidos localmente (scripts/video-prepare.ts)
+/.video-out

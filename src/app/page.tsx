@@ -1,4 +1,5 @@
 import { asc, eq } from "drizzle-orm";
+import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { db } from "@/db";
@@ -44,7 +45,8 @@ async function CourseList() {
   return (
     <ul className="grid gap-4 sm:grid-cols-2">
       {list.map((c) => (
-        <li key={c.id} className="rounded-lg border border-stone-200 bg-white p-5">
+        <li key={c.id}>
+          <Link href={`/cursos/${c.slug}`} className="block h-full rounded-lg border border-stone-200 bg-white p-5 hover:border-stone-400">
           <h2 className="font-semibold">{c.title}</h2>
           <p className="mt-1 line-clamp-3 text-sm text-stone-600">{c.description}</p>
           <p className="mt-3 text-sm">
@@ -53,6 +55,7 @@ async function CourseList() {
               <span className="text-stone-500"> · incluido en la suscripción</span>
             )}
           </p>
+          </Link>
         </li>
       ))}
     </ul>
