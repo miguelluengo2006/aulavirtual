@@ -1,18 +1,205 @@
 @import "tailwindcss";
 
+/*
+ * Sistema de diseño de Aula Virtual
+ * Oscuro, Poppins, paneles de cristal y botones píldora.
+ * Usa estas clases (glass, btn, field, chip…) en vez de repetir utilidades sueltas.
+ */
+
 :root {
-  --background: #fafaf9;
-  --foreground: #1c1917;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --muted: rgb(255 255 255 / 0.72);
+  --subtle: rgb(255 255 255 / 0.5);
+  --glass-bg: rgb(255 255 255 / 0.07);
+  --glass-bg-strong: rgb(255 255 255 / 0.12);
+  --glass-border: rgb(255 255 255 / 0.14);
+  --glass-blur: blur(28px) saturate(140%);
+  --glass-shadow: 0 8px 32px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.12);
+  --accent: #34d399; /* completado, aciertos, progreso */
+  --warning: #fbbf24; /* borradores, avisos */
+  --info: #4f8cff;
+  --danger: #f87171;
+  color-scheme: dark;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-danger: var(--danger);
+  --font-sans: "Poppins", system-ui, sans-serif;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  /* Luz ambiental fija: da profundidad al cristal sin competir con el contenido. */
+  background:
+    radial-gradient(60rem 40rem at 85% -10%, rgb(52 211 153 / 0.10), transparent 60%),
+    radial-gradient(50rem 36rem at -10% 30%, rgb(79 140 255 / 0.08), transparent 60%),
+    var(--background);
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+::selection {
+  background: rgb(52 211 153 / 0.35);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.5rem;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-strong {
+    background: var(--glass-bg-strong);
+  }
+
+  /* Filas y bloques dentro de un panel de cristal (sin sombra ni desenfoque propios). */
+  .inset {
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-radius: 1rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition:
+      background-color 150ms,
+      color 150ms,
+      border-color 150ms;
+  }
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: #fff;
+    color: #000;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: rgb(255 255 255 / 0.85);
+  }
+
+  .btn-ghost {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--foreground);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--glass-bg-strong);
+  }
+
+  .btn-sm {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8125rem;
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.06);
+    border: 1px solid var(--glass-border);
+    padding: 0.7rem 1.1rem;
+    color: var(--foreground);
+    outline: none;
+    transition: border-color 150ms;
+  }
+  .field::placeholder {
+    color: var(--subtle);
+  }
+  .field:focus {
+    border-color: rgb(255 255 255 / 0.5);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: rgb(255 255 255 / 0.08);
+    color: var(--muted);
+  }
+  .chip-accent {
+    background: rgb(52 211 153 / 0.14);
+    color: var(--accent);
+  }
+  .chip-warning {
+    background: rgb(251 191 36 / 0.14);
+    color: var(--warning);
+  }
+
+  .link {
+    color: var(--foreground);
+    text-decoration: underline;
+    text-decoration-color: rgb(255 255 255 / 0.35);
+    text-underline-offset: 3px;
+  }
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .progress-track {
+    height: 6px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.1);
+  }
+  .progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

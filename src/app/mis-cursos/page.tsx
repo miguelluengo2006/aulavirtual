@@ -3,13 +3,14 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { db } from "@/db";
 import { courses, enrollments, lessonProgress, lessons, subscriptions } from "@/db/schema";
+import { plural } from "@/lib/format";
 import { requireUser } from "@/lib/session";
 
 export default function MisCursosPage() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Mis cursos</h1>
-      <Suspense fallback={<p className="text-stone-400">Cargando…</p>}>
+    <div className="space-y-8">
+      <h1 className="text-4xl">Mis cursos</h1>
+      <Suspense fallback={<p className="text-subtle">Cargando…</p>}>
         <MyCourses />
       </Suspense>
     </div>
@@ -41,7 +42,7 @@ async function MyCourses() {
       slug: courses.slug,
       title: courses.title,
       description: courses.description,
-      total: sql<number>`(select count(*)::int from ${lessons} where ${lessons.courseId} = ${courses.id})`,
+      total: sql<number>`(select count(*)::int from "lessons" where "lessons"."course_id" = "courses"."id")`,
     })
     .from(courses)
     .where(
@@ -59,9 +60,14 @@ async function MyCourses() {
 
   if (list.length === 0) {
     return (
-      <p className="text-stone-500">
-        Aún no tienes cursos. Cuando compres uno o te suscribas aparecerán aquí.
-      </p>
+      <div className="glass space-y-4 p-8">
+        <p className="text-muted">
+          Aún no tienes cursos. Cuando compres uno o te suscribas, aparecerán aquí.
+        </p>
+        <Link href="/#cursos" className="btn btn-primary">
+          Ver el catálogo
+        </Link>
+      </div>
     );
   }
 
@@ -80,20 +86,30 @@ async function MyCourses() {
   const done = new Map(doneRows.map((r) => [r.courseId, r.done]));
 
   return (
-    <ul className="space-y-3">
+    <ul className="grid gap-5 md:grid-cols-2">
       {list.map((c) => {
         const n = done.get(c.id) ?? 0;
         const pct = c.total ? Math.round((n / c.total) * 100) : 0;
         return (
           <li key={c.id}>
-            <Link href={`/cursos/${c.slug}`} className="block rounded-lg border border-stone-200 bg-white p-4 hover:border-stone-400">
-              <h2 className="font-medium">{c.title}</h2>
-              <p className="text-sm text-stone-600">{c.description}</p>
-              <div className="mt-3 flex items-center gap-3 text-xs text-stone-500">
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-stone-100">
-                  <div className="h-full bg-green-600" style={{ width: `${pct}%` }} />
+            <Link
+              href={`/cursos/${c.slug}`}
+              className="glass flex h-full flex-col gap-4 p-6 transition-colors hover:bg-white/10"
+            >
+              <div className="flex-1 space-y-2">
+                <h2 className="text-xl">{c.title}</h2>
+                <p className="line-clamp-2 text-sm text-muted">{c.description}</p>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted">
+                    {n} de {plural(c.total, "lección", "lecciones")}
+                  </span>
+                  <span className={pct === 100 ? "text-accent" : "text-muted"}>{pct} %</span>
                 </div>
-                {n}/{c.total} lecciones
+                <div className="progress-track">
+                  <div className="progress-bar" style={{ width: `${pct}%` }} />
+                </div>
               </div>
             </Link>
           </li>

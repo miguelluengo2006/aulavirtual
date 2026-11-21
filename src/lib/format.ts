@@ -12,3 +12,16 @@ export function formatDuration(totalSeconds: number | null | undefined) {
   const s = totalSeconds % 60;
   return `${m}:${String(s).padStart(2, "0")}`;
 }
+
+/** "1 lección", "3 lecciones". */
+export function plural(n: number, one: string, many: string) {
+  return `${n} ${n === 1 ? one : many}`;
+}
+
+/** Minutos de vídeo para mostrar: "menos de 1 min", "12 min", "1 h 5 min". */
+export function formatTotalMinutes(totalSeconds: number) {
+  if (totalSeconds < 60) return "menos de 1 min";
+  const min = Math.round(totalSeconds / 60);
+  if (min < 60) return `${min} min`;
+  return `${Math.floor(min / 60)} h${min % 60 ? ` ${min % 60} min` : ""}`;
+}

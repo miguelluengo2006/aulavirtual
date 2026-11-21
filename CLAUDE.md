@@ -19,7 +19,7 @@ No hay archivos descargables. Todo el contenido se consume dentro de la platafor
 - Stripe: pago único por curso **y** suscripción a todo el catálogo
 - Cloudflare para vídeo (R2 + HLS o Cloudflare Stream; ver "Vídeo")
 - Zod para validar todo lo que entra (manifiestos, formularios, webhooks)
-- Tailwind + shadcn/ui para la interfaz
+- Tailwind con un sistema de diseño propio (ver "Diseño")
 
 ## Roles
 
@@ -197,6 +197,26 @@ Panel de admin (y panel del profesor, filtrado a sus cursos):
 - **Foro por curso**: hilos y respuestas. Los profesores del curso pueden fijar, cerrar y borrar. Las respuestas de profesores se marcan visualmente (`is_teacher`).
 - Solo usuarios con acceso al curso pueden leer y escribir.
 - Sanear el contenido (Markdown sin HTML crudo) y limitar la frecuencia de publicación.
+
+## Diseño
+
+Estilo oscuro inspirado en myofia.com: fondo `#0a0a0a`, texto blanco, tipografía **Poppins** (`@fontsource/poppins`, 400/500/600), paneles de cristal translúcidos y botones píldora. Todo está en `src/app/globals.css`; **usar sus clases en vez de inventar estilos nuevos**:
+
+| Clase | Para |
+|---|---|
+| `glass` (+ `glass-strong`) | Paneles y tarjetas (radio 1.5rem, desenfoque, borde blanco suave) |
+| `inset` | Bloques dentro de un panel (sin sombra ni desenfoque) |
+| `btn btn-primary` | Acción principal: píldora blanca con texto negro. Una por pantalla |
+| `btn btn-ghost` | Acciones secundarias: píldora de cristal |
+| `btn-sm` | Botones pequeños (cabecera, acciones de fila) |
+| `field` | Campos de formulario (píldora) |
+| `chip`, `chip-accent`, `chip-warning` | Estados y etiquetas cortas |
+| `link` | Enlaces dentro de texto |
+| `progress-track` + `progress-bar` | Barras de progreso |
+
+Colores (`text-muted`, `text-subtle`, `text-accent`, `text-warning`, `text-danger`, `bg-accent`…): esmeralda `#34d399` para completado/aciertos/progreso, ámbar `#fbbf24` para borradores y avisos, rojo `#f87171` para errores. Titulares en 600 con tracking negativo (ya aplicado a `h1`–`h3`).
+
+Reglas: textos en español, en frases normales (nada de etiquetas en mayúsculas ni flechas en los botones); el botón dice lo que hace ("Comprar curso", no "Enviar"); los estados vacíos dicen qué hacer a continuación; foco visible y `prefers-reduced-motion` respetados; comprobar siempre en móvil (390 px).
 
 ## Comandos
 

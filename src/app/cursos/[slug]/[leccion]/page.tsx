@@ -16,7 +16,7 @@ import { requireUser } from "@/lib/session";
 
 export default function LessonPage({ params }: PageProps<"/cursos/[slug]/[leccion]">) {
   return (
-    <Suspense fallback={<p className="text-stone-400">Cargando lección…</p>}>
+    <Suspense fallback={<p className="text-subtle">Cargando lección…</p>}>
       <Lesson params={params} />
     </Suspense>
   );
@@ -43,16 +43,11 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
   ]);
   const lastAttempt = quiz ? await getLastAttempt(user.id, quiz.id) : null;
   const mine = progress.get(lesson.id);
+  const done = all.filter((l) => progress.get(l.id)?.completed).length;
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
+    <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
       <div className="min-w-0 space-y-6">
-        <nav className="text-sm text-stone-500">
-          <Link href={`/cursos/${course.slug}`} className="hover:underline">
-            {course.title}
-          </Link>
-        </nav>
-
         <VideoPlayer
           lessonId={lesson.id}
           watermark={user.email}
@@ -60,17 +55,22 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
           startAt={mine && !mine.completed ? mine.position : 0}
         />
 
-        <div className="flex items-start justify-between gap-4">
-          <h1 className="text-2xl font-semibold">{lesson.title}</h1>
-          <div className="flex shrink-0 gap-2 text-sm">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-1">
+            <Link href={`/cursos/${course.slug}`} className="text-sm text-muted hover:text-white">
+              {course.title}
+            </Link>
+            <h1 className="text-3xl">{lesson.title}</h1>
+          </div>
+          <div className="flex shrink-0 gap-2">
             {prev && (
-              <Link href={`/cursos/${course.slug}/${prev.externalId}`} className="rounded-md border border-stone-300 px-3 py-1.5 hover:bg-stone-100">
-                ← Anterior
+              <Link href={`/cursos/${course.slug}/${prev.externalId}`} className="btn btn-ghost btn-sm">
+                Anterior
               </Link>
             )}
             {next && (
-              <Link href={`/cursos/${course.slug}/${next.externalId}`} className="rounded-md bg-stone-900 px-3 py-1.5 text-white hover:bg-stone-700">
-                Siguiente →
+              <Link href={`/cursos/${course.slug}/${next.externalId}`} className="btn btn-primary btn-sm">
+                Siguiente lección
               </Link>
             )}
           </div>
@@ -79,10 +79,21 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
         {quiz && <LessonQuiz quiz={quiz} lastAttempt={lastAttempt} />}
       </div>
 
-      <aside className="space-y-4 lg:sticky lg:top-4 lg:self-start">
+      <aside className="glass h-fit space-y-5 p-4 lg:sticky lg:top-24">
+        <div className="space-y-2 px-2 pt-2">
+          <div className="flex justify-between text-sm">
+            <span className="font-medium">Contenido del curso</span>
+            <span className="text-muted tabular-nums">
+              {done}/{all.length}
+            </span>
+          </div>
+          <div className="progress-track">
+            <div className="progress-bar" style={{ width: `${all.length ? (done / all.length) * 100 : 0}%` }} />
+          </div>
+        </div>
         {course.modules.map((m) => (
-          <div key={m.id}>
-            <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-stone-500">{m.title}</h2>
+          <div key={m.id} className="space-y-1">
+            <h2 className="px-2 text-sm font-medium text-muted">{m.title}</h2>
             <ol className="space-y-0.5">
               {m.lessons.map((l) => {
                 const completed = progress.get(l.id)?.completed;
@@ -92,15 +103,16 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
                     <Link
                       href={`/cursos/${course.slug}/${l.externalId}`}
                       aria-current={current ? "page" : undefined}
-                      className={`flex items-center justify-between rounded px-2 py-1.5 text-sm ${current ? "bg-stone-900 text-white" : "hover:bg-stone-100"}`}
+                      className={`flex items-center gap-3 rounded-2xl px-3 py-2 text-sm ${current ? "bg-white text-black" : "text-muted hover:bg-white/5 hover:text-white"}`}
                     >
-                      <span>
-                        <span className={completed ? (current ? "text-green-300" : "text-green-600") : "opacity-40"}>
-                          {completed ? "✓" : "○"}
-                        </span>{" "}
-                        {l.title}
+                      <span
+                        aria-label={completed ? "Completada" : undefined}
+                        className={`grid size-4 shrink-0 place-items-center rounded-full text-[9px] ${completed ? "bg-accent text-black" : current ? "border border-black/30" : "border border-white/25"}`}
+                      >
+                        {completed && "✓"}
                       </span>
-                      <span className="text-xs opacity-60">{formatDuration(l.durationSeconds)}</span>
+                      <span className="flex-1">{l.title}</span>
+                      <span className="text-xs tabular-nums opacity-60">{formatDuration(l.durationSeconds)}</span>
                     </Link>
                   </li>
                 );

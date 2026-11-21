@@ -38,18 +38,20 @@ export function LessonQuiz({
   };
 
   return (
-    <section id="quiz" className="scroll-mt-20 space-y-4 rounded-lg border border-stone-200 bg-white p-5">
-      <header className="flex items-baseline justify-between gap-4">
-        <h2 className="text-lg font-semibold">Preguntas clave</h2>
+    <section id="quiz" className="glass scroll-mt-24 space-y-6 p-6 sm:p-8">
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div className="space-y-1">
+          <h2 className="text-2xl">Preguntas clave</h2>
+          <p className="text-sm text-muted">Comprueba lo que has entendido. No cuenta para avanzar.</p>
+        </div>
         {!result && lastAttempt && (
-          <span className="text-sm text-stone-500">
-            Último intento: {lastAttempt.score}/{lastAttempt.total}
+          <span className="chip">
+            Último intento: {lastAttempt.score} de {lastAttempt.total}
           </span>
         )}
       </header>
-      <p className="text-sm text-stone-500">Repasa lo que acabas de ver. No cuenta para avanzar.</p>
 
-      <ol className="space-y-5">
+      <ol className="space-y-7">
         {quiz.questions.map((q, qi) => {
           const r = byQuestion.get(q.id);
           return (
@@ -57,21 +59,21 @@ export function LessonQuiz({
               <p className="font-medium">
                 {qi + 1}. {q.prompt}
               </p>
-              <div className="space-y-1">
+              <div className="space-y-2">
                 {q.options.map((o) => {
                   const chosen = answers[q.id] === o.id;
-                  let style = "border-stone-200 hover:border-stone-400";
+                  let style = "border-white/12 hover:border-white/35 hover:bg-white/5";
                   if (r) {
-                    if (o.id === r.correctOptionId) style = "border-green-600 bg-green-50";
-                    else if (chosen) style = "border-red-500 bg-red-50";
-                    else style = "border-stone-200 opacity-60";
+                    if (o.id === r.correctOptionId) style = "border-accent/70 bg-accent/12";
+                    else if (chosen) style = "border-danger/70 bg-danger/12";
+                    else style = "border-white/8 opacity-50";
                   } else if (chosen) {
-                    style = "border-stone-900 bg-stone-50";
+                    style = "border-white bg-white/10";
                   }
                   return (
                     <label
                       key={o.id}
-                      className={`flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2 text-sm ${style}`}
+                      className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-sm transition-colors has-[:disabled]:cursor-default ${style}`}
                     >
                       <input
                         type="radio"
@@ -80,6 +82,7 @@ export function LessonQuiz({
                         checked={chosen}
                         disabled={Boolean(result) || pending}
                         onChange={() => setAnswers((a) => ({ ...a, [q.id]: o.id }))}
+                        className="accent-white"
                       />
                       {o.text}
                     </label>
@@ -87,9 +90,11 @@ export function LessonQuiz({
                 })}
               </div>
               {r && (
-                <p className={`text-sm ${r.isCorrect ? "text-green-700" : "text-red-700"}`}>
-                  {r.isCorrect ? "¡Correcto! " : "No es correcto. "}
-                  <span className="text-stone-600">{r.explanation}</span>
+                <p className="pl-1 text-sm">
+                  <span className={r.isCorrect ? "text-accent" : "text-danger"}>
+                    {r.isCorrect ? "Correcto. " : "No es correcto. "}
+                  </span>
+                  <span className="text-muted">{r.explanation}</span>
                 </p>
               )}
             </li>
@@ -97,14 +102,18 @@ export function LessonQuiz({
         })}
       </ol>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p role="alert" className="text-sm text-danger">
+          {error}
+        </p>
+      )}
 
       {result ? (
-        <div className="flex items-center justify-between rounded-md bg-stone-50 px-4 py-3">
+        <div className="inset flex flex-wrap items-center justify-between gap-3 px-5 py-4" aria-live="polite">
           <span className="font-medium">
             Has acertado {result.score} de {result.total}
           </span>
-          <button type="button" onClick={retry} className="text-sm underline">
+          <button type="button" onClick={retry} className="btn btn-ghost btn-sm">
             Volver a intentarlo
           </button>
         </div>
@@ -113,7 +122,7 @@ export function LessonQuiz({
           type="button"
           onClick={onSubmit}
           disabled={!allAnswered || pending}
-          className="rounded-md bg-stone-900 px-4 py-2 text-sm text-white hover:bg-stone-700 disabled:opacity-40"
+          className="btn btn-primary"
         >
           {pending ? "Corrigiendo…" : "Comprobar respuestas"}
         </button>

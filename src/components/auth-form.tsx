@@ -33,8 +33,8 @@ export function AuthForm({ mode }: { mode: "signin" | "signup" }) {
     if (error) {
       setError(
         mode === "signup"
-          ? "No se ha podido crear la cuenta. ¿Ya existe una con ese email?"
-          : "Email o contraseña incorrectos.",
+          ? "No se ha podido crear la cuenta. Si ya tienes una con ese email, entra con ella."
+          : "El email o la contraseña no son correctos.",
       );
       return;
     }
@@ -42,48 +42,54 @@ export function AuthForm({ mode }: { mode: "signin" | "signup" }) {
     router.refresh();
   }
 
-  const input =
-    "w-full rounded-md border border-stone-300 bg-white px-3 py-2 outline-none focus:border-stone-900";
+  const next = params.get("next");
+  const other = mode === "signup" ? "/entrar" : "/registro";
 
   return (
-    <form onSubmit={onSubmit} className="mx-auto mt-8 max-w-sm space-y-4">
-      <h1 className="text-2xl font-semibold">
-        {mode === "signup" ? "Crear cuenta" : "Entrar"}
-      </h1>
+    <form onSubmit={onSubmit} className="glass mx-auto mt-6 max-w-md space-y-5 p-8 sm:p-10">
+      <div className="space-y-1">
+        <h1 className="text-3xl">{mode === "signup" ? "Crea tu cuenta" : "Entra en tu cuenta"}</h1>
+        <p className="text-muted">
+          {mode === "signup"
+            ? "Con una cuenta guardas tu progreso en cada curso."
+            : "Sigue donde lo dejaste."}
+        </p>
+      </div>
       {mode === "signup" && (
-        <label className="block space-y-1">
-          <span className="text-sm">Nombre</span>
-          <input name="name" required autoComplete="name" className={input} />
+        <label className="block space-y-1.5">
+          <span className="pl-1 text-sm text-muted">Nombre</span>
+          <input name="name" required autoComplete="name" className="field" />
         </label>
       )}
-      <label className="block space-y-1">
-        <span className="text-sm">Email</span>
-        <input name="email" type="email" required autoComplete="email" className={input} />
+      <label className="block space-y-1.5">
+        <span className="pl-1 text-sm text-muted">Email</span>
+        <input name="email" type="email" required autoComplete="email" className="field" />
       </label>
-      <label className="block space-y-1">
-        <span className="text-sm">Contraseña</span>
+      <label className="block space-y-1.5">
+        <span className="pl-1 text-sm text-muted">Contraseña</span>
         <input
           name="password"
           type="password"
           required
           minLength={8}
           autoComplete={mode === "signup" ? "new-password" : "current-password"}
-          className={input}
+          className="field"
         />
+        {mode === "signup" && <span className="block pl-1 text-xs text-subtle">Mínimo 8 caracteres.</span>}
       </label>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      <button
-        disabled={pending}
-        className="w-full rounded-md bg-stone-900 py-2 text-white hover:bg-stone-700 disabled:opacity-50"
-      >
+      {error && (
+        <p role="alert" className="text-sm text-danger">
+          {error}
+        </p>
+      )}
+      <button disabled={pending} className="btn btn-primary w-full">
         {pending ? "Un momento…" : mode === "signup" ? "Crear cuenta" : "Entrar"}
       </button>
-      <p className="text-center text-sm text-stone-500">
-        {mode === "signup" ? (
-          <>¿Ya tienes cuenta? <Link href="/entrar" className="underline">Entrar</Link></>
-        ) : (
-          <>¿No tienes cuenta? <Link href="/registro" className="underline">Crear una</Link></>
-        )}
+      <p className="text-center text-sm text-muted">
+        {mode === "signup" ? "¿Ya tienes cuenta? " : "¿Aún no tienes cuenta? "}
+        <Link href={next ? `${other}?next=${encodeURIComponent(next)}` : other} className="link">
+          {mode === "signup" ? "Entra" : "Crea una"}
+        </Link>
       </p>
     </form>
   );

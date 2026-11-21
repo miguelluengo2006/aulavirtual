@@ -6,9 +6,12 @@ import { requireRole } from "@/lib/session";
 
 export default function ProfesorPage() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Mis cursos como profesor</h1>
-      <Suspense fallback={<p className="text-stone-400">Cargando…</p>}>
+    <div className="space-y-8">
+      <div className="space-y-1">
+        <h1 className="text-4xl">Tus cursos como profesor</h1>
+        <p className="text-muted">Aquí atenderás las dudas y el foro de cada curso.</p>
+      </div>
+      <Suspense fallback={<p className="text-subtle">Cargando…</p>}>
         <TeacherCourses />
       </Suspense>
     </div>
@@ -26,15 +29,19 @@ async function TeacherCourses() {
     .orderBy(asc(courses.title));
 
   if (list.length === 0) {
-    return <p className="text-stone-500">No tienes cursos asignados.</p>;
+    return (
+      <div className="glass p-8 text-muted">
+        Todavía no tienes cursos asignados. El administrador te los asignará.
+      </div>
+    );
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="grid gap-5 md:grid-cols-2">
       {list.map((c) => (
-        <li key={c.id} className="rounded-lg border border-stone-200 bg-white p-4">
-          <span className="font-medium">{c.title}</span>
-          <p className="text-sm text-stone-500">
+        <li key={c.id} className="glass space-y-2 p-6">
+          <h2 className="text-xl">{c.title}</h2>
+          <p className="text-sm text-muted">
             Dudas y foro: disponibles en la siguiente fase.
           </p>
         </li>
