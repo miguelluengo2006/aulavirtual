@@ -83,6 +83,14 @@ forum_posts (id, thread_id, user_id, body, is_teacher, created_at)
 
 Cambios de esquema: editar `src/db/schema.ts`, luego `npm run db:generate` (crea la migración en `drizzle/`) y `npm run db:migrate`.
 
+### Supabase
+
+La base de datos de producción está en Supabase (proyecto `aulavirtual`, ref `fsuwchykvftumjbkrife`, Frankfurt). Se usa **solo como PostgreSQL**: nada de Supabase Auth ni de su API REST.
+
+- Todas las tablas de `public` tienen **RLS activado sin políticas** (migración `0001_enable_rls`). Así la API REST de Supabase no expone nada con la clave anónima; la app se conecta como propietario y no le afecta. **Toda tabla nueva necesita su `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` en la misma migración.** El aviso "RLS enabled, no policy" del panel de Supabase es esperado.
+- Si aplicas una migración con el conector de Supabase en vez de con `npm run db:migrate`, añade también su fila en `drizzle.__drizzle_migrations` (hash = sha256 del archivo .sql, `created_at` = `when` de `drizzle/meta/_journal.json`), o Drizzle intentará repetirla.
+- En el hosting (Vercel), usar la cadena del **Transaction pooler** (puerto 6543). La conexión directa (5432) es para migraciones desde un ordenador.
+
 ## Importar un curso con Claude Code
 
 ### Carpeta de entrada
