@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "slug": "nextjs-desde-cero",
+  "title": "Next.js desde cero",
+  "description": "Aprende a construir aplicaciones web modernas con Next.js y el App Router.",
+  "pricing": {
+    "priceCents": 4900,
+    "currency": "eur",
+    "includedInSubscription": true
+  },
+  "teachers": ["profesora@ejemplo.com"],
+  "modules": [
+    {
+      "id": "fundamentos",
+      "title": "Fundamentos",
+      "lessons": [
+        {
+          "id": "que-es-nextjs",
+          "title": "¿Qué es Next.js?",
+          "video": {
+            "provider": "r2",
+            "key": "cursos/nextjs-desde-cero/01-que-es-nextjs/index.m3u8",
+            "durationSeconds": 412
+          },
+          "sourceFile": "material/01-introduccion.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-que-aporta",
+                "prompt": "¿Qué aporta Next.js sobre React por sí solo?",
+                "options": [
+                  { "text": "Enrutado, renderizado en servidor y optimizaciones integradas", "isCorrect": true },
+                  { "text": "Un lenguaje de programación distinto a JavaScript", "isCorrect": false },
+                  { "text": "Una base de datos incluida", "isCorrect": false }
+                ],
+                "explanation": "Next.js es un framework sobre React que añade enrutado, renderizado en servidor y optimizaciones."
+              },
+              {
+                "id": "q2-app-router",
+                "prompt": "En el App Router, ¿qué define una ruta?",
+                "options": [
+                  { "text": "Una carpeta dentro de app/ con un archivo page.tsx", "isCorrect": true },
+                  { "text": "Una entrada en un archivo routes.json", "isCorrect": false },
+                  { "text": "Un componente con el atributo route", "isCorrect": false }
+                ],
+                "explanation": "Cada carpeta en app/ es un segmento de ruta y page.tsx la hace accesible."
+              },
+              {
+                "id": "q3-server-components",
+                "prompt": "¿Cómo son los componentes por defecto en el App Router?",
+                "options": [
+                  { "text": "Server Components", "isCorrect": true },
+                  { "text": "Client Components", "isCorrect": false },
+                  { "text": "Web Components", "isCorrect": false }
+                ],
+                "explanation": "Por defecto se renderizan en el servidor; para el cliente hace falta 'use client'."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "La duración del vídeo se ha tomado del nombre del archivo; confírmala en el panel."
+  ]
+}
