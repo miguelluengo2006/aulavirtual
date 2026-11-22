@@ -22,7 +22,7 @@ export function HeroDemo() {
         <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_80%_90%,rgb(45_212_191/0.35),transparent_70%)]" />
         <div className="absolute left-4 top-4 space-y-1">
           <p className="text-xs text-white/70">Lección 3 de 12</p>
-          <p className="font-medium">Cómo se estudia en Aula Virtual</p>
+          <p className="font-medium">Cómo se estudia en IDESIE AV</p>
         </div>
         <div className="absolute inset-0 grid place-items-center">
           <span className="grid size-14 place-items-center rounded-full bg-white/90 text-navy shadow-lg">

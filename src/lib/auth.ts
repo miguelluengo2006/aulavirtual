@@ -3,6 +3,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 import { emailEnabled, sendEmail } from "./email";
@@ -61,6 +62,13 @@ export const auth = betterAuth({
       await sendEmail({ to: user.email, ...t });
     },
     onPasswordReset: async ({ user }, request) => {
+      // Si acaba de elegir su primera contraseña (invitación), no es un "cambio": no se avisa.
+      const [acc] = await db
+        .select({ createdAt: schema.account.createdAt })
+        .from(schema.account)
+        .where(and(eq(schema.account.userId, user.id), eq(schema.account.providerId, "credential")))
+        .limit(1);
+      if (acc && Date.now() - acc.createdAt.getTime() < 2 * 60 * 1000) return;
       const t = passwordChangedTemplate(user.name, siteUrl("/recuperar", request));
       await sendEmail({ to: user.email, ...t });
     },
@@ -99,10 +107,36 @@ export const auth = betterAuth({
         defaultValue: "student",
         required: false,
       },
+      // Bloqueo: solo lo cambia un admin desde el panel.
+      banned: {
+        type: "boolean",
+        input: false,
+        defaultValue: false,
+        required: false,
+      },
     },
   },
 
   databaseHooks: {
+    // Una cuenta bloqueada no puede iniciar sesión (ni al entrar, ni al confirmar el email).
+    session: {
+      create: {
+        before: async (session) => {
+          const [u] = await db
+            .select({ banned: schema.user.banned })
+            .from(schema.user)
+            .where(eq(schema.user.id, session.userId))
+            .limit(1);
+          if (u?.banned) {
+            throw new APIError("FORBIDDEN", {
+              message: "Esta cuenta está bloqueada",
+              code: "USER_BANNED",
+            });
+          }
+          return { data: session };
+        },
+      },
+    },
     user: {
       create: {
         before: async (user) => {

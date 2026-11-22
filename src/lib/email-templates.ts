@@ -11,7 +11,7 @@ function layout(opts: { title: string; intro: string; button?: { label: string; 
   return `<!doctype html><html lang="es"><body style="margin:0;background:#061430;font-family:Poppins,Segoe UI,Helvetica,Arial,sans-serif;color:#ffffff">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#061430;padding:32px 16px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#0d2148;border:1px solid #1f3a6e;border-radius:24px;padding:32px">
-<tr><td style="font-weight:600;font-size:15px;padding-bottom:24px">Aula Virtual</td></tr>
+<tr><td style="font-weight:600;font-size:15px;padding-bottom:24px">IDESIE AV</td></tr>
 <tr><td style="font-size:24px;font-weight:600;letter-spacing:-0.5px;padding-bottom:12px">${escape(opts.title)}</td></tr>
 <tr><td style="font-size:15px;line-height:1.6;color:#dbe6ff;padding-bottom:24px">${opts.intro}</td></tr>
 ${button}
@@ -24,11 +24,11 @@ export function verifyEmailTemplate(name: string, url: string) {
     subject: "Confirma tu email para empezar",
     html: layout({
       title: `Hola, ${escape(name)}`,
-      intro: "Confirma tu email para activar tu cuenta de Aula Virtual. Solo tienes que pulsar el botón.",
+      intro: "Confirma tu email para activar tu cuenta de IDESIE AV. Solo tienes que pulsar el botón.",
       button: { label: "Confirmar mi email", url },
       outro: "El enlace caduca en 24 horas. Si no has creado una cuenta, puedes ignorar este email.",
     }),
-    text: `Hola, ${name}\n\nConfirma tu email para activar tu cuenta de Aula Virtual:\n${url}\n\nEl enlace caduca en 24 horas. Si no has creado una cuenta, ignora este email.`,
+    text: `Hola, ${name}\n\nConfirma tu email para activar tu cuenta de IDESIE AV:\n${url}\n\nEl enlace caduca en 24 horas. Si no has creado una cuenta, ignora este email.`,
   };
 }
 
@@ -48,7 +48,7 @@ export function resetPasswordTemplate(name: string, url: string) {
 
 export function existingAccountTemplate(name: string, signInUrl: string, resetUrl: string) {
   return {
-    subject: "Ya tienes una cuenta en Aula Virtual",
+    subject: "Ya tienes una cuenta en IDESIE AV",
     html: layout({
       title: "Ya tienes una cuenta",
       intro: `Hola, ${escape(name)}. Alguien ha intentado crear una cuenta nueva con este email, pero ya tienes una. Entra con tu contraseña de siempre.`,
@@ -68,5 +68,23 @@ export function passwordChangedTemplate(name: string, resetUrl: string) {
       outro: `Si no has sido tú, <a href="${escape(resetUrl)}" style="color:#2dd4bf">elige otra contraseña ahora</a>.`,
     }),
     text: `Hola, ${name}\n\nLa contraseña de tu cuenta se acaba de cambiar y hemos cerrado la sesión en todos tus dispositivos.\nSi no has sido tú, elige otra ahora: ${resetUrl}`,
+  };
+}
+
+export function inviteTemplate(name: string, url: string, role: "admin" | "teacher" | "student") {
+  const what = {
+    admin: "como administrador de la plataforma",
+    teacher: "como profesor",
+    student: "para que empieces a aprender",
+  }[role];
+  return {
+    subject: "Te han invitado a IDESIE AV",
+    html: layout({
+      title: `Hola, ${escape(name)}`,
+      intro: `Te hemos creado una cuenta en IDESIE AV ${what}. Para empezar, elige tu contraseña.`,
+      button: { label: "Elegir mi contraseña", url },
+      outro: "El enlace caduca en 7 días y solo se puede usar una vez. Si no esperabas este email, puedes ignorarlo.",
+    }),
+    text: `Hola, ${name}\n\nTe hemos creado una cuenta en IDESIE AV ${what}. Elige tu contraseña aquí:\n${url}\n\nEl enlace caduca en 7 días y solo se puede usar una vez.`,
   };
 }

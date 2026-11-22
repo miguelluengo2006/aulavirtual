@@ -4,7 +4,7 @@ import { asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
 import { courses, lessonProgress, lessons, modules } from "@/db/schema";
 import { AdminError, adminAction, idInput, type Tx } from "@/lib/admin/action";
-import { slugify, swapIndex, titleSchema, videoKeySchema } from "@/lib/admin/rules";
+import { sameMembers, slugify, swapIndex, titleSchema, videoKeySchema } from "@/lib/admin/rules";
 
 /** Reescribe las posiciones 0..n-1 en el orden dado. */
 async function writeOrder(tx: Tx, table: typeof modules | typeof lessons, ids: string[]) {
@@ -227,4 +227,37 @@ const deleteLessonImpl = adminAction({
 });
 export async function deleteLesson(input: z.input<typeof deleteLessonSchema>) {
   return deleteLessonImpl(input);
+}
+
+// ─── Reordenar arrastrando ────────────────────────────────────
+
+const reorderModulesSchema = z.object({ courseId: idInput, ids: z.array(idInput).min(1).max(200) });
+const reorderModulesImpl = adminAction({
+  schema: reorderModulesSchema,
+  run: async ({ courseId, ids }, { tx }) => {
+    const ct = await courseTitle(tx, courseId);
+    const current = await tx.select({ id: modules.id }).from(modules).where(eq(modules.courseId, courseId));
+    if (!sameMembers(current.map((r) => r.id), ids)) throw new AdminError("El temario ha cambiado mientras lo editabas. Recarga la página.");
+    await writeOrder(tx, modules, ids);
+    return { data: undefined, audit: { action: "module.reorder", targetType: "course", targetId: courseId, summary: `Reordenó los módulos de "${ct}"` } };
+  },
+});
+export async function reorderModules(input: z.input<typeof reorderModulesSchema>) {
+  return reorderModulesImpl(input);
+}
+
+const reorderLessonsSchema = z.object({ moduleId: idInput, ids: z.array(idInput).min(1).max(500) });
+const reorderLessonsImpl = adminAction({
+  schema: reorderLessonsSchema,
+  run: async ({ moduleId, ids }, { tx }) => {
+    const m = await tx.query.modules.findFirst({ where: eq(modules.id, moduleId) });
+    if (!m) throw new AdminError("El módulo no existe.");
+    const current = await tx.select({ id: lessons.id }).from(lessons).where(eq(lessons.moduleId, moduleId));
+    if (!sameMembers(current.map((r) => r.id), ids)) throw new AdminError("El temario ha cambiado mientras lo editabas. Recarga la página.");
+    await writeOrder(tx, lessons, ids);
+    return { data: undefined, audit: { action: "lesson.reorder", targetType: "module", targetId: moduleId, summary: `Reordenó las lecciones del módulo "${m.title}"` } };
+  },
+});
+export async function reorderLessons(input: z.input<typeof reorderLessonsSchema>) {
+  return reorderLessonsImpl(input);
 }

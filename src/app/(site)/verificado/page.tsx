@@ -6,7 +6,7 @@ import { linkErrorMessage } from "@/lib/auth-errors";
 import { safeNext } from "@/lib/safe-next";
 import { getCurrentUser } from "@/lib/session";
 
-export const metadata: Metadata = { title: "Confirmar email | Aula Virtual" };
+export const metadata: Metadata = { title: "Confirmar email" };
 
 // Aquí llega quien abre el enlace del email de confirmación.
 export default function VerificadoPage({ searchParams }: PageProps<"/verificado">) {

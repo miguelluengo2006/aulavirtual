@@ -1,23 +1,22 @@
-import Link from "next/link";
 import { Suspense } from "react";
 import { listActivity } from "@/lib/admin/queries";
-import { formatDateTime, PageHeader, Pagination } from "../_components/ui";
+import { Card, EmptyState, FilterPills, formatDateTime, PageHeader, Pagination } from "../_components/ui";
 
 const types = [
-  { value: undefined, label: "Todo" },
-  { value: "course", label: "Cursos" },
-  { value: "lesson", label: "Lecciones" },
-  { value: "quiz", label: "Quizzes" },
-  { value: "user", label: "Usuarios" },
-  { value: "teacher", label: "Profesores" },
-  { value: "enrollment", label: "Accesos" },
+  { key: undefined, label: "Todo" },
+  { key: "course", label: "Cursos" },
+  { key: "lesson", label: "Lecciones" },
+  { key: "quiz", label: "Quizzes" },
+  { key: "user", label: "Usuarios" },
+  { key: "teacher", label: "Profesores" },
+  { key: "enrollment", label: "Accesos" },
 ] as const;
 
 export default function ActivityPage({ searchParams }: PageProps<"/admin/actividad">) {
   return (
     <div className="space-y-6">
       <PageHeader title="Actividad" description="Cada cambio hecho desde el panel: quién, qué y cuándo. No se puede editar ni borrar." />
-      <Suspense fallback={<p className="text-subtle">Cargando…</p>}>
+      <Suspense fallback={<p className="a-subtle">Cargando…</p>}>
         <Log searchParams={searchParams} />
       </Suspense>
     </div>
@@ -40,27 +39,21 @@ async function Log({ searchParams }: { searchParams: Promise<Record<string, stri
 
   return (
     <div className="space-y-4">
-      <nav aria-label="Filtrar por tipo" className="flex flex-wrap gap-2">
-        {types.map((t) => (
-          <Link key={t.label} href={href(t.value)} aria-current={type === t.value ? "page" : undefined} className={`btn btn-sm ${type === t.value ? "btn-primary" : "btn-ghost"}`}>
-            {t.label}
-          </Link>
-        ))}
-      </nav>
-      {rows.length === 0 ? (
-        <div className="glass p-8 text-muted">Todavía no hay actividad registrada.</div>
-      ) : (
-        <ol className="glass divide-y divide-white/8 p-2">
-          {rows.map((a) => (
-            <li key={a.id} className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-              <p className="text-sm">{a.summary}</p>
-              <p className="shrink-0 text-xs text-subtle">
-                {a.actorEmail}, {formatDateTime(a.createdAt)}
-              </p>
-            </li>
-          ))}
-        </ol>
-      )}
+      <FilterPills active={type} items={types.map((t) => ({ key: t.key, label: t.label, href: href(t.key) }))} />
+      <Card padded={false}>
+        {rows.length === 0 ? (
+          <EmptyState title="Todavía no hay actividad" text="Aquí aparecerá cada cambio que se haga desde el panel." />
+        ) : (
+          <ol className="divide-y divide-[#e1e7f0]">
+            {rows.map((a) => (
+              <li key={a.id} className="flex flex-col gap-1 px-5 py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                <p className="text-sm">{a.summary}</p>
+                <p className="shrink-0 text-xs a-subtle">{a.actorEmail}, {formatDateTime(a.createdAt)}</p>
+              </li>
+            ))}
+          </ol>
+        )}
+      </Card>
       <Pagination page={Math.min(page, pages)} pages={pages} href={(p) => href(type, p)} />
     </div>
   );

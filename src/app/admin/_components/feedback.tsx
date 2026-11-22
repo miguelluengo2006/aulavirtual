@@ -26,13 +26,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             role={t.tone === "error" ? "alert" : "status"}
-            className={`glass glass-strong pointer-events-auto w-full max-w-sm rounded-2xl border px-4 py-3 text-sm ${t.tone === "error" ? "border-danger/50" : "border-accent/50"}`}
+            className={`pointer-events-auto flex w-full max-w-sm gap-3 rounded-xl border bg-white px-4 py-3 text-sm text-[#0f1b33] shadow-lg ${
+              t.tone === "error" ? "border-red-200" : "border-teal-200"
+            }`}
           >
-            <p>
-              <span className={t.tone === "error" ? "text-danger" : "text-accent"}>{t.tone === "error" ? "No se ha guardado. " : "Hecho. "}</span>
-              {t.text}
-            </p>
-            {t.reauth && <ReauthButton />}
+            <span aria-hidden className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full text-xs text-white ${t.tone === "error" ? "bg-red-600" : "bg-teal-600"}`}>
+              {t.tone === "error" ? "!" : "✓"}
+            </span>
+            <div>
+              <p className="font-medium">{t.tone === "error" ? "No se ha guardado" : "Hecho"}</p>
+              <p className="text-[#52617a]">{t.text}</p>
+              {t.reauth && <ReauthButton />}
+            </div>
           </div>
         ))}
       </div>
@@ -49,7 +54,7 @@ function ReauthButton() {
   return (
     <button
       type="button"
-      className="link mt-2"
+      className="mt-2 font-medium text-[#1d4ed8] underline underline-offset-2"
       onClick={async () => {
         await signOut();
         router.push(`/entrar?next=${encodeURIComponent(pathname)}`);
@@ -89,10 +94,47 @@ export function useAdminAction() {
   return { run, pending };
 }
 
-// ─── Confirmación ─────────────────────────────────────────────
+// ─── Diálogos ─────────────────────────────────────────────────
+
+export function Dialog({
+  open,
+  onClose,
+  title,
+  children,
+  wide,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+  wide?: boolean;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const d = ref.current;
+    if (!d) return;
+    if (open && !d.open) d.showModal();
+    if (!open && d.open) d.close();
+  }, [open]);
+  return (
+    <dialog
+      ref={ref}
+      onClose={onClose}
+      className="m-auto rounded-2xl border border-[#e1e7f0] bg-white p-0 text-[#0f1b33] shadow-2xl backdrop:bg-[#061430]/50 backdrop:backdrop-blur-[2px]"
+      style={{ width: `min(94vw, ${wide ? "40rem" : "28rem"})` }}
+    >
+      {open && (
+        <div className="space-y-5 p-6">
+          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+          {children}
+        </div>
+      )}
+    </dialog>
+  );
+}
 
 /**
- * Botón que pide confirmación en un diálogo antes de actuar.
+ * Botón que pide confirmación antes de actuar.
  * Con `typeToConfirm`, hay que escribir ese texto exacto para poder continuar.
  */
 export function ConfirmButton({
@@ -105,6 +147,7 @@ export function ConfirmButton({
   className,
   disabled,
   onConfirm,
+  children,
 }: {
   label: React.ReactNode;
   title: string;
@@ -115,64 +158,90 @@ export function ConfirmButton({
   className?: string;
   disabled?: boolean;
   onConfirm: (typed: string) => Promise<boolean>;
+  children?: React.ReactNode;
 }) {
-  const ref = useRef<HTMLDialogElement>(null);
-  const [typed, setTyped] = useState("");
-  const [busy, setBusy] = useState(false);
-  const ready = !typeToConfirm || typed.trim() === typeToConfirm;
-
-  useEffect(() => {
-    const d = ref.current;
-    const reset = () => setTyped("");
-    d?.addEventListener("close", reset);
-    return () => d?.removeEventListener("close", reset);
-  }, []);
-
+  const [open, setOpen] = useState(false);
   return (
     <>
-      <button type="button" disabled={disabled} className={className} onClick={() => ref.current?.showModal()}>
+      <button type="button" disabled={disabled} className={className} onClick={() => setOpen(true)}>
         {label}
       </button>
-      <dialog
-        ref={ref}
-        className="glass glass-strong m-auto w-[min(92vw,28rem)] p-0 text-white backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+      <ConfirmDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title={title}
+        description={description}
+        confirmLabel={confirmLabel}
+        typeToConfirm={typeToConfirm}
+        danger={danger}
+        onConfirm={onConfirm}
       >
-        <form
-          method="dialog"
-          className="space-y-5 p-6"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            if (!ready) return;
-            setBusy(true);
-            const ok = await onConfirm(typed);
-            setBusy(false);
-            if (ok) ref.current?.close();
-          }}
-        >
-          <h2 className="text-xl">{title}</h2>
-          <div className="space-y-2 text-sm text-muted">{description}</div>
-          {typeToConfirm && (
-            <label className="block space-y-1.5 text-sm">
-              <span className="text-muted">
-                Escribe <strong className="font-mono text-white">{typeToConfirm}</strong> para confirmar
-              </span>
-              <input className="field" value={typed} onChange={(e) => setTyped(e.target.value)} autoComplete="off" autoFocus />
-            </label>
-          )}
-          <div className="flex flex-wrap justify-end gap-2">
-            <button type="button" className="btn btn-ghost btn-sm" onClick={() => ref.current?.close()}>
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={!ready || busy}
-              className={`btn btn-sm ${danger ? "bg-danger text-navy hover:bg-danger/85" : "btn-primary"}`}
-            >
-              {busy ? "Un momento…" : confirmLabel}
-            </button>
-          </div>
-        </form>
-      </dialog>
+        {children}
+      </ConfirmDialog>
     </>
+  );
+}
+
+export function ConfirmDialog({
+  open,
+  onClose,
+  title,
+  description,
+  confirmLabel,
+  typeToConfirm,
+  danger,
+  onConfirm,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  description: React.ReactNode;
+  confirmLabel: string;
+  typeToConfirm?: string;
+  danger?: boolean;
+  onConfirm: (typed: string) => Promise<boolean>;
+  children?: React.ReactNode;
+}) {
+  const [typed, setTyped] = useState("");
+  const [busy, setBusy] = useState(false);
+  const ready = !typeToConfirm || typed.trim().toLowerCase() === typeToConfirm.toLowerCase();
+  const close = () => {
+    setTyped("");
+    onClose();
+  };
+  return (
+    <Dialog open={open} onClose={close} title={title}>
+      <form
+        className="space-y-5"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (!ready) return;
+          setBusy(true);
+          const ok = await onConfirm(typed);
+          setBusy(false);
+          if (ok) close();
+        }}
+      >
+        <div className="space-y-2 text-sm text-[#52617a]">{description}</div>
+        {children}
+        {typeToConfirm && (
+          <label className="block">
+            <span className="a-label">
+              Escribe <strong className="font-mono text-[#0f1b33]">{typeToConfirm}</strong> para confirmar
+            </span>
+            <input className="a-input" value={typed} onChange={(e) => setTyped(e.target.value)} autoComplete="off" autoFocus />
+          </label>
+        )}
+        <div className="flex flex-wrap justify-end gap-2">
+          <button type="button" className="a-btn a-btn-secondary" onClick={close}>
+            Cancelar
+          </button>
+          <button type="submit" disabled={!ready || busy} className={`a-btn ${danger ? "a-btn-danger" : "a-btn-primary"}`}>
+            {busy ? "Un momento…" : confirmLabel}
+          </button>
+        </div>
+      </form>
+    </Dialog>
   );
 }

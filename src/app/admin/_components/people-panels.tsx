@@ -5,7 +5,7 @@ import { useState } from "react";
 import { addTeacher, grantAccess, removeTeacher, revokeAccess } from "../_actions/people";
 import { ConfirmButton, useAdminAction } from "./feedback";
 
-function AddByEmail({ label, button, onAdd }: { label: string; button: string; onAdd: (email: string) => Promise<boolean> }) {
+function AddByEmail({ id, label, button, onAdd }: { id: string; label: string; button: string; onAdd: (email: string) => Promise<boolean> }) {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   return (
@@ -18,23 +18,27 @@ function AddByEmail({ label, button, onAdd }: { label: string; button: string; o
         setBusy(false);
       }}
     >
-      <label className="sr-only" htmlFor={`add-${button}`}>
-        {label}
-      </label>
-      <input
-        id={`add-${button}`}
-        className="field"
-        type="email"
-        required
-        placeholder={label}
-        autoComplete="off"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button disabled={busy} className="btn btn-ghost shrink-0">
-        {button}
-      </button>
+      <label className="sr-only" htmlFor={id}>{label}</label>
+      <input id={id} className="a-input" type="email" required placeholder={label} autoComplete="off" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <button disabled={busy} className="a-btn a-btn-primary shrink-0">{button}</button>
     </form>
+  );
+}
+
+function PersonRow({ userId, name, email, children }: { userId: string; name: string; email: string; children: React.ReactNode }) {
+  return (
+    <li className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
+      <Link href={`/admin/usuarios/${userId}`} className="flex min-w-0 items-center gap-3 hover:underline">
+        <span aria-hidden className="grid size-8 shrink-0 place-items-center rounded-full bg-[#e7eefb] text-xs font-medium text-[#1e40af]">
+          {name.slice(0, 1).toUpperCase()}
+        </span>
+        <span className="min-w-0 text-sm">
+          <span className="block font-medium">{name}</span>
+          <span className="block truncate text-xs a-subtle">{email}</span>
+        </span>
+      </Link>
+      {children}
+    </li>
   );
 }
 
@@ -43,31 +47,25 @@ export function TeachersPanel({ courseId, teachers }: { courseId: string; teache
   return (
     <div className="space-y-4">
       {teachers.length === 0 ? (
-        <p className="text-sm text-muted">Este curso no tiene profesor. Nadie atenderá sus dudas ni su foro.</p>
+        <p className="text-sm text-amber-700">Este curso no tiene profesor: nadie atenderá sus dudas ni su foro.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="divide-y divide-[#e1e7f0] rounded-xl border border-[#e1e7f0]">
           {teachers.map((t) => (
-            <li key={t.userId} className="inset flex flex-wrap items-center justify-between gap-2 px-4 py-2.5">
-              <Link href={`/admin/usuarios/${t.userId}`} className="min-w-0 hover:underline">
-                <span className="font-medium">{t.name}</span> <span className="text-sm text-muted">{t.email}</span>
-              </Link>
+            <PersonRow key={t.userId} {...t}>
               <ConfirmButton
                 label="Quitar"
-                className="btn btn-sm text-muted hover:text-white"
+                className="a-btn a-btn-ghost a-btn-sm"
                 title={`¿Quitar a ${t.name} como profesor?`}
                 description={<p>Dejará de ver este curso y sus dudas. Si no le quedan cursos, volverá a ser alumno.</p>}
                 confirmLabel="Quitar"
                 onConfirm={() => run(() => removeTeacher({ courseId, userId: t.userId }), "Profesor quitado.")}
               />
-            </li>
+            </PersonRow>
           ))}
         </ul>
       )}
-      <AddByEmail
-        label="Email del profesor (tiene que tener cuenta)"
-        button="Asignar profesor"
-        onAdd={(email) => run(() => addTeacher({ courseId, email }), "Profesor asignado.")}
-      />
+      <AddByEmail id="add-teacher" label="Email del profesor" button="Asignar profesor" onAdd={(email) => run(() => addTeacher({ courseId, email }), "Profesor asignado.")} />
+      <p className="text-xs a-subtle">Tiene que tener cuenta. Si no la tiene, invítale desde Usuarios.</p>
     </div>
   );
 }
@@ -80,38 +78,31 @@ export function AccessPanel({
   access: { userId: string; name: string; email: string; source: "purchase" | "manual" }[];
 }) {
   const { run } = useAdminAction();
-  const purchases = access.filter((a) => a.source === "purchase").length;
+  const purchases = access.filter((a) => a.source === "purchase");
   const manual = access.filter((a) => a.source === "manual");
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted">
-        {purchases === 0 ? "Nadie lo ha comprado todavía." : `${purchases} ${purchases === 1 ? "alumno lo ha" : "alumnos lo han"} comprado.`}{" "}
-        Los suscriptores acceden si el curso está incluido en la suscripción.
+      <p className="text-sm a-muted">
+        {purchases.length === 0 ? "Nadie lo ha comprado todavía." : `${purchases.length} ${purchases.length === 1 ? "alumno lo ha" : "alumnos lo han"} comprado.`} Los suscriptores
+        acceden si el curso está incluido en la suscripción.
       </p>
       {manual.length > 0 && (
-        <ul className="space-y-2">
+        <ul className="divide-y divide-[#e1e7f0] rounded-xl border border-[#e1e7f0]">
           {manual.map((a) => (
-            <li key={a.userId} className="inset flex flex-wrap items-center justify-between gap-2 px-4 py-2.5">
-              <Link href={`/admin/usuarios/${a.userId}`} className="min-w-0 hover:underline">
-                <span className="font-medium">{a.name}</span> <span className="text-sm text-muted">{a.email}</span>
-              </Link>
+            <PersonRow key={a.userId} {...a}>
               <ConfirmButton
                 label="Quitar acceso"
-                className="btn btn-sm text-muted hover:text-white"
+                className="a-btn a-btn-ghost a-btn-sm"
                 title={`¿Quitar el acceso de ${a.name}?`}
                 description={<p>Dejará de poder ver el curso. Su progreso se conserva por si vuelve a tener acceso.</p>}
                 confirmLabel="Quitar acceso"
                 onConfirm={() => run(() => revokeAccess({ courseId, userId: a.userId }), "Acceso quitado.")}
               />
-            </li>
+            </PersonRow>
           ))}
         </ul>
       )}
-      <AddByEmail
-        label="Email del alumno (tiene que tener cuenta)"
-        button="Dar acceso gratis"
-        onAdd={(email) => run(() => grantAccess({ courseId, email }), "Acceso concedido.")}
-      />
+      <AddByEmail id="add-access" label="Email del alumno" button="Dar acceso gratis" onAdd={(email) => run(() => grantAccess({ courseId, email }), "Acceso concedido.")} />
     </div>
   );
 }

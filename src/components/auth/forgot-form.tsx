@@ -26,7 +26,7 @@ export function ForgotForm({ available }: { available: boolean }) {
       <AuthCard title="Recuperar contraseña" footer={footer}>
         <FormMessage tone="info">
           La recuperación de contraseña por email todavía no está disponible. Escribe al equipo de
-          Aula Virtual y te ayudaremos a recuperar el acceso.
+          IDESIE AV y te ayudaremos a recuperar el acceso.
         </FormMessage>
       </AuthCard>
     );

@@ -1,10 +1,14 @@
 "use server";
 
-import { and, count, eq } from "drizzle-orm";
+import { randomBytes } from "node:crypto";
+import { and, count, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
-import { courseTeachers, courses, enrollments, session, user } from "@/db/schema";
+import { account, courseTeachers, courses, enrollments, session, user, verification } from "@/db/schema";
 import { AdminError, adminAction, emailInput, idInput, type Tx } from "@/lib/admin/action";
-import { roleChangeIssue } from "@/lib/admin/rules";
+import { banIssue, roleChangeIssue } from "@/lib/admin/rules";
+import { sendEmail } from "@/lib/email";
+import { inviteTemplate, resetPasswordTemplate } from "@/lib/email-templates";
+import { siteOrigin } from "@/lib/site-url";
 
 async function findUserByEmail(tx: Tx, email: string) {
   const u = await tx.query.user.findFirst({ where: eq(user.email, email) });
@@ -162,4 +166,144 @@ const sessionsImpl = adminAction({
 });
 export async function revokeSessions(input: z.input<typeof sessionsSchema>) {
   return sessionsImpl(input);
+}
+
+// ─── Bloqueo, invitaciones y accesos desde la ficha del usuario ─
+
+const banSchema = z.object({
+  userId: idInput,
+  banned: z.boolean(),
+  reason: z.string().trim().max(300).optional(),
+});
+const banImpl = adminAction({
+  schema: banSchema,
+  sensitive: true,
+  run: async ({ userId, banned, reason }, { tx, actor }) => {
+    const target = await tx.query.user.findFirst({ where: eq(user.id, userId) });
+    if (!target) throw new AdminError("El usuario no existe.");
+    if (banned) {
+      const issue = banIssue({ actorId: actor.id, targetId: userId, targetRole: target.role });
+      if (issue) throw new AdminError(issue);
+      if (target.banned) throw new AdminError("La cuenta ya está bloqueada.");
+      await tx.update(user).set({ banned: true, bannedAt: new Date(), banReason: reason || null }).where(eq(user.id, userId));
+      // Fuera ya: se cierran todas sus sesiones.
+      await tx.delete(session).where(eq(session.userId, userId));
+    } else {
+      if (!target.banned) throw new AdminError("La cuenta no está bloqueada.");
+      await tx.update(user).set({ banned: false, bannedAt: null, banReason: null }).where(eq(user.id, userId));
+    }
+    return {
+      data: undefined,
+      audit: {
+        action: banned ? "user.ban" : "user.unban",
+        targetType: "user",
+        targetId: userId,
+        summary: banned ? `Bloqueó la cuenta de ${target.email}${reason ? ` (${reason})` : ""}` : `Desbloqueó la cuenta de ${target.email}`,
+      },
+    };
+  },
+});
+export async function setBanned(input: z.input<typeof banSchema>) {
+  return banImpl(input);
+}
+
+/** Enlace de un solo uso para elegir contraseña (el mismo mecanismo que "recuperar contraseña"). */
+async function createPasswordLink(tx: Tx, userId: string, days: number) {
+  const token = randomBytes(24).toString("base64url");
+  await tx.insert(verification).values({
+    id: randomBytes(16).toString("base64url"),
+    identifier: `reset-password:${token}`,
+    value: userId,
+    expiresAt: new Date(Date.now() + days * 24 * 60 * 60 * 1000),
+  });
+  return `${await siteOrigin()}/restablecer?token=${encodeURIComponent(token)}`;
+}
+
+const inviteSchema = z.object({
+  name: z.string().trim().min(1, "Escribe el nombre").max(80, "El nombre es demasiado largo"),
+  email: emailInput,
+  role: z.enum(["admin", "teacher", "student"]),
+  courseIds: z.array(idInput).max(50).default([]),
+});
+const inviteImpl = adminAction({
+  schema: inviteSchema,
+  sensitive: true,
+  run: async ({ name, email, role, courseIds }, { tx }) => {
+    const exists = await tx.query.user.findFirst({ where: eq(user.email, email), columns: { id: true } });
+    if (exists) throw new AdminError("Ya hay una cuenta con ese email. Búscala en la lista de usuarios.");
+    const found = courseIds.length
+      ? await tx.select({ id: courses.id, title: courses.title }).from(courses).where(inArray(courses.id, courseIds))
+      : [];
+    if (found.length !== new Set(courseIds).size) throw new AdminError("Alguno de los cursos elegidos ya no existe.");
+
+    const id = randomBytes(24).toString("base64url");
+    // El admin responde del email, así que la cuenta nace confirmada.
+    await tx.insert(user).values({ id, name: name.replace(/\s+/g, " "), email, role, emailVerified: true });
+    if (found.length) {
+      await tx.insert(enrollments).values(found.map((c) => ({ userId: id, courseId: c.id, source: "manual" as const })));
+    }
+    const url = await createPasswordLink(tx, id, 7);
+    await sendEmail({ to: email, ...inviteTemplate(name, url, role) });
+    const names = { admin: "administrador", teacher: "profesor", student: "alumno" };
+    return {
+      data: { id },
+      audit: {
+        action: "user.invite",
+        targetType: "user",
+        targetId: id,
+        summary: `Invitó a ${email} como ${names[role]}${found.length ? ` con acceso a ${found.map((c) => `"${c.title}"`).join(", ")}` : ""}`,
+      },
+    };
+  },
+});
+export async function inviteUser(input: z.input<typeof inviteSchema>) {
+  return inviteImpl(input);
+}
+
+const linkSchema = z.object({ userId: idInput });
+const linkImpl = adminAction({
+  schema: linkSchema,
+  run: async ({ userId }, { tx }) => {
+    const target = await tx.query.user.findFirst({ where: eq(user.id, userId) });
+    if (!target) throw new AdminError("El usuario no existe.");
+    if (target.banned) throw new AdminError("La cuenta está bloqueada. Desbloquéala antes.");
+    const hasPassword = await tx.query.account.findFirst({
+      where: and(eq(account.userId, userId), eq(account.providerId, "credential")),
+      columns: { id: true },
+    });
+    const url = await createPasswordLink(tx, userId, hasPassword ? 1 : 7);
+    const t = hasPassword ? resetPasswordTemplate(target.name, url) : inviteTemplate(target.name, url, target.role);
+    await sendEmail({ to: target.email, ...t });
+    return {
+      data: undefined,
+      audit: {
+        action: "user.password_link",
+        targetType: "user",
+        targetId: userId,
+        summary: `Envió a ${target.email} un enlace para ${hasPassword ? "cambiar" : "elegir"} su contraseña`,
+      },
+    };
+  },
+});
+export async function sendPasswordLink(input: z.input<typeof linkSchema>) {
+  return linkImpl(input);
+}
+
+const grantToUserSchema = z.object({ userId: idInput, courseId: idInput });
+const grantToUserImpl = adminAction({
+  schema: grantToUserSchema,
+  run: async ({ userId, courseId }, { tx }) => {
+    const c = await getCourse(tx, courseId);
+    const target = await tx.query.user.findFirst({ where: eq(user.id, userId), columns: { email: true } });
+    if (!target) throw new AdminError("El usuario no existe.");
+    const inserted = await tx.insert(enrollments).values({ courseId, userId, source: "manual" }).onConflictDoNothing().returning();
+    if (!inserted.length) throw new AdminError("Ya tiene acceso a ese curso.");
+    return {
+      data: undefined,
+      audit: { action: "enrollment.grant", targetType: "enrollment", targetId: userId, summary: `Dio acceso a ${target.email} a "${c.title}"`, details: { courseId } },
+    };
+  },
+});
+export async function grantAccessToUser(input: z.input<typeof grantToUserSchema>) {
+  return grantToUserImpl(input);
 }

@@ -2,9 +2,9 @@
 
 import { and, asc, count, eq, ne } from "drizzle-orm";
 import { z } from "zod";
-import { courses, enrollments, lessons, modules } from "@/db/schema";
+import { courseTeachers, courses, enrollments, lessons, modules, user } from "@/db/schema";
 import { AdminError, adminAction, idInput } from "@/lib/admin/action";
-import { courseFieldsSchema, deleteCourseIssue, publishIssues } from "@/lib/admin/rules";
+import { courseFieldsSchema, deleteCourseIssue, publishIssues, slugify, titleSchema, videoKeySchema } from "@/lib/admin/rules";
 import { formatPrice } from "@/lib/format";
 
 const createImpl = adminAction({
@@ -123,4 +123,82 @@ const deleteImpl = adminAction({
 });
 export async function deleteCourse(input: z.input<typeof deleteSchema>) {
   return deleteImpl(input);
+}
+
+// ─── Asistente: crea el curso con todo su temario de una vez ───
+
+const wizardLesson = z.object({
+  title: titleSchema,
+  videoKey: videoKeySchema,
+  durationSeconds: z.number().int().min(1).max(6 * 3600).nullable(),
+});
+const wizardSchema = courseFieldsSchema.extend({
+  modules: z
+    .array(z.object({ title: titleSchema, lessons: z.array(wizardLesson).max(200) }))
+    .min(1, "Añade al menos un módulo")
+    .max(50),
+  teacherEmail: z.string().trim().toLowerCase().email("El email del profesor no es válido").optional().or(z.literal("")),
+  publish: z.boolean(),
+});
+const wizardImpl = adminAction({
+  schema: wizardSchema,
+  run: async ({ modules: mods, teacherEmail, publish, ...fields }, { tx }) => {
+    const taken = await tx.query.courses.findFirst({ where: eq(courses.slug, fields.slug), columns: { id: true } });
+    if (taken) throw new AdminError("Ya hay un curso con esa dirección. Cámbiala en el paso 1.");
+    const allLessons = mods.flatMap((m) => m.lessons);
+    if (publish) {
+      const issues = publishIssues({ priceCents: fields.priceCents, lessons: allLessons.map((l) => ({ ...l })) });
+      if (issues.length) throw new AdminError(`No se puede publicar todavía. ${issues.join(" ")}`);
+    }
+    let teacher: { id: string; role: string } | undefined;
+    if (teacherEmail) {
+      teacher = await tx.query.user.findFirst({ where: eq(user.email, teacherEmail), columns: { id: true, role: true } });
+      if (!teacher) throw new AdminError(`No hay ninguna cuenta con ${teacherEmail}. Invítale primero desde Usuarios o deja el profesor vacío.`);
+    }
+
+    const [c] = await tx.insert(courses).values({ ...fields, status: publish ? "published" : "draft" }).returning({ id: courses.id });
+    const usedLesson = new Set<string>();
+    const usedModule = new Set<string>();
+    const unique = (used: Set<string>, title: string) => {
+      const base = slugify(title) || "elemento";
+      let id = base;
+      for (let i = 2; used.has(id); i++) id = `${base}-${i}`;
+      used.add(id);
+      return id;
+    };
+    for (const [mi, m] of mods.entries()) {
+      const [row] = await tx
+        .insert(modules)
+        .values({ courseId: c.id, title: m.title, position: mi, externalId: unique(usedModule, m.title) })
+        .returning({ id: modules.id });
+      for (const [li, l] of m.lessons.entries()) {
+        await tx.insert(lessons).values({
+          courseId: c.id,
+          moduleId: row.id,
+          title: l.title,
+          videoKey: l.videoKey,
+          durationSeconds: l.durationSeconds,
+          videoProvider: "r2",
+          position: li,
+          externalId: unique(usedLesson, l.title),
+        });
+      }
+    }
+    if (teacher) {
+      await tx.insert(courseTeachers).values({ courseId: c.id, userId: teacher.id });
+      if (teacher.role === "student") await tx.update(user).set({ role: "teacher" }).where(eq(user.id, teacher.id));
+    }
+    return {
+      data: { id: c.id },
+      audit: {
+        action: "course.create",
+        targetType: "course",
+        targetId: c.id,
+        summary: `${publish ? "Creó y publicó" : "Creó como borrador"} el curso "${fields.title}" (${mods.length} módulo${mods.length === 1 ? "" : "s"}, ${allLessons.length} lección${allLessons.length === 1 ? "" : "es"})`,
+      },
+    };
+  },
+});
+export async function createCourseWithContent(input: z.input<typeof wizardSchema>) {
+  return wizardImpl(input);
 }

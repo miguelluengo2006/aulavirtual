@@ -58,11 +58,11 @@ export function adminAction<S extends z.ZodType, T = undefined>(opts: {
 
       // El rol se lee de la base de datos en cada acción.
       const [row] = await db
-        .select({ role: user.role, email: user.email, name: user.name })
+        .select({ role: user.role, email: user.email, name: user.name, banned: user.banned })
         .from(user)
         .where(eq(user.id, session.user.id))
         .limit(1);
-      if (!row || row.role !== "admin") {
+      if (!row || row.role !== "admin" || row.banned) {
         console.warn(`[admin] acción rechazada: ${session.user.id} no es admin`);
         return { ok: false, error: "No tienes permiso para hacer esto." };
       }

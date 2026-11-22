@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { RedirectIfSignedIn } from "@/components/auth/redirect-if-signed-in";
-import { SignInForm } from "@/components/auth/sign-in-form";
+import { SignUpForm } from "@/components/auth/sign-up-form";
 
-export const metadata: Metadata = { title: "Entrar | Aula Virtual" };
+export const metadata: Metadata = { title: "Crear cuenta" };
 
-export default function EntrarPage({ searchParams }: PageProps<"/entrar">) {
+export default function RegistroPage({ searchParams }: PageProps<"/registro">) {
   return (
     <Suspense>
       <RedirectIfSignedIn searchParams={searchParams}>
-        <SignInForm />
+        <SignUpForm />
       </RedirectIfSignedIn>
     </Suspense>
   );

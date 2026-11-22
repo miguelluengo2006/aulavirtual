@@ -122,6 +122,21 @@ export function roleChangeIssue(p: {
   return null;
 }
 
+/** Motivo por el que no se puede bloquear a alguien, o null si se puede. */
+export function banIssue(p: { actorId: string; targetId: string; targetRole: Role }): string | null {
+  if (p.actorId === p.targetId) return "No puedes bloquear tu propia cuenta.";
+  if (p.targetRole === "admin") return "No se puede bloquear a un administrador. Quítale antes el rol.";
+  return null;
+}
+
+/** Comprueba que una lista reordenada tiene exactamente los mismos elementos. */
+export function sameMembers(current: string[], next: string[]): boolean {
+  if (current.length !== next.length) return false;
+  const a = [...current].sort();
+  const b = [...next].sort();
+  return a.every((x, i) => x === b[i]) && new Set(next).size === next.length;
+}
+
 /** Las acciones delicadas exigen haber entrado hace poco. */
 export const FRESH_SESSION_MS = 12 * 60 * 60 * 1000;
 

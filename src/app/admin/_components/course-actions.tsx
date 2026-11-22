@@ -15,7 +15,7 @@ export function CourseActionsBar({ id, status, issues }: { id: string; status: S
       {status !== "published" && (
         <ConfirmButton
           label="Publicar"
-          className="btn btn-primary btn-sm"
+          className="a-btn a-btn-primary"
           disabled={pending || issues.length > 0}
           title="¿Publicar el curso?"
           description={<p>Aparecerá en el catálogo y quien tenga acceso podrá verlo.</p>}
@@ -25,8 +25,8 @@ export function CourseActionsBar({ id, status, issues }: { id: string; status: S
       )}
       {status === "published" && (
         <ConfirmButton
-          label="Pasar a borrador"
-          className="btn btn-ghost btn-sm"
+          label="Despublicar"
+          className="a-btn a-btn-secondary"
           disabled={pending}
           title="¿Pasar a borrador?"
           description={
@@ -39,7 +39,7 @@ export function CourseActionsBar({ id, status, issues }: { id: string; status: S
       {status !== "archived" && (
         <ConfirmButton
           label="Archivar"
-          className="btn btn-ghost btn-sm"
+          className="a-btn a-btn-secondary"
           disabled={pending}
           title="¿Archivar el curso?"
           description={
@@ -68,15 +68,15 @@ export function DeleteCourse({ id, slug, title, status, purchases }: { id: strin
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted">
+      <p className="text-sm a-muted">
         Eliminar un curso borra para siempre sus módulos, lecciones, quizzes, el progreso de los alumnos y su foro. Los vídeos
         de R2 no se tocan.
       </p>
-      {blocked && <p className="text-sm text-warning">{blocked}</p>}
+      {blocked && <p className="text-sm text-amber-700">{blocked}</p>}
       <ConfirmButton
         label="Eliminar curso"
         danger
-        className="btn btn-sm border border-danger/50 text-danger hover:bg-danger/10"
+        className="a-btn a-btn-danger-soft border border-red-200"
         disabled={Boolean(blocked)}
         title={`¿Eliminar "${title}"?`}
         description={<p>Esto no se puede deshacer.</p>}

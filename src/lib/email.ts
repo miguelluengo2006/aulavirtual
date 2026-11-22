@@ -36,7 +36,7 @@ export async function sendEmail(email: Email): Promise<void> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: process.env.EMAIL_FROM ?? "Aula Virtual <onboarding@resend.dev>",
+      from: process.env.EMAIL_FROM ?? "IDESIE AV <onboarding@resend.dev>",
       to: [email.to],
       subject: email.subject,
       html: email.html,

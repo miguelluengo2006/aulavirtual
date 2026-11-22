@@ -21,6 +21,8 @@ export type CurrentUser = {
 export async function getCurrentUser(): Promise<CurrentUser | null> {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return null;
+  // Cuenta bloqueada: como si no hubiera sesión (sus sesiones ya se cerraron al bloquearla).
+  if ((session.user as { banned?: boolean }).banned) return null;
   const { id, name, email } = session.user;
   const role = (session.user as { role?: string }).role;
   return {

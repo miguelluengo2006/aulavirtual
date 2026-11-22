@@ -2,6 +2,7 @@ import "server-only";
 import { and, asc, count, desc, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
+  account,
   adminAuditLog,
   courseTeachers,
   courses,
@@ -144,17 +145,18 @@ export async function getLessonQuizForEdit(courseId: string, lessonId: string) {
 
 const PAGE_SIZE = 50;
 
-export async function listUsers(params: { q?: string; role?: "admin" | "teacher" | "student"; page?: number }) {
-  await admin();
+export async function listUsers(params: { q?: string; role?: "admin" | "teacher" | "student"; banned?: boolean; page?: number }) {
+  const me = await admin();
   const page = Math.max(1, params.page ?? 1);
   const q = params.q?.trim().slice(0, 100);
   const where = and(
     params.role ? eq(user.role, params.role) : undefined,
+    params.banned ? eq(user.banned, true) : undefined,
     q ? or(ilike(user.email, `%${q.replace(/[%_\\]/g, "\\$&")}%`), ilike(user.name, `%${q.replace(/[%_\\]/g, "\\$&")}%`)) : undefined,
   );
   const [rows, [{ total }]] = await Promise.all([
     db
-      .select({ id: user.id, name: user.name, email: user.email, role: user.role, emailVerified: user.emailVerified, createdAt: user.createdAt })
+      .select({ id: user.id, name: user.name, email: user.email, role: user.role, emailVerified: user.emailVerified, banned: user.banned, createdAt: user.createdAt })
       .from(user)
       .where(where)
       .orderBy(desc(user.createdAt))
@@ -162,7 +164,16 @@ export async function listUsers(params: { q?: string; role?: "admin" | "teacher"
       .offset((page - 1) * PAGE_SIZE),
     db.select({ total: count() }).from(user).where(where),
   ]);
-  return { rows, total, page, pages: Math.max(1, Math.ceil(total / PAGE_SIZE)) };
+  return { rows, total, page, pages: Math.max(1, Math.ceil(total / PAGE_SIZE)), meId: me.id };
+}
+
+/** Cursos para elegir (invitar o dar acceso). */
+export async function listCourseOptions() {
+  await admin();
+  return db
+    .select({ id: courses.id, title: courses.title, status: courses.status })
+    .from(courses)
+    .orderBy(asc(courses.title));
 }
 
 export async function getUserForAdmin(id: string) {
@@ -189,7 +200,22 @@ export async function getUserForAdmin(id: string) {
       .limit(20),
     db.select({ n: count() }).from(lessonProgress).where(and(eq(lessonProgress.userId, id), isNotNull(lessonProgress.completedAt))),
   ]);
-  return { user: u, isMe: me.id === id, enrolled, teaching, activeSessions: sessions.n, activity, completedLessons: completed.n };
+  const [hasPassword, allCourses] = await Promise.all([
+    db.query.account.findFirst({ where: and(eq(account.userId, id), eq(account.providerId, "credential")), columns: { id: true } }),
+    db.select({ id: courses.id, title: courses.title }).from(courses).orderBy(asc(courses.title)),
+  ]);
+  const enrolledIds = new Set(enrolled.map((e) => e.courseId));
+  return {
+    user: u,
+    isMe: me.id === id,
+    enrolled,
+    teaching,
+    activeSessions: sessions.n,
+    activity,
+    completedLessons: completed.n,
+    hasPassword: Boolean(hasPassword),
+    courseOptions: allCourses.filter((c) => !enrolledIds.has(c.id)),
+  };
 }
 
 export async function listActivity(params: { page?: number; type?: string }) {

@@ -17,6 +17,7 @@ const messages: Record<string, string> = {
   NAME_REQUIRED: "Escribe tu nombre.",
   NAME_TOO_LONG: "El nombre es demasiado largo (máximo 80 caracteres).",
   EMAIL_NOT_VERIFIED: "Aún no has confirmado tu email.",
+  USER_BANNED: "Esta cuenta está bloqueada. Si crees que es un error, escribe al equipo de IDESIE AV.",
   EMAIL_ALREADY_VERIFIED: "Tu email ya está confirmado. Ya puedes entrar.",
   INVALID_TOKEN: "El enlace no es válido o ya se ha usado. Pide uno nuevo.",
   TOKEN_EXPIRED: "El enlace ha caducado. Pide uno nuevo.",

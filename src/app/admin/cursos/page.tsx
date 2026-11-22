@@ -2,28 +2,17 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { listCourses } from "@/lib/admin/queries";
 import { formatPrice, plural } from "@/lib/format";
-import { formatDate, PageHeader, StatusChip } from "../_components/ui";
-
-const filters = [
-  { value: undefined, label: "Todos" },
-  { value: "draft", label: "Borradores" },
-  { value: "published", label: "Publicados" },
-  { value: "archived", label: "Archivados" },
-] as const;
+import { Card, EmptyState, FilterPills, formatDate, PageHeader, StatusChip } from "../_components/ui";
 
 export default function CoursesPage({ searchParams }: PageProps<"/admin/cursos">) {
   return (
     <div className="space-y-6">
       <PageHeader
         title="Cursos"
-        description="Crea cursos, edita su contenido y decide cuándo se publican."
-        actions={
-          <Link href="/admin/cursos/nuevo" className="btn btn-primary btn-sm">
-            Crear curso
-          </Link>
-        }
+        description="Crea cursos, edita su temario y decide cuándo se publican."
+        actions={<Link href="/admin/cursos/nuevo" className="a-btn a-btn-primary">Crear curso</Link>}
       />
-      <Suspense fallback={<p className="text-subtle">Cargando…</p>}>
+      <Suspense fallback={<p className="a-subtle">Cargando…</p>}>
         <CourseTable searchParams={searchParams} />
       </Suspense>
     </div>
@@ -38,59 +27,52 @@ async function CourseTable({ searchParams }: { searchParams: Promise<Record<stri
 
   return (
     <div className="space-y-4">
-      <nav aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
-        {filters.map((f) => (
-          <Link
-            key={f.label}
-            href={f.value ? `/admin/cursos?estado=${f.value}` : "/admin/cursos"}
-            aria-current={status === f.value ? "page" : undefined}
-            className={`btn btn-sm ${status === f.value ? "btn-primary" : "btn-ghost"}`}
-          >
-            {f.label}
-          </Link>
-        ))}
-      </nav>
-
-      {list.length === 0 ? (
-        <div className="glass space-y-3 p-8 text-muted">
-          <p>{status ? "No hay cursos con este estado." : "Todavía no hay cursos."}</p>
-          <p className="text-sm">
-            Crea uno desde aquí o pídele a Claude Code que lo prepare a partir de una carpeta.
-          </p>
-        </div>
-      ) : (
-        <div className="glass overflow-x-auto p-2">
-          <table className="w-full min-w-[640px] text-sm">
-            <thead className="text-left text-subtle">
-              <tr>
-                <th className="px-4 py-3 font-normal">Curso</th>
-                <th className="px-4 py-3 font-normal">Estado</th>
-                <th className="px-4 py-3 font-normal">Contenido</th>
-                <th className="px-4 py-3 font-normal">Precio</th>
-                <th className="px-4 py-3 font-normal">Actualizado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {list.map((c) => (
-                <tr key={c.id} className="border-t border-white/8">
-                  <td className="px-4 py-3">
-                    <Link href={`/admin/cursos/${c.id}`} className="font-medium hover:underline">
-                      {c.title}
-                    </Link>
-                    <div className="text-xs text-subtle">/cursos/{c.slug}</div>
-                  </td>
-                  <td className="px-4 py-3"><StatusChip status={c.status} /></td>
-                  <td className="px-4 py-3 text-muted">
-                    {plural(c.lessonCount, "lección", "lecciones")}, {plural(c.studentCount, "alumno", "alumnos")}
-                  </td>
-                  <td className="px-4 py-3">{formatPrice(c.priceCents, c.currency)}</td>
-                  <td className="px-4 py-3 text-muted">{formatDate(c.updatedAt)}</td>
+      <FilterPills
+        active={status}
+        items={[
+          { label: "Todos", href: "/admin/cursos" },
+          { label: "Borradores", href: "/admin/cursos?estado=draft", key: "draft" },
+          { label: "Publicados", href: "/admin/cursos?estado=published", key: "published" },
+          { label: "Archivados", href: "/admin/cursos?estado=archived", key: "archived" },
+        ]}
+      />
+      <Card padded={false}>
+        {list.length === 0 ? (
+          <EmptyState
+            title={status ? "No hay cursos con este estado" : "Todavía no hay cursos"}
+            text="Crea uno con el asistente, o pídele a Claude Code que lo prepare a partir de una carpeta."
+            action={<Link href="/admin/cursos/nuevo" className="a-btn a-btn-primary">Crear curso</Link>}
+          />
+        ) : (
+          <div className="relative overflow-x-auto">
+            <table className="a-table min-w-[680px]">
+              <thead>
+                <tr>
+                  <th>Curso</th>
+                  <th>Estado</th>
+                  <th>Contenido</th>
+                  <th>Precio</th>
+                  <th>Actualizado</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {list.map((c) => (
+                  <tr key={c.id}>
+                    <td>
+                      <Link href={`/admin/cursos/${c.id}`} className="font-medium hover:underline">{c.title}</Link>
+                      <p className="text-xs a-subtle">/cursos/{c.slug}</p>
+                    </td>
+                    <td><StatusChip status={c.status} /></td>
+                    <td className="a-muted">{plural(c.lessonCount, "lección", "lecciones")}, {plural(c.studentCount, "alumno", "alumnos")}</td>
+                    <td>{formatPrice(c.priceCents, c.currency)}</td>
+                    <td className="a-muted">{formatDate(c.updatedAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
     </div>
   );
 }

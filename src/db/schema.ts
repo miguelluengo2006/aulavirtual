@@ -41,6 +41,10 @@ export const user = pgTable("user", {
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
   role: userRole("role").default("student").notNull(),
+  // Cuenta bloqueada por un admin: no puede entrar ni usar sesiones.
+  banned: boolean("banned").default(false).notNull(),
+  bannedAt: timestamp("banned_at", { withTimezone: true }),
+  banReason: text("ban_reason"),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

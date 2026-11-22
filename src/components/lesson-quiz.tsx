@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { submitQuiz } from "@/app/cursos/[slug]/actions";
+import { submitQuiz } from "@/app/(site)/cursos/[slug]/actions";
 import type { QuizResult } from "@/lib/quiz";
 
 type Quiz = {

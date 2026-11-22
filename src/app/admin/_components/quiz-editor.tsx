@@ -65,34 +65,34 @@ export function QuizEditor({
   return (
     <div className="space-y-5">
       {questions.length === 0 && (
-        <div className="glass p-6 text-sm text-muted">Esta lección no tiene preguntas. Añade la primera.</div>
+        <div className="a-card p-6 text-sm a-muted">Esta lección aún no tiene quiz. Añade la primera pregunta con el botón de abajo.</div>
       )}
 
       {questions.map((q, qi) => (
-        <fieldset key={q.key} className="glass space-y-4 p-5 sm:p-6">
+        <fieldset key={q.key} className="a-card space-y-4 p-5 sm:p-6">
           <legend className="sr-only">Pregunta {qi + 1}</legend>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-lg">Pregunta {qi + 1}</h2>
+            <h2 className="text-base font-semibold">Pregunta {qi + 1}</h2>
             <div className="flex gap-1">
-              <button type="button" className="btn btn-sm text-muted hover:text-white" disabled={qi === 0} onClick={() => move(qi, -1)}>
+              <button type="button" className="a-btn a-btn-ghost a-btn-sm" disabled={qi === 0} onClick={() => move(qi, -1)}>
                 Subir
               </button>
-              <button type="button" className="btn btn-sm text-muted hover:text-white" disabled={qi === questions.length - 1} onClick={() => move(qi, 1)}>
+              <button type="button" className="a-btn a-btn-ghost a-btn-sm" disabled={qi === questions.length - 1} onClick={() => move(qi, 1)}>
                 Bajar
               </button>
-              <button type="button" className="btn btn-sm text-danger hover:bg-danger/10" onClick={() => update((qs) => qs.filter((_, i) => i !== qi))}>
+              <button type="button" className="a-btn a-btn-danger-soft a-btn-sm" onClick={() => update((qs) => qs.filter((_, i) => i !== qi))}>
                 Quitar
               </button>
             </div>
           </div>
 
           <label className="block space-y-1.5">
-            <span className="pl-1 text-sm text-muted">Enunciado</span>
-            <textarea className="field min-h-16 rounded-3xl py-3" maxLength={500} value={q.prompt} onChange={(e) => setQ(qi, { prompt: e.target.value })} />
+            <span className="a-label">Enunciado</span>
+            <textarea className="a-input min-h-16" maxLength={500} value={q.prompt} onChange={(e) => setQ(qi, { prompt: e.target.value })} />
           </label>
 
           <div className="space-y-2" role="radiogroup" aria-label={`Respuestas de la pregunta ${qi + 1}`}>
-            <p className="pl-1 text-sm text-muted">Respuestas (marca la correcta)</p>
+            <p className="a-label">Respuestas (marca la correcta)</p>
             {q.options.map((o, oi) => (
               <div key={o.key} className="flex items-center gap-2">
                 <input
@@ -101,12 +101,12 @@ export function QuizEditor({
                   aria-label={`Respuesta ${oi + 1} es la correcta`}
                   checked={o.isCorrect}
                   onChange={() => setQ(qi, { options: q.options.map((x, i) => ({ ...x, isCorrect: i === oi })) })}
-                  className="size-4 shrink-0 accent-[var(--accent)]"
+                  className="size-4 shrink-0 accent-[#0d9488]"
                 />
                 <label className="sr-only" htmlFor={`op-${o.key}`}>Texto de la respuesta {oi + 1}</label>
                 <input
                   id={`op-${o.key}`}
-                  className={`field py-2 ${o.isCorrect ? "border-accent/60" : ""}`}
+                  className={`a-input py-2 ${o.isCorrect ? "border-teal-400 bg-teal-50/50" : ""}`}
                   maxLength={300}
                   value={o.text}
                   onChange={(e) => setQ(qi, { options: q.options.map((x, i) => (i === oi ? { ...x, text: e.target.value } : x)) })}
@@ -115,7 +115,7 @@ export function QuizEditor({
                   type="button"
                   aria-label={`Quitar la respuesta ${oi + 1}`}
                   disabled={q.options.length <= 2}
-                  className="grid size-8 shrink-0 place-items-center rounded-full text-muted hover:bg-white/10 hover:text-white disabled:opacity-30"
+                  className="grid size-8 shrink-0 place-items-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 disabled:opacity-30"
                   onClick={() => {
                     const rest = q.options.filter((_, i) => i !== oi);
                     if (o.isCorrect && rest.length) rest[0] = { ...rest[0], isCorrect: true };
@@ -129,7 +129,7 @@ export function QuizEditor({
             {q.options.length < 6 && (
               <button
                 type="button"
-                className="btn btn-sm text-muted hover:text-white"
+                className="a-btn a-btn-ghost a-btn-sm"
                 onClick={() => setQ(qi, { options: [...q.options, { key: k(), text: "", isCorrect: false }] })}
               >
                 Añadir respuesta
@@ -138,23 +138,23 @@ export function QuizEditor({
           </div>
 
           <label className="block space-y-1.5">
-            <span className="pl-1 text-sm text-muted">Explicación (se muestra al responder)</span>
-            <textarea className="field min-h-16 rounded-3xl py-3" maxLength={1000} value={q.explanation} onChange={(e) => setQ(qi, { explanation: e.target.value })} />
+            <span className="a-label">Explicación (se muestra al responder)</span>
+            <textarea className="a-input min-h-16" maxLength={1000} value={q.explanation} onChange={(e) => setQ(qi, { explanation: e.target.value })} />
           </label>
         </fieldset>
       ))}
 
-      <div className="glass glass-strong sticky bottom-4 z-10 flex flex-wrap items-center justify-between gap-3 p-3 pl-5">
-        <span className="text-sm text-muted">
+      <div className="a-card sticky bottom-4 z-10 flex flex-wrap items-center justify-between gap-3 p-3 pl-5 shadow-lg">
+        <span className={`text-sm ${dirty ? "text-amber-700" : "a-muted"}`}>
           {dirty ? "Tienes cambios sin guardar." : `${questions.length} pregunta${questions.length === 1 ? "" : "s"}.`}
         </span>
         <div className="flex gap-2">
           {questions.length < 20 && (
-            <button type="button" className="btn btn-ghost btn-sm" onClick={() => update((qs) => [...qs, blankQuestion()])}>
+            <button type="button" className="a-btn a-btn-secondary a-btn-sm" onClick={() => update((qs) => [...qs, blankQuestion()])}>
               Añadir pregunta
             </button>
           )}
-          <button type="button" disabled={pending || !dirty} className="btn btn-primary btn-sm" onClick={onSave}>
+          <button type="button" disabled={pending || !dirty} className="a-btn a-btn-primary a-btn-sm" onClick={onSave}>
             {pending ? "Guardando…" : "Guardar quiz"}
           </button>
         </div>

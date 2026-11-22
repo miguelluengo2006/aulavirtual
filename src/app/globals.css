@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Sistema de diseño de Aula Virtual
+ * Sistema de diseño de IDESIE AV
  * Azul marino, blanco y turquesa. Poppins, paneles de cristal y botones píldora.
  * Usa estas clases (glass, btn, field, chip…) en vez de repetir utilidades sueltas.
  */
@@ -202,5 +202,197 @@ h3 {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+}
+
+/*
+ * Panel de administración: barra lateral azul marino y zona de trabajo clara.
+ * Clases con prefijo a- (solo dentro de .admin-shell).
+ */
+.admin-shell {
+  --a-bg: #f3f6fb;
+  --a-surface: #ffffff;
+  --a-border: #e1e7f0;
+  --a-border-strong: #cbd5e3;
+  --a-text: #0f1b33;
+  --a-muted: #52617a;
+  --a-subtle: #8492a8;
+  --a-blue: #1d4ed8;
+  --a-blue-hover: #1e40af;
+  --a-teal: #0f9488;
+  color: var(--a-text);
+  background: var(--a-bg);
+  color-scheme: light;
+}
+.admin-shell ::selection {
+  background: rgb(29 78 216 / 0.18);
+}
+.admin-shell :focus-visible {
+  outline: 2px solid var(--a-blue);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .a-card {
+    background: var(--a-surface);
+    border: 1px solid var(--a-border);
+    border-radius: 1rem;
+    box-shadow: 0 1px 2px rgb(15 27 51 / 0.04), 0 6px 20px rgb(15 27 51 / 0.04);
+  }
+  .a-muted {
+    color: var(--a-muted);
+  }
+  .a-subtle {
+    color: var(--a-subtle);
+  }
+
+  .a-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border-radius: 0.7rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: background-color 120ms, border-color 120ms, color 120ms;
+  }
+  .a-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .a-btn-sm {
+    padding: 0.38rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+  .a-btn-primary {
+    background: var(--a-blue);
+    color: #fff;
+  }
+  .a-btn-primary:hover:not(:disabled) {
+    background: var(--a-blue-hover);
+  }
+  .a-btn-secondary {
+    background: #fff;
+    border-color: var(--a-border-strong);
+    color: var(--a-text);
+  }
+  .a-btn-secondary:hover:not(:disabled) {
+    background: #f1f4f9;
+  }
+  .a-btn-ghost {
+    color: var(--a-muted);
+  }
+  .a-btn-ghost:hover:not(:disabled) {
+    background: #eaf0f8;
+    color: var(--a-text);
+  }
+  .a-btn-danger {
+    background: #dc2626;
+    color: #fff;
+  }
+  .a-btn-danger:hover:not(:disabled) {
+    background: #b91c1c;
+  }
+  .a-btn-danger-soft {
+    color: #b91c1c;
+  }
+  .a-btn-danger-soft:hover:not(:disabled) {
+    background: #fef2f2;
+  }
+
+  .a-input {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--a-border-strong);
+    border-radius: 0.7rem;
+    padding: 0.6rem 0.85rem;
+    color: var(--a-text);
+    outline: none;
+    transition: border-color 120ms, box-shadow 120ms;
+  }
+  .a-input::placeholder {
+    color: var(--a-subtle);
+  }
+  .a-input:focus {
+    border-color: var(--a-blue);
+    box-shadow: 0 0 0 3px rgb(29 78 216 / 0.15);
+  }
+  .a-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 0.35rem;
+  }
+  .a-help {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--a-subtle);
+    margin-top: 0.35rem;
+  }
+
+  .a-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: #eef2f7;
+    color: #475569;
+    white-space: nowrap;
+  }
+  .a-chip::before {
+    content: "";
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.8;
+  }
+  .a-chip-teal {
+    background: #ccfbf1;
+    color: #0f766e;
+  }
+  .a-chip-amber {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .a-chip-blue {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+  .a-chip-red {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+
+  .a-table {
+    width: 100%;
+    font-size: 0.875rem;
+  }
+  .a-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.75rem;
+    color: var(--a-subtle);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--a-border);
+  }
+  .a-table td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--a-border);
+    vertical-align: middle;
+  }
+  .a-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .a-table tbody tr:hover {
+    background: #f8fafd;
   }
 }

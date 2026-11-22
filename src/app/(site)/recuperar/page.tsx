@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { ForgotForm } from "@/components/auth/forgot-form";
 import { emailEnabled } from "@/lib/email";
 
-export const metadata: Metadata = { title: "Recuperar contraseña | Aula Virtual" };
+export const metadata: Metadata = { title: "Recuperar contraseña" };
 
 export default function RecuperarPage() {
   return (

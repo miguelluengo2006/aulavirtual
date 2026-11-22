@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  banIssue,
   deleteCourseIssue,
+  sameMembers,
   isSessionFresh,
   parsePrice,
   publishIssues,
@@ -109,5 +111,22 @@ describe("parsePrice", () => {
     expect(parsePrice("")).toBeNull();
     expect(parsePrice("49,999")).toBe("invalid");
     expect(parsePrice("-5")).toBe("invalid");
+  });
+});
+
+describe("banIssue", () => {
+  it("no te puedes bloquear ni bloquear a un admin", () => {
+    expect(banIssue({ actorId: "a", targetId: "a", targetRole: "student" })).toContain("propia cuenta");
+    expect(banIssue({ actorId: "a", targetId: "b", targetRole: "admin" })).toContain("administrador");
+    expect(banIssue({ actorId: "a", targetId: "b", targetRole: "teacher" })).toBeNull();
+  });
+});
+
+describe("sameMembers", () => {
+  it("solo acepta reordenar los mismos elementos", () => {
+    expect(sameMembers(["a", "b", "c"], ["c", "a", "b"])).toBe(true);
+    expect(sameMembers(["a", "b"], ["a", "x"])).toBe(false);
+    expect(sameMembers(["a", "b"], ["a", "a"])).toBe(false);
+    expect(sameMembers(["a", "b"], ["a"])).toBe(false);
   });
 });

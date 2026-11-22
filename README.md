@@ -1,4 +1,4 @@
-# Aula Virtual
+# IDESIE AV
 
 Plataforma de cursos de pago. Los cursos se crean con Claude Code a partir de una carpeta (vídeos + HTML para los quizzes) o desde el panel de administración.
 
