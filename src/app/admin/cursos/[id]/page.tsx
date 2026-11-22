@@ -1,106 +1,63 @@
-import { asc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { db } from "@/db";
-import { courses, lessons, modules, options, questions } from "@/db/schema";
-import { formatDuration, formatPrice, plural } from "@/lib/format";
-import { requireRole } from "@/lib/session";
+import { getCourseForEdit } from "@/lib/admin/queries";
+import { plural } from "@/lib/format";
+import { CourseActionsBar, DeleteCourse } from "../../_components/course-actions";
+import { ContentEditor } from "../../_components/content-editor";
+import { CourseForm } from "../../_components/course-form";
+import { AccessPanel, TeachersPanel } from "../../_components/people-panels";
+import { PageHeader, Section, StatusChip } from "../../_components/ui";
 
-// Vista de revisión de un curso (p. ej. recién importado por Claude Code).
-// La edición y reordenación llegan en la fase del panel de admin.
 export default function AdminCoursePage({ params }: PageProps<"/admin/cursos/[id]">) {
   return (
     <Suspense fallback={<p className="text-subtle">Cargando…</p>}>
-      <CourseDetail params={params} />
+      <Editor params={params} />
     </Suspense>
   );
 }
 
-async function CourseDetail({ params }: { params: Promise<{ id: string }> }) {
-  await requireRole(["admin"]);
+async function Editor({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-
-  const course = await db.query.courses.findFirst({
-    where: eq(courses.id, id),
-    with: {
-      teachers: { with: { user: { columns: { name: true, email: true } } } },
-      modules: {
-        orderBy: asc(modules.position),
-        with: {
-          lessons: {
-            orderBy: asc(lessons.position),
-            with: {
-              quiz: {
-                with: {
-                  questions: {
-                    orderBy: asc(questions.position),
-                    with: { options: { orderBy: asc(options.position) } },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
-  if (!course) notFound();
-
-  const statusChip =
-    course.status === "draft" ? (
-      <span className="chip chip-warning">Borrador</span>
-    ) : course.status === "published" ? (
-      <span className="chip chip-accent">Publicado</span>
-    ) : (
-      <span className="chip">Archivado</span>
-    );
+  const data = await getCourseForEdit(id);
+  if (!data) notFound();
+  const { course, teachers, access, progressByLesson, issues } = data;
+  const lessonCount = course.modules.reduce((n, m) => n + m.lessons.length, 0);
+  const purchases = access.filter((a) => a.source === "purchase").length;
 
   return (
-    <div className="space-y-8">
-      <Link href="/admin" className="text-sm text-muted hover:text-white">
-        Volver al panel
-      </Link>
-      <header className="glass space-y-4 p-6 sm:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-2">
-            {statusChip}
-            <h1 className="text-3xl">{course.title}</h1>
-          </div>
-          <Link href={`/cursos/${course.slug}`} className="btn btn-ghost btn-sm">
-            Ver como alumno
-          </Link>
+    <div className="space-y-6">
+      <PageHeader
+        back={{ href: "/admin/cursos", label: "Volver a cursos" }}
+        title={course.title}
+        description={
+          <span className="flex flex-wrap items-center gap-2">
+            <StatusChip status={course.status} />
+            <span>
+              {plural(course.modules.length, "módulo", "módulos")}, {plural(lessonCount, "lección", "lecciones")}
+            </span>
+            <Link href={`/cursos/${course.slug}`} className="link text-sm">
+              Ver como alumno
+            </Link>
+          </span>
+        }
+        actions={<CourseActionsBar id={course.id} status={course.status} issues={issues} />}
+      />
+
+      {course.status !== "published" && issues.length > 0 && (
+        <div className="glass space-y-2 border-warning/40 p-5 text-sm">
+          <p className="font-medium text-warning">Para poder publicarlo falta:</p>
+          <ul className="list-disc space-y-1 pl-5 text-muted">
+            {issues.map((i) => (
+              <li key={i}>{i}</li>
+            ))}
+          </ul>
         </div>
-        <p className="max-w-2xl text-muted">{course.description}</p>
-        <dl className="grid gap-4 text-sm sm:grid-cols-3">
-          <div>
-            <dt className="text-subtle">Precio</dt>
-            <dd>
-              {formatPrice(course.priceCents, course.currency)}
-              {course.includedInSubscription && ", incluido en la suscripción"}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-subtle">Profesores</dt>
-            <dd>
-              {course.teachers.length
-                ? course.teachers.map((t) => t.user.name || t.user.email).join(", ")
-                : "Ninguno asignado"}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-subtle">Contenido</dt>
-            <dd>
-              {plural(course.modules.length, "módulo", "módulos")},{" "}
-              {plural(course.modules.reduce((n, m) => n + m.lessons.length, 0), "lección", "lecciones")}
-            </dd>
-          </div>
-        </dl>
-      </header>
+      )}
 
       {course.importNotes.length > 0 && (
-        <div className="glass space-y-2 border-warning/40 p-6 text-sm">
-          <p className="font-medium text-warning">Notas de la importación</p>
+        <div className="glass space-y-2 p-5 text-sm">
+          <p className="font-medium">Notas de la importación con Claude Code</p>
           <ul className="list-disc space-y-1 pl-5 text-muted">
             {course.importNotes.map((n, i) => (
               <li key={i}>{n}</li>
@@ -109,53 +66,52 @@ async function CourseDetail({ params }: { params: Promise<{ id: string }> }) {
         </div>
       )}
 
-      {course.modules.map((m) => (
-        <section key={m.id} className="space-y-3">
-          <h2 className="text-xl">
-            Módulo {m.position + 1}: {m.title}
-          </h2>
-          <ol className="space-y-3">
-            {m.lessons.map((l) => (
-              <li key={l.id} className="glass space-y-3 p-5">
-                <div className="flex flex-wrap items-baseline justify-between gap-3">
-                  <span className="font-medium">{l.title}</span>
-                  <span className="flex gap-2">
-                    {l.videoKey === "TODO" ? (
-                      <span className="chip chip-warning">Falta el vídeo</span>
-                    ) : (
-                      <span className="chip">{formatDuration(l.durationSeconds)}</span>
-                    )}
-                    {!l.quiz && <span className="chip chip-warning">Sin quiz</span>}
-                  </span>
-                </div>
-                <p className="break-all font-mono text-xs text-subtle">{l.videoKey}</p>
-                {l.quiz && (
-                  <details className="inset px-4 py-3 text-sm">
-                    <summary className="cursor-pointer text-muted">
-                      Quiz de {plural(l.quiz.questions.length, "pregunta", "preguntas")}
-                    </summary>
-                    <ol className="mt-3 list-decimal space-y-3 pl-5">
-                      {l.quiz.questions.map((q) => (
-                        <li key={q.id} className="space-y-1">
-                          <p>{q.prompt}</p>
-                          <ul className="space-y-0.5">
-                            {q.options.map((o) => (
-                              <li key={o.id} className={o.isCorrect ? "text-accent" : "text-subtle"}>
-                                {o.isCorrect ? "✓ " : "– "}
-                                {o.text}
-                              </li>
-                            ))}
-                          </ul>
-                        </li>
-                      ))}
-                    </ol>
-                  </details>
-                )}
-              </li>
-            ))}
-          </ol>
-        </section>
-      ))}
+      <Section id="contenido" title="Contenido" description="Ordena los módulos y las lecciones, añade nuevas y edita su vídeo y su quiz.">
+        <ContentEditor
+          courseId={course.id}
+          courseSlug={course.slug}
+          modules={course.modules.map((m) => ({
+            id: m.id,
+            title: m.title,
+            lessons: m.lessons.map((l) => ({
+              id: l.id,
+              title: l.title,
+              description: l.description,
+              videoKey: l.videoKey,
+              durationSeconds: l.durationSeconds,
+              questionCount: l.quiz?.questions.length ?? 0,
+              progressCount: progressByLesson[l.id] ?? 0,
+            })),
+          }))}
+        />
+      </Section>
+
+      <Section id="datos" title="Datos del curso">
+        <CourseForm
+          course={{
+            id: course.id,
+            title: course.title,
+            slug: course.slug,
+            description: course.description,
+            priceCents: course.priceCents,
+            currency: course.currency,
+            includedInSubscription: course.includedInSubscription,
+          }}
+        />
+      </Section>
+
+      <div className="grid gap-6 xl:grid-cols-2">
+        <Section id="profesores" title="Profesores" description="Atienden las dudas y el foro de este curso.">
+          <TeachersPanel courseId={course.id} teachers={teachers} />
+        </Section>
+        <Section id="alumnos" title="Alumnos" description="Da acceso gratis a quien quieras (becas, pruebas, colaboradores).">
+          <AccessPanel courseId={course.id} access={access} />
+        </Section>
+      </div>
+
+      <Section id="eliminar" title="Eliminar el curso">
+        <DeleteCourse id={course.id} slug={course.slug} title={course.title} status={course.status} purchases={purchases} />
+      </Section>
     </div>
   );
 }

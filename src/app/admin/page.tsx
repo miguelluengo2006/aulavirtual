@@ -1,88 +1,100 @@
-import { desc, sql } from "drizzle-orm";
 import Link from "next/link";
 import { Suspense } from "react";
-import { db } from "@/db";
-import { courses } from "@/db/schema";
-import { formatPrice } from "@/lib/format";
-import { requireRole } from "@/lib/session";
+import { getOverview } from "@/lib/admin/queries";
+import { formatDateTime, PageHeader } from "./_components/ui";
 
-const statusLabel = {
-  draft: "Borrador",
-  published: "Publicado",
-  archived: "Archivado",
-} as const;
-
-export default function AdminPage() {
+export default function AdminHome() {
   return (
-    <div className="space-y-8">
-      <div className="space-y-1">
-        <h1 className="text-4xl">Panel de administración</h1>
-        <p className="text-muted">Revisa los cursos importados antes de publicarlos.</p>
-      </div>
-      <Suspense fallback={<p className="text-subtle">Cargando…</p>}>
-        <CourseTable />
-      </Suspense>
-    </div>
+    <Suspense fallback={<p className="text-subtle">Cargando…</p>}>
+      <Overview />
+    </Suspense>
   );
 }
 
-async function CourseTable() {
-  await requireRole(["admin"], "/admin");
-
-  const list = await db
-    .select({
-      id: courses.id,
-      title: courses.title,
-      slug: courses.slug,
-      status: courses.status,
-      priceCents: courses.priceCents,
-      currency: courses.currency,
-      updatedAt: courses.updatedAt,
-      lessonCount: sql<number>`(select count(*)::int from "lessons" where "lessons"."course_id" = "courses"."id")`,
-    })
-    .from(courses)
-    .orderBy(desc(courses.updatedAt));
-
-  if (list.length === 0) {
-    return (
-      <div className="glass p-8 text-muted">
-        No hay cursos todavía. Pídele a Claude Code que prepare uno a partir de una carpeta, o
-        impórtalo con <code className="rounded bg-white/10 px-1.5 py-0.5 text-white">npm run course:import</code>.
-      </div>
-    );
-  }
+async function Overview() {
+  const o = await getOverview();
+  const stats = [
+    { label: "Cursos publicados", value: o.courses.published, href: "/admin/cursos?estado=published" },
+    { label: "Borradores", value: o.courses.draft, href: "/admin/cursos?estado=draft" },
+    { label: "Alumnos", value: o.users.student, href: "/admin/usuarios?rol=student" },
+    { label: "Profesores", value: o.users.teacher, href: "/admin/usuarios?rol=teacher" },
+    { label: "Accesos a cursos", value: o.enrollments, href: "/admin/cursos" },
+  ];
 
   return (
-    <div className="glass overflow-x-auto p-2">
-    <table className="w-full text-sm">
-      <thead className="text-left text-subtle">
-        <tr>
-          <th className="px-4 py-3 font-normal">Curso</th>
-          <th className="px-4 py-3 font-normal">Estado</th>
-          <th className="px-4 py-3 font-normal">Lecciones</th>
-          <th className="px-4 py-3 font-normal">Precio</th>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map((c) => (
-          <tr key={c.id} className="border-t border-white/8">
-            <td className="px-4 py-3">
-              <Link href={`/admin/cursos/${c.id}`} className="font-medium hover:underline">
-                {c.title}
-              </Link>
-              <div className="text-xs text-subtle">{c.slug}</div>
-            </td>
-            <td className="px-4 py-3">
-              <span className={`chip ${c.status === "draft" ? "chip-warning" : c.status === "published" ? "chip-accent" : ""}`}>
-                {statusLabel[c.status]}
-              </span>
-            </td>
-            <td className="px-4 py-3">{c.lessonCount}</td>
-            <td className="px-4 py-3">{formatPrice(c.priceCents, c.currency)}</td>
-          </tr>
+    <div className="space-y-8">
+      <PageHeader
+        title="Resumen"
+        description="Lo esencial de la plataforma de un vistazo."
+        actions={
+          <Link href="/admin/cursos/nuevo" className="btn btn-primary btn-sm">
+            Crear curso
+          </Link>
+        }
+      />
+
+      <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5">
+        {stats.map((s) => (
+          <li key={s.label}>
+            <Link href={s.href} className="glass block space-y-1 p-5 transition-colors hover:bg-white/10">
+              <p className="text-3xl font-semibold tabular-nums tracking-tight">{s.value}</p>
+              <p className="text-sm text-muted">{s.label}</p>
+            </Link>
+          </li>
         ))}
-      </tbody>
-    </table>
+      </ul>
+
+      <div className="grid gap-6 xl:grid-cols-2">
+        <section className="glass space-y-4 p-6">
+          <h2 className="text-xl">Borradores</h2>
+          {o.drafts.length === 0 ? (
+            <p className="text-sm text-muted">No hay cursos en borrador.</p>
+          ) : (
+            <ul className="space-y-3">
+              {o.drafts.map((d) => (
+                <li key={d.id} className="inset space-y-1 px-4 py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <Link href={`/admin/cursos/${d.id}`} className="font-medium hover:underline">
+                      {d.title}
+                    </Link>
+                    {d.issues.length === 0 ? (
+                      <span className="chip chip-accent">Listo para publicar</span>
+                    ) : (
+                      <span className="chip chip-warning">
+                        {d.issues.length} pendiente{d.issues.length === 1 ? "" : "s"}
+                      </span>
+                    )}
+                  </div>
+                  {d.issues.length > 0 && <p className="text-sm text-muted">{d.issues[0]}</p>}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section className="glass space-y-4 p-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl">Actividad reciente</h2>
+            <Link href="/admin/actividad" className="link text-sm">
+              Ver toda
+            </Link>
+          </div>
+          {o.recent.length === 0 ? (
+            <p className="text-sm text-muted">Aquí aparecerá cada cambio que se haga desde el panel.</p>
+          ) : (
+            <ul className="space-y-3 text-sm">
+              {o.recent.map((a) => (
+                <li key={a.id} className="space-y-0.5">
+                  <p>{a.summary}</p>
+                  <p className="text-xs text-subtle">
+                    {a.actorEmail}, {formatDateTime(a.createdAt)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
     </div>
   );
 }

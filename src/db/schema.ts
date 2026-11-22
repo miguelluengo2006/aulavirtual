@@ -434,6 +434,31 @@ export const forumPosts = pgTable(
 );
 
 // ─────────────────────────────────────────────────────────────
+// Registro de actividad del panel de administración
+// ─────────────────────────────────────────────────────────────
+
+export const adminAuditLog = pgTable(
+  "admin_audit_log",
+  {
+    id: id(),
+    // Sin FK: el registro se conserva aunque se borre el usuario.
+    actorId: text("actor_id").notNull(),
+    actorEmail: text("actor_email").notNull(),
+    action: text("action").notNull(),
+    targetType: text("target_type").notNull(),
+    targetId: text("target_id"),
+    summary: text("summary").notNull(),
+    details: jsonb("details").$type<Record<string, unknown>>(),
+    ipAddress: text("ip_address"),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index("admin_audit_created_idx").on(t.createdAt),
+    index("admin_audit_target_idx").on(t.targetType, t.targetId),
+  ],
+);
+
+// ─────────────────────────────────────────────────────────────
 // Relaciones (para db.query.*)
 // ─────────────────────────────────────────────────────────────
 

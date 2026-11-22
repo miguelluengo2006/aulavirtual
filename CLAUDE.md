@@ -46,6 +46,21 @@ Better Auth (`src/lib/auth.ts`) con email y contraseña. Pantallas en `src/compo
 - **No pasar `callbackURL` a `signIn.email`**: Better Auth redirige solo a esa URL tras entrar.
 - Emails: `src/lib/email.ts` (Resend por API) y plantillas en `src/lib/email-templates.ts`. En local, `EMAIL_DEV_CONSOLE=1` los escribe en la consola (nunca en Vercel).
 
+## Panel de administración (`/admin`)
+
+Secciones: Resumen, Cursos (crear, editar datos, publicar/borrador/archivar, eliminar, contenido con módulos y lecciones, quiz de cada lección, profesores, acceso manual), Usuarios (buscar, rol, sesiones) y Actividad.
+
+**Seguridad (no saltarse nunca):**
+- Toda acción del panel se crea con `adminAction()` de `src/lib/admin/action.ts` y vive en `src/app/admin/_actions/`. Comprueba sesión y rol **leyendo la base de datos en cada llamada**, valida con Zod, guarda el cambio y su registro de actividad en la misma transacción y no filtra errores internos. Proteger la página no basta: una Server Action se puede llamar sin la interfaz.
+- En archivos `"use server"` solo se exportan `async function`; el `adminAction(...)` se guarda en una constante sin exportar y la función exportada la llama.
+- Las consultas de las páginas (`src/lib/admin/queries.ts`) vuelven a comprobar el rol (defensa en profundidad).
+- Acciones delicadas (`sensitive: true`: rol, borrar curso o lección, cerrar sesiones) exigen haber entrado en las últimas 12 h; si no, piden volver a entrar.
+- Reglas en `src/lib/admin/rules.ts` (con tests): no se puede cambiar el propio rol ni quitar el último admin; no se borra un curso publicado ni uno comprado (solo archivar); no se publica sin precio, sin lecciones o con vídeos pendientes; las rutas de vídeo se validan (sin `..`, solo `.m3u8`).
+- Confirmación escrita para borrar un curso (su dirección) y para dar o quitar el rol de admin (el email).
+- Al quitar el rol de admin se cierran sus sesiones; al pasar a alumno deja de ser profesor de sus cursos.
+- Registro de actividad en `admin_audit_log` (quién, qué, cuándo, IP): solo se escribe desde `adminAction`, nunca se edita ni se borra.
+- Cabeceras de seguridad en `next.config.ts` para toda la web (X-Frame-Options, nosniff, HSTS…); `/admin` sin caché y `noindex`.
+
 ## Acceso a un curso
 
 Un alumno tiene acceso a un curso si se cumple alguna de estas condiciones:
@@ -272,6 +287,6 @@ npm run typecheck
 - [x] Fase 1: Next.js, base de datos, autenticación con roles, importación de cursos, vista de revisión en `/admin/cursos/<id>`
 - [x] Fase 2: vídeo en R2 con HLS cifrado, reproductor con marca de agua, progreso, páginas de curso y lección (`/cursos/<slug>/<id-leccion>`) y quizzes corregidos en el servidor
 - [ ] Fase 3: Stripe (compra única y suscripción) y control de acceso
-- [ ] Fase 4: panel de admin (editar, reordenar, publicar, asignar profesores)
+- [x] Fase 4: panel de admin completo y blindado (cursos, contenido, quizzes, profesores, accesos, usuarios, actividad)
 - [ ] Fase 5: dudas por lección y foro por curso
 - [ ] Fase 6: panel de métricas
