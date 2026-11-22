@@ -1,6 +1,6 @@
 "use server";
 
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, gt, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
 import { lessons, options, questions, quizAttempts, quizzes } from "@/db/schema";
@@ -10,8 +10,13 @@ import { getCurrentUser } from "@/lib/session";
 
 const input = z.object({
   quizId: z.string().min(1).max(64),
-  answers: z.record(z.string().max(64), z.string().max(64)),
+  answers: z
+    .record(z.string().max(64), z.string().max(64))
+    .refine((a) => Object.keys(a).length <= 50, "Demasiadas respuestas"),
 });
+
+/** Intentos de un mismo quiz por alumno y hora (evita llenar la base de datos a golpe de script). */
+const MAX_ATTEMPTS_PER_HOUR = 30;
 
 export async function submitQuiz(
   raw: z.infer<typeof input>,
@@ -31,6 +36,20 @@ export async function submitQuiz(
     .limit(1);
   if (!quiz[0] || !(await canAccessCourse(user.id, quiz[0].courseId))) {
     return { ok: false, error: "No tienes acceso a este quiz" };
+  }
+
+  const [recent] = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(quizAttempts)
+    .where(
+      and(
+        eq(quizAttempts.userId, user.id),
+        eq(quizAttempts.quizId, quizId),
+        gt(quizAttempts.createdAt, sql`now() - interval '1 hour'`),
+      ),
+    );
+  if (recent.n >= MAX_ATTEMPTS_PER_HOUR) {
+    return { ok: false, error: "Has repetido este quiz muchas veces seguidas. Vuelve a intentarlo dentro de un rato." };
   }
 
   // Las respuestas correctas solo se leen aquí, en el servidor.

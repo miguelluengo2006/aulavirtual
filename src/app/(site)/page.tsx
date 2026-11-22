@@ -1,10 +1,8 @@
-import { asc, eq, sql } from "drizzle-orm";
+import { getPublishedCourses } from "@/lib/course-data";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { HeroDemo } from "@/components/landing/hero-demo";
-import { db } from "@/db";
-import { courses } from "@/db/schema";
 import { formatPrice, plural } from "@/lib/format";
 
 const steps = [
@@ -343,21 +341,7 @@ function FeatureIcon({ name }: { name: (typeof features)[number]["icon"] }) {
 
 async function CourseList() {
   await connection();
-  const list = await db
-    .select({
-      id: courses.id,
-      slug: courses.slug,
-      title: courses.title,
-      description: courses.description,
-      priceCents: courses.priceCents,
-      currency: courses.currency,
-      includedInSubscription: courses.includedInSubscription,
-      lessonCount: sql<number>`(select count(*)::int from "lessons" where "lessons"."course_id" = "courses"."id")`,
-      totalSeconds: sql<number>`(select coalesce(sum("lessons"."duration_seconds"), 0)::int from "lessons" where "lessons"."course_id" = "courses"."id")`,
-    })
-    .from(courses)
-    .where(eq(courses.status, "published"))
-    .orderBy(asc(courses.title));
+  const list = await getPublishedCourses();
 
   if (list.length === 0) {
     return (

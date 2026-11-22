@@ -138,6 +138,17 @@ Despliegue automático desde GitHub (`main` → producción). Variables de entor
 
 El build no necesita la base de datos (`src/db/index.ts` solo exige `DATABASE_URL` fuera de `next build`). En Vercel el pool usa 3 conexiones por función.
 
+## Estabilidad y carga
+
+- **Región**: las funciones de Vercel van en Frankfurt (`vercel.json` → `fra1`), junto a la base de datos. No cambiarla sin mover también la base de datos.
+- **Pool de BD** (`src/db/index.ts`): 8 conexiones por instancia en Vercel, con tiempo máximo de conexión (8 s) y de consulta (15 s) y manejador de errores de conexiones en reposo. No quitar `pool.on("error")`: sin él, un corte de red tumba el proceso.
+- **Caché del catálogo**: `getPublishedCourses` y `getCourseOutline` (`src/lib/course-data.ts`) usan `"use cache"` con la etiqueta `courses` (1 min). `adminAction` la vacía con `updateTag("courses")` en cada cambio; una importación por script tarda hasta 1 min en verse. **Nunca cachear nada que dependa del usuario ni `canAccessCourse`.**
+- `canAccessCourse` es **una sola consulta** (se ejecuta en cada latido y cada petición de vídeo) y `getCurrentUser` lee la sesión una vez por petición (`cache` de React). Mantenerlo así.
+- Páginas de error en español: `src/app/(site)/error.tsx`, `src/app/admin/error.tsx`, `src/app/not-found.tsx` y `src/app/global-error.tsx`.
+- **CSP** en `next.config.ts`: solo se carga código de la propia web y vídeo de R2. Si se añade un servicio externo en el navegador (p. ej. Stripe.js), hay que añadir su dominio ahí.
+- Los quizzes admiten 30 intentos por alumno, quiz y hora.
+- Toda clave foránea nueva lleva su índice.
+
 ## Importar un curso con Claude Code
 
 ### Carpeta de entrada

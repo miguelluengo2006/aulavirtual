@@ -153,7 +153,7 @@ export const courseTeachers = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
   },
-  (t) => [primaryKey({ columns: [t.courseId, t.userId] })],
+  (t) => [primaryKey({ columns: [t.courseId, t.userId] }), index("course_teachers_user_idx").on(t.userId)],
 );
 
 export const modules = pgTable(
@@ -255,7 +255,7 @@ export const enrollments = pgTable(
     stripePaymentId: text("stripe_payment_id"),
     createdAt: createdAt(),
   },
-  (t) => [primaryKey({ columns: [t.userId, t.courseId] })],
+  (t) => [primaryKey({ columns: [t.userId, t.courseId] }), index("enrollments_course_idx").on(t.courseId)],
 );
 
 export const subscriptionStatus = pgEnum("subscription_status", [
@@ -319,7 +319,7 @@ export const lessonProgress = pgTable(
       .defaultNow()
       .notNull(),
   },
-  (t) => [primaryKey({ columns: [t.userId, t.lessonId] })],
+  (t) => [primaryKey({ columns: [t.userId, t.lessonId] }), index("lesson_progress_lesson_idx").on(t.lessonId)],
 );
 
 export const watchEvents = pgTable(
@@ -340,6 +340,7 @@ export const watchEvents = pgTable(
   (t) => [
     index("watch_events_lesson_idx").on(t.lessonId, t.createdAt),
     index("watch_events_user_idx").on(t.userId, t.createdAt),
+    index("watch_events_session_idx").on(t.userId, t.sessionId, t.createdAt),
     check("watch_events_range_chk", sql`${t.toSecond} >= ${t.fromSecond}`),
   ],
 );
@@ -360,7 +361,7 @@ export const quizAttempts = pgTable(
     answers: jsonb("answers").$type<Record<string, string>>().notNull(),
     createdAt: createdAt(),
   },
-  (t) => [index("quiz_attempts_user_quiz_idx").on(t.userId, t.quizId)],
+  (t) => [index("quiz_attempts_user_quiz_idx").on(t.userId, t.quizId, t.createdAt), index("quiz_attempts_quiz_idx").on(t.quizId)],
 );
 
 // ─────────────────────────────────────────────────────────────

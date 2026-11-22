@@ -1,5 +1,6 @@
 import "server-only";
 import { headers } from "next/headers";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "./auth";
 
@@ -17,8 +18,9 @@ export type CurrentUser = {
  * (nunca el objeto de sesión completo) o null si no hay sesión.
  *
  * Con cacheComponents, quien llame a esto debe estar dentro de <Suspense>.
+ * `cache` hace que varias llamadas en la misma petición lean la sesión una sola vez.
  */
-export async function getCurrentUser(): Promise<CurrentUser | null> {
+export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return null;
   // Cuenta bloqueada: como si no hubiera sesión (sus sesiones ya se cerraron al bloquearla).
@@ -31,7 +33,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     email,
     role: role === "admin" || role === "teacher" ? role : "student",
   };
-}
+});
 
 /** Exige sesión; si no hay, redirige a /entrar. */
 export async function requireUser(next?: string): Promise<CurrentUser> {

@@ -36,6 +36,13 @@
       "when": 1795364744583,
       "tag": "0004_user_ban",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795370114114,
+      "tag": "0005_perf_indexes",
+      "breakpoints": true
     }
   ]
 }

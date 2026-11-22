@@ -14,11 +14,24 @@ const pool =
   globalForDb.pool ??
   new Pool({
     connectionString: process.env.DATABASE_URL,
-    // En Vercel cada función tiene su propio pool: pocas conexiones, y el
-    // Transaction pooler de Supabase (puerto 6543) las reparte.
-    max: process.env.VERCEL ? 3 : 10,
+    // En Vercel una misma instancia atiende varias peticiones a la vez y el
+    // Transaction pooler de Supabase (puerto 6543) reparte las conexiones reales.
+    max: process.env.VERCEL ? 8 : 10,
     idleTimeoutMillis: 10_000,
+    // Si no hay conexión libre o la base de datos no responde, falla pronto
+    // en vez de dejar la petición colgada hasta el límite de la función.
+    connectionTimeoutMillis: 8_000,
+    query_timeout: 15_000,
+    keepAlive: true,
   });
+
+// Una conexión en reposo puede cortarse (reinicio del pooler, red). Sin este
+// manejador, ese error tumbaría el proceso entero; el pool la sustituye solo.
+if (!globalForDb.pool) {
+  pool.on("error", (err) => {
+    console.error(`[db] conexión en reposo cerrada: ${err.message}`);
+  });
+}
 
 if (process.env.NODE_ENV !== "production") globalForDb.pool = pool;
 

@@ -1,6 +1,6 @@
 import "server-only";
 import { eq } from "drizzle-orm";
-import { refresh } from "next/cache";
+import { refresh, updateTag } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { db } from "@/db";
@@ -103,6 +103,8 @@ export function adminAction<S extends z.ZodType, T = undefined>(opts: {
         return result.data;
       });
 
+      // El catálogo y los temarios públicos están en caché: se vacía al guardar cualquier cambio.
+      updateTag("courses");
       refresh();
       return { ok: true, data };
     } catch (e) {

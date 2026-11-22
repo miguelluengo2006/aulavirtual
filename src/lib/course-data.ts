@@ -1,5 +1,6 @@
 import "server-only";
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import {
   courses,
@@ -12,8 +13,40 @@ import {
   quizzes,
 } from "@/db/schema";
 
+// El catálogo y los temarios son iguales para todos y cambian poco, así que se
+// guardan en caché: con muchos alumnos a la vez no se repite la misma consulta
+// en cada visita. El panel de admin la vacía al guardar (etiqueta "courses");
+// una importación con Claude Code tarda como mucho un minuto en verse.
+// El acceso a vídeos y quizzes NO pasa por esta caché (canAccessCourse).
+const COURSES_CACHE = { stale: 30, revalidate: 60, expire: 3600 };
+
+/** Cursos publicados para el catálogo de la portada. */
+export async function getPublishedCourses() {
+  "use cache";
+  cacheTag("courses");
+  cacheLife(COURSES_CACHE);
+  return db
+    .select({
+      id: courses.id,
+      slug: courses.slug,
+      title: courses.title,
+      description: courses.description,
+      priceCents: courses.priceCents,
+      currency: courses.currency,
+      includedInSubscription: courses.includedInSubscription,
+      lessonCount: sql<number>`(select count(*)::int from "lessons" where "lessons"."course_id" = "courses"."id")`,
+      totalSeconds: sql<number>`(select coalesce(sum("lessons"."duration_seconds"), 0)::int from "lessons" where "lessons"."course_id" = "courses"."id")`,
+    })
+    .from(courses)
+    .where(eq(courses.status, "published"))
+    .orderBy(asc(courses.title));
+}
+
 /** Curso con su temario ordenado (sin vídeos ni respuestas). */
 export async function getCourseOutline(slug: string) {
+  "use cache";
+  cacheTag("courses");
+  cacheLife(COURSES_CACHE);
   return db.query.courses.findFirst({
     where: eq(courses.slug, slug),
     columns: {
