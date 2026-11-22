@@ -103,11 +103,11 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
                     <Link
                       href={`/cursos/${course.slug}/${l.externalId}`}
                       aria-current={current ? "page" : undefined}
-                      className={`flex items-center gap-3 rounded-2xl px-3 py-2 text-sm ${current ? "bg-white text-black" : "text-muted hover:bg-white/5 hover:text-white"}`}
+                      className={`flex items-center gap-3 rounded-2xl px-3 py-2 text-sm ${current ? "bg-white text-navy" : "text-muted hover:bg-white/5 hover:text-white"}`}
                     >
                       <span
                         aria-label={completed ? "Completada" : undefined}
-                        className={`grid size-4 shrink-0 place-items-center rounded-full text-[9px] ${completed ? "bg-accent text-black" : current ? "border border-black/30" : "border border-white/25"}`}
+                        className={`grid size-4 shrink-0 place-items-center rounded-full text-[9px] ${completed ? "bg-accent text-navy" : current ? "border border-navy/30" : "border border-white/25"}`}
                       >
                         {completed && "✓"}
                       </span>

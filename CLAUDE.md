@@ -200,7 +200,7 @@ Panel de admin (y panel del profesor, filtrado a sus cursos):
 
 ## Diseño
 
-Estilo oscuro inspirado en myofia.com: fondo `#0a0a0a`, texto blanco, tipografía **Poppins** (`@fontsource/poppins`, 400/500/600), paneles de cristal translúcidos y botones píldora. Todo está en `src/app/globals.css`; **usar sus clases en vez de inventar estilos nuevos**:
+Estilo inspirado en myofia.com con paleta **azul, blanco y turquesa**: fondo azul marino `#061430` con luz ambiental azul y turquesa, texto y botón principal blancos, tipografía **Poppins** (`@fontsource/poppins`, 400/500/600), paneles de cristal translúcidos y botones píldora. Todo está en `src/app/globals.css`; **usar sus clases en vez de inventar estilos nuevos**:
 
 | Clase | Para |
 |---|---|
@@ -214,7 +214,7 @@ Estilo oscuro inspirado en myofia.com: fondo `#0a0a0a`, texto blanco, tipografí
 | `link` | Enlaces dentro de texto |
 | `progress-track` + `progress-bar` | Barras de progreso |
 
-Colores (`text-muted`, `text-subtle`, `text-accent`, `text-warning`, `text-danger`, `bg-accent`…): esmeralda `#34d399` para completado/aciertos/progreso, ámbar `#fbbf24` para borradores y avisos, rojo `#f87171` para errores. Titulares en 600 con tracking negativo (ya aplicado a `h1`–`h3`).
+Colores (`text-muted`, `text-subtle`, `text-accent`, `text-warning`, `text-danger`, `bg-accent`…): turquesa `#2dd4bf` para completado/aciertos/progreso (las barras de progreso van de azul `#3b82f6` a turquesa), ámbar `#fbbf24` para borradores y avisos, rojo `#f87171` para errores. Titulares en 600 con tracking negativo (ya aplicado a `h1`–`h3`).
 
 Reglas: textos en español, en frases normales (nada de etiquetas en mayúsculas ni flechas en los botones); el botón dice lo que hace ("Comprar curso", no "Enviar"); los estados vacíos dicen qué hacer a continuación; foco visible y `prefers-reduced-motion` respetados; comprobar siempre en móvil (390 px).
 

@@ -2,29 +2,30 @@
 
 /*
  * Sistema de diseño de Aula Virtual
- * Oscuro, Poppins, paneles de cristal y botones píldora.
+ * Azul marino, blanco y turquesa. Poppins, paneles de cristal y botones píldora.
  * Usa estas clases (glass, btn, field, chip…) en vez de repetir utilidades sueltas.
  */
 
 :root {
-  --background: #0a0a0a;
+  --background: #061430; /* azul marino profundo */
   --foreground: #ffffff;
-  --muted: rgb(255 255 255 / 0.72);
-  --subtle: rgb(255 255 255 / 0.5);
-  --glass-bg: rgb(255 255 255 / 0.07);
-  --glass-bg-strong: rgb(255 255 255 / 0.12);
-  --glass-border: rgb(255 255 255 / 0.14);
+  --muted: rgb(226 236 255 / 0.76);
+  --subtle: rgb(226 236 255 / 0.52);
+  --glass-bg: rgb(148 180 255 / 0.08);
+  --glass-bg-strong: rgb(148 180 255 / 0.14);
+  --glass-border: rgb(190 210 255 / 0.18);
   --glass-blur: blur(28px) saturate(140%);
-  --glass-shadow: 0 8px 32px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.12);
-  --accent: #34d399; /* completado, aciertos, progreso */
+  --glass-shadow: 0 8px 32px rgb(2 8 24 / 0.45), inset 0 1px 0 rgb(255 255 255 / 0.12);
+  --accent: #2dd4bf; /* turquesa: completado, aciertos, progreso */
   --warning: #fbbf24; /* borradores, avisos */
-  --info: #4f8cff;
+  --info: #3b82f6; /* azul */
   --danger: #f87171;
   color-scheme: dark;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-navy: #061430;
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-subtle: var(--subtle);
@@ -46,8 +47,8 @@ body {
   line-height: 1.6;
   /* Luz ambiental fija: da profundidad al cristal sin competir con el contenido. */
   background:
-    radial-gradient(60rem 40rem at 85% -10%, rgb(52 211 153 / 0.10), transparent 60%),
-    radial-gradient(50rem 36rem at -10% 30%, rgb(79 140 255 / 0.08), transparent 60%),
+    radial-gradient(60rem 40rem at 85% -10%, rgb(45 212 191 / 0.16), transparent 60%),
+    radial-gradient(55rem 40rem at -10% 35%, rgb(59 130 246 / 0.22), transparent 60%),
     var(--background);
   background-attachment: fixed;
 }
@@ -61,7 +62,7 @@ h3 {
 }
 
 ::selection {
-  background: rgb(52 211 153 / 0.35);
+  background: rgb(45 212 191 / 0.35);
 }
 
 :focus-visible {
@@ -113,7 +114,7 @@ h3 {
 
   .btn-primary {
     background: #fff;
-    color: #000;
+    color: #061430;
   }
   .btn-primary:hover:not(:disabled) {
     background: rgb(255 255 255 / 0.85);
@@ -138,7 +139,7 @@ h3 {
   .field {
     width: 100%;
     border-radius: 999px;
-    background: rgb(255 255 255 / 0.06);
+    background: rgb(148 180 255 / 0.08);
     border: 1px solid var(--glass-border);
     padding: 0.7rem 1.1rem;
     color: var(--foreground);
@@ -164,7 +165,7 @@ h3 {
     color: var(--muted);
   }
   .chip-accent {
-    background: rgb(52 211 153 / 0.14);
+    background: rgb(45 212 191 / 0.15);
     color: var(--accent);
   }
   .chip-warning {
@@ -186,12 +187,12 @@ h3 {
     height: 6px;
     overflow: hidden;
     border-radius: 999px;
-    background: rgb(255 255 255 / 0.1);
+    background: rgb(148 180 255 / 0.16);
   }
   .progress-bar {
     height: 100%;
     border-radius: 999px;
-    background: var(--accent);
+    background: linear-gradient(90deg, var(--info), var(--accent));
   }
 }
 

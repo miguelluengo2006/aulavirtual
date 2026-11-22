@@ -60,7 +60,7 @@ async function Course({ params }: { params: Promise<{ slug: string }> }) {
                     <span className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm">
                       <span
                         aria-label={completed ? "Completada" : undefined}
-                        className={`grid size-5 shrink-0 place-items-center rounded-full text-[10px] ${completed ? "bg-accent text-black" : "border border-white/25"}`}
+                        className={`grid size-5 shrink-0 place-items-center rounded-full text-[10px] ${completed ? "bg-accent text-navy" : "border border-white/25"}`}
                       >
                         {completed && "✓"}
                       </span>

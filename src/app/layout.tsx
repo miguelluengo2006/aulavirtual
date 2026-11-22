@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Link href="/" className="flex items-center gap-2.5 font-semibold tracking-tight">
               <span
                 aria-hidden
-                className="grid size-7 place-items-center rounded-full bg-white text-sm font-semibold text-black"
+                className="grid size-7 place-items-center rounded-full bg-white text-sm font-semibold text-navy"
               >
                 A
               </span>
