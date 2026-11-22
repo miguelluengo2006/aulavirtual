@@ -33,6 +33,19 @@ Un profesor se asigna por curso (`course_teachers`). Un mismo usuario puede ser 
 
 Comprobar permisos **siempre en el servidor** (server actions / route handlers), nunca solo en la UI.
 
+## Cuentas: registro, entrar y recuperar contraseña
+
+Better Auth (`src/lib/auth.ts`) con email y contraseña. Pantallas en `src/components/auth/` y páginas `/entrar`, `/registro`, `/recuperar`, `/restablecer` y `/verificado`.
+
+- **Confirmar email**: obligatorio cuando hay envío de emails (`RESEND_API_KEY`). El enlace caduca en 24 h e inicia sesión al abrirlo (`/verificado?next=…`). Si alguien intenta entrar sin confirmar, el formulario de entrar le reenvía el enlace.
+- **No revelar qué emails tienen cuenta**: registrarse con un email existente responde igual que uno nuevo y avisa al dueño por email; "recuperar contraseña" responde siempre igual.
+- **Recuperar contraseña**: enlace de 1 h y un solo uso; al cambiarla se cierran todas las sesiones y se avisa por email.
+- **Límite de intentos** por IP guardado en la tabla `rate_limit` (en Vercel la memoria no se comparte): entrar y registro 10/min, recuperar y reenviar email 3/min. Solo en producción (`npm start` incluido).
+- Nombre limpio (espacios) y de 80 caracteres como mucho; email en minúsculas; contraseña de 8 a 128.
+- Mensajes de error en español en `src/lib/auth-errors.ts`; redirecciones seguras tras entrar con `safeNext` (`src/lib/safe-next.ts`). Ambos con tests.
+- **No pasar `callbackURL` a `signIn.email`**: Better Auth redirige solo a esa URL tras entrar.
+- Emails: `src/lib/email.ts` (Resend por API) y plantillas en `src/lib/email-templates.ts`. En local, `EMAIL_DEV_CONSOLE=1` los escribe en la consola (nunca en Vercel).
+
 ## Acceso a un curso
 
 Un alumno tiene acceso a un curso si se cumple alguna de estas condiciones:
@@ -98,6 +111,7 @@ Despliegue automático desde GitHub (`main` → producción). Variables de entor
 - `DATABASE_URL`: cadena del Transaction pooler de Supabase (6543). Obligatoria.
 - `BETTER_AUTH_SECRET`: secreto aleatorio (`openssl rand -base64 32`), distinto del de desarrollo. Obligatoria.
 - `BETTER_AUTH_URL`: solo si se usa un dominio propio; si no, se toma la URL de producción de Vercel.
+- `RESEND_API_KEY` y `EMAIL_FROM`: emails de confirmación y recuperación. Sin ellos no se exige confirmar el email y no se puede recuperar la contraseña.
 - `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`: para los vídeos.
 
 El build no necesita la base de datos (`src/db/index.ts` solo exige `DATABASE_URL` fuera de `next build`). En Vercel el pool usa 3 conexiones por función.

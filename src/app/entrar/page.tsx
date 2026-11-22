@@ -1,10 +1,16 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
-import { AuthForm } from "@/components/auth-form";
+import { RedirectIfSignedIn } from "@/components/auth/redirect-if-signed-in";
+import { SignInForm } from "@/components/auth/sign-in-form";
 
-export default function EntrarPage() {
+export const metadata: Metadata = { title: "Entrar | Aula Virtual" };
+
+export default function EntrarPage({ searchParams }: PageProps<"/entrar">) {
   return (
     <Suspense>
-      <AuthForm mode="signin" />
+      <RedirectIfSignedIn searchParams={searchParams}>
+        <SignInForm />
+      </RedirectIfSignedIn>
     </Suspense>
   );
 }
