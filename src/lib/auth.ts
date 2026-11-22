@@ -5,7 +5,18 @@ import { nextCookies } from "better-auth/next-js";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
 
+// URL pública de la web. En Vercel se deduce sola si no se define BETTER_AUTH_URL.
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : undefined;
+const baseURL = process.env.BETTER_AUTH_URL ?? vercelUrl;
+
 export const auth = betterAuth({
+  baseURL,
+  // Permite también las URLs de preview de Vercel de este despliegue.
+  trustedOrigins: [baseURL, process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`].filter(
+    (o): o is string => Boolean(o),
+  ),
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {

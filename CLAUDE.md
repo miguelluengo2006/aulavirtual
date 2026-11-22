@@ -91,6 +91,17 @@ La base de datos de producción está en Supabase (proyecto `aulavirtual`, ref `
 - Si aplicas una migración con el conector de Supabase en vez de con `npm run db:migrate`, añade también su fila en `drizzle.__drizzle_migrations` (hash = sha256 del archivo .sql, `created_at` = `when` de `drizzle/meta/_journal.json`), o Drizzle intentará repetirla.
 - En el hosting (Vercel), usar la cadena del **Transaction pooler** (puerto 6543). La conexión directa (5432) es para migraciones desde un ordenador.
 
+### Vercel
+
+Despliegue automático desde GitHub (`main` → producción). Variables de entorno en Vercel (Settings → Environment Variables):
+
+- `DATABASE_URL`: cadena del Transaction pooler de Supabase (6543). Obligatoria.
+- `BETTER_AUTH_SECRET`: secreto aleatorio (`openssl rand -base64 32`), distinto del de desarrollo. Obligatoria.
+- `BETTER_AUTH_URL`: solo si se usa un dominio propio; si no, se toma la URL de producción de Vercel.
+- `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`: para los vídeos.
+
+El build no necesita la base de datos (`src/db/index.ts` solo exige `DATABASE_URL` fuera de `next build`). En Vercel el pool usa 3 conexiones por función.
+
 ## Importar un curso con Claude Code
 
 ### Carpeta de entrada
