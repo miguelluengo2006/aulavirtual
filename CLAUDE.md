@@ -210,6 +210,8 @@ npm run video:prepare -- <video.mp4> cursos/<slug>/<id-leccion> --upload
 
 Convierte con ffmpeg (720p por defecto, `--height=1080` para cambiarlo), cifra con una clave aleatoria por lección, sube `index.m3u8`, `seg_*.ts` y `enc.key` a R2 e imprime el `video` para el `course.json` (con la duración). Sin `--upload` deja el resultado en `.video-out/`. Cuando el admin pase vídeos en la carpeta de un curso, usar este script para cada uno.
 
+Para un curso entero, `npm run videos:course -- <course.json> <carpeta-con-los-mp4> --upload [--limit=N] [--height=720] [--force]` empareja `M<módulo>-<n>-<tema>.mp4` con la lección n del módulo (ignora los `-ligero`), llama a `video:prepare` para cada uno, sube a `cursos/<slug>/<id-leccion>/` y guarda clave y duración en el `course.json` tras cada vídeo. Salta las lecciones que ya tienen vídeo, así que se puede lanzar por tandas (`--limit`) y retomar si se corta. Después, `npm run course:import`. Emparejado en `src/lib/video-batch.ts` (con tests).
+
 ### Cómo se protege
 
 - `GET /api/video/<lessonId>/playlist` comprueba `canAccessCourse`, lee la playlist de R2 y la reescribe (`src/lib/hls.ts`): segmentos → URLs firmadas de R2; clave → `/api/video/<lessonId>/key`; sub-playlists → el mismo endpoint. Rechaza rutas fuera de la carpeta de la lección.
@@ -301,6 +303,7 @@ npm run course:validate <ruta course.json>
 npm run course:import -- <ruta course.json> [--allow-published] [--prune]
 npm run user:role <email> <admin|teacher|student>
 npm run video:prepare -- <video.mp4> <carpeta-en-r2> [--upload] [--height=720]
+npm run videos:course -- <course.json> <carpeta-mp4> [--upload] [--limit=N]
 npm run test
 npm run lint
 npm run typecheck
