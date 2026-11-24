@@ -70,11 +70,16 @@ export async function getObjectTextCached(key: string): Promise<string> {
   return new TextDecoder().decode(await getObjectBytesCached(key));
 }
 
-/** Origen del endpoint de R2 (para `preconnect`). null si R2 no está configurado. */
+/**
+ * Origen desde el que el navegador descarga los segmentos (para `preconnect`).
+ * Las URLs firmadas usan el estilo "virtual host": <bucket>.<cuenta>.r2.cloudflarestorage.com.
+ * null si R2 no está configurado.
+ */
 export function r2Origin(): string | null {
   if (process.env.R2_ENDPOINT) return new URL(process.env.R2_ENDPOINT).origin;
   const account = process.env.R2_ACCOUNT_ID;
-  return account ? `https://${account}.r2.cloudflarestorage.com` : null;
+  const bucket = process.env.R2_BUCKET;
+  return account && bucket ? `https://${bucket}.${account}.r2.cloudflarestorage.com` : null;
 }
 
 /**

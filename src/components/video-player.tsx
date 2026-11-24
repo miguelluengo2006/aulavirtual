@@ -62,12 +62,25 @@ export function VideoPlayer({ lessonId, watermark, startAt = 0 }: Props) {
             },
           },
         });
+        // Recuperaciones tras errores graves de red: sin límite, un fallo permanente
+        // (p. ej. R2 bloqueando la descarga) dejaría la pantalla en negro sin aviso.
+        let networkRecoveries = 0;
+        hls.on(Hls.Events.FRAG_LOADED, () => {
+          networkRecoveries = 0;
+        });
         hls.on(Hls.Events.ERROR, (_e, data) => {
           if (!data.fatal) return;
           const status = (data.response as { code?: number } | undefined)?.code;
+          console.warn(`[vídeo] ${data.type}: ${data.details}${status ? ` (HTTP ${status})` : ""}`);
           if (status === 401) setError("Tu sesión ha caducado. Vuelve a entrar.");
           else if (status === 404) setError("Este vídeo todavía no está disponible.");
-          else if (data.type === Hls.ErrorTypes.NETWORK_ERROR) hls.startLoad();
+          else if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRecoveries >= 3) {
+            setError("No se ha podido cargar el vídeo. Revisa tu conexión y vuelve a cargar la página.");
+            hls.stopLoad();
+          } else if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+            networkRecoveries++;
+            hls.startLoad();
+          }
           else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
           else setError("No se ha podido reproducir el vídeo.");
         });
