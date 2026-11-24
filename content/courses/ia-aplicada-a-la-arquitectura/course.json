@@ -1,0 +1,3606 @@
+{
+  "version": 1,
+  "slug": "ia-aplicada-a-la-arquitectura",
+  "title": "IA Aplicada a la Arquitectura",
+  "description": "Un curso para integrar la inteligencia artificial generativa en el flujo de trabajo del arquitecto de forma sistemática, crítica y profesional: desde entender cómo funciona un LLM hasta operar agentes dentro de Revit.",
+  "pricing": {
+    "priceCents": null,
+    "currency": "eur",
+    "includedInSubscription": true
+  },
+  "teachers": [
+    "josecarlosmartinmateos@gmail.com"
+  ],
+  "modules": [
+    {
+      "id": "m1-introduccion-a-la-ia",
+      "title": "Introducción a la IA",
+      "lessons": [
+        {
+          "id": "m1-1-que-es-la-ia",
+          "title": "¿Qué es la Inteligencia Artificial?",
+          "description": "Presenta las cuatro definiciones de referencia de la IA, el mapa de la disciplina hasta la IA generativa, la IA simbólica frente a la conexionista, los niveles de IA y el test de Turing invertido aplicado al estudio.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.1-Que-es-la-IA/1.1-Que-es-la-IA.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-mirada-kelleher",
+                "prompt": "Según la mirada de Kelleher (la IA como aprendizaje automático), ¿por qué es probable que un modelo de lenguaje responda mal sobre la ordenanza municipal de un pueblo pequeño?",
+                "options": [
+                  {
+                    "text": "Porque los modelos de lenguaje tienen prohibido responder sobre normativa",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque un modelo es tan bueno como los datos de los que aprendió, y esa ordenanza apenas aparece en ellos",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque las reglas de la ordenanza se escribieron a mano y el modelo no puede leerlas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque los modelos solo funcionan con normativa estatal como el CTE",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección resume la mirada de Kelleher en que un modelo es tan bueno como sus datos: si el dato es escaso, local o sesgado, el modelo falla."
+              },
+              {
+                "id": "q2-simbolica-conexionista",
+                "prompt": "¿Qué combinación de rasgos describe a la IA conexionista frente a la simbólica?",
+                "options": [
+                  {
+                    "text": "Reglas escritas por expertos, alta transparencia y baja flexibilidad",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Reglas escritas por expertos, baja transparencia y alta flexibilidad",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Aprende de ejemplos, alta flexibilidad y baja transparencia",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "La IA conexionista aprende de ejemplos ajustando parámetros: es potente y flexible, pero opaca; la simbólica es transparente y verificable, pero frágil."
+              },
+              {
+                "id": "q3-ia-estrecha",
+                "prompt": "Según la lección, ¿bajo qué supuesto conviene diseñar hoy los flujos de trabajo con IA en el estudio?",
+                "options": [
+                  {
+                    "text": "Que se trata de IA general, capaz de razonar en cualquier campo como una persona",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que es IA estrecha: excelente en tareas acotadas, sin comprensión general y con revisión humana",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Que los modelos de lenguaje más avanzados ya tienen comprensión general y no necesitan revisión",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que es superinteligencia y hay que limitar su uso a tareas no profesionales",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Todo lo que usamos hoy es IA estrecha; la regla práctica es diseñar los flujos asumiéndolo, siempre con un paso de revisión humana."
+              },
+              {
+                "id": "q4-test-invertido",
+                "prompt": "¿En qué consiste el «test invertido» que la lección considera el verdadero examen del arquitecto?",
+                "options": [
+                  {
+                    "text": "En comprobar si la máquina consigue hacerse pasar por una persona en una conversación",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "En que la IA evalúe si un texto lo ha escrito un arquitecto o un becario",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "En saber distinguir el contenido generado por IA y, sobre todo, detectar sus errores",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Como los modelos ya superan el juego de imitación, lo relevante es si el profesional sabe detectar el contenido generado y sus errores."
+              },
+              {
+                "id": "q5-integrar-ia",
+                "prompt": "¿Qué distingue «integrar la IA en el flujo de trabajo» de simplemente «usar una herramienta»?",
+                "options": [
+                  {
+                    "text": "Que todo el equipo tenga cuenta en varias herramientas de IA",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Decidir qué tareas se delegan, revisar los resultados y proteger los datos del cliente",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Anunciar en la web del estudio que se usa IA en todos los procesos",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Sustituir los programas de cálculo por modelos de lenguaje",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección define integrar como decidir tareas, revisar resultados y proteger datos; el caso del estudio de Valencia muestra que usar herramientas sueltas no es integrar."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m1-2-historia",
+          "title": "Historia y momentos clave",
+          "description": "Recorre los hitos de la IA del Perceptrón al Transformer y los Nobel de 2024, explica los dos inviernos y los tres factores del resurgimiento de 2012, y ofrece un filtro para leer titulares sobre IA.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.2-Historia/1.2-Historia.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-inviernos",
+                "prompt": "¿Qué patrón común explica, según la lección, los dos «inviernos de la IA»?",
+                "options": [
+                  {
+                    "text": "La falta de ordenadores personales en universidades y empresas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "La prohibición legal de investigar en redes neuronales",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que las promesas superaron lo que la tecnología podía cumplir",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Los dos inviernos llegaron cuando las promesas superaron las capacidades reales; es el patrón que la lección pide vigilar hoy."
+              },
+              {
+                "id": "q2-factores-2012",
+                "prompt": "¿Qué tres factores se alinearon para provocar el resurgimiento del aprendizaje profundo a partir de 2012?",
+                "options": [
+                  {
+                    "text": "Datos, cómputo y algoritmos",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Reglas expertas, fuerza bruta y financiación pública",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Lenguaje LISP, sistemas expertos y GPU",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Teoría de la información, juego de imitación y Perceptrón",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Internet aportó datos, las GPU aportaron cómputo y nuevas técnicas de entrenamiento aportaron algoritmos; los tres explican también la carrera actual."
+              },
+              {
+                "id": "q3-deepblue-alphago",
+                "prompt": "¿Cuál es la diferencia esencial entre Deep Blue y AlphaGo?",
+                "options": [
+                  {
+                    "text": "Deep Blue aprendía jugando contra sí mismo y AlphaGo usaba reglas expertas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Deep Blue no aprendía (fuerza bruta y reglas expertas), mientras que AlphaGo aprende con redes neuronales y aprendizaje por refuerzo",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Ambos usaban fuerza bruta, pero AlphaGo tenía más potencia de cálculo",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Deep Blue calcula millones de posiciones sin aprender; AlphaGo combina redes neuronales, búsqueda y aprendizaje por refuerzo, porque en el Go la fuerza bruta no basta."
+              },
+              {
+                "id": "q4-transformer",
+                "prompt": "¿Qué aportó el mecanismo de atención del Transformer (2017)?",
+                "options": [
+                  {
+                    "text": "Que el modelo lea el texto estrictamente de izquierda a derecha, palabra a palabra",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que el modelo funcione sin datos de entrenamiento",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Relacionar cada palabra con todas las demás a la vez y repartir el entrenamiento en paralelo entre miles de procesadores",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Sustituir las redes neuronales por reglas lógicas más eficientes",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La atención relaciona cada palabra con todas las demás simultáneamente y permite entrenar en paralelo, lo que hizo posibles los modelos enormes actuales."
+              },
+              {
+                "id": "q5-filtro-titulares",
+                "prompt": "Al aplicar el filtro de la lección a un titular como «una IA genera el proyecto básico en diez minutos», ¿qué pregunta forma parte de él?",
+                "options": [
+                  {
+                    "text": "¿Es una demostración o un uso real en proyectos construidos?",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "¿Cuántos usuarios tiene la empresa que lo anuncia?",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "¿Lo ha desarrollado un laboratorio estadounidense?",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Entre las cinco preguntas del filtro está distinguir demostración de uso real; los inviernos llegaron por confundir demostraciones con capacidades."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m1-3-como-funciona",
+          "title": "Cómo funciona la IA",
+          "description": "Explica sin matemáticas cómo se entrena un modelo de lenguaje, qué son la fecha de corte, los embeddings, la atención y los tokens, por qué alucina y cómo escribir prompts con rol, objetivo, contexto y formato.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.3-Como-funciona/1.3-Como-funciona.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-alucinacion",
+                "prompt": "¿Por qué alucina un modelo de lenguaje, según la lección?",
+                "options": [
+                  {
+                    "text": "Por un fallo puntual de programación que se corregirá en la próxima versión",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque está entrenado para producir el texto más probable, no el más verdadero, y rellena los huecos con algo plausible",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque la temperatura está siempre configurada al máximo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque busca en internet y copia páginas con errores",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Alucinar es estructural: el modelo genera lo probable, no lo verdadero; las versiones nuevas alucinan menos, pero siguen haciéndolo."
+              },
+              {
+                "id": "q2-fecha-corte",
+                "prompt": "Necesitas que el modelo tenga en cuenta una ordenanza aprobada el mes pasado. ¿Qué debes hacer?",
+                "options": [
+                  {
+                    "text": "Nada: el ajuste con instrucciones actualiza su conocimiento continuamente",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Pedirle que razone más tiempo con un modelo de razonamiento",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Hacérsela llegar por el prompt, adjuntando el documento o mediante herramientas como búsqueda web o RAG",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "El conocimiento se congela en la fecha de corte; lo posterior o específico solo llega a través de lo que tú le das."
+              },
+              {
+                "id": "q3-embeddings",
+                "prompt": "¿Por qué una búsqueda por embeddings encuentra un documento sobre «SATE» al buscar «aislamiento por el exterior»?",
+                "options": [
+                  {
+                    "text": "Porque los embeddings representan el significado como posiciones cercanas en un espacio numérico, aunque no se compartan palabras",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque el modelo tiene programado un diccionario de sinónimos de construcción",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque la búsqueda por embeddings compara letra a letra las palabras clave",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque el documento fue etiquetado manualmente por el estudio",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Los textos con significado parecido quedan cerca en el espacio de embeddings, sin necesidad de un diccionario programado."
+              },
+              {
+                "id": "q4-temperatura",
+                "prompt": "¿Cuándo conviene una temperatura baja?",
+                "options": [
+                  {
+                    "text": "Para generar nombres de proyecto y alternativas de concepto muy distintas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Para análisis normativo, extracción de datos o tablas, donde interesan respuestas predecibles",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Para ampliar la ventana de contexto del modelo",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La temperatura baja da respuestas más predecibles y repetibles, adecuadas para analizar; la alta sirve para idear."
+              },
+              {
+                "id": "q5-elemento-contexto",
+                "prompt": "En la estructura rol, objetivo, contexto y formato, ¿qué elemento señala la lección como el más débil habitualmente y el que más mejora el resultado?",
+                "options": [
+                  {
+                    "text": "El rol",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El formato",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El objetivo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El contexto",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "La lección advierte que muchos prompts tienen rol y formato pero les falta contexto (datos, criterios, alcance), que es lo que más mejora la respuesta."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m1-4-retos",
+          "title": "Retos de la IA",
+          "description": "Analiza cinco grandes retos de la IA para el estudio (empleo, control, sesgo, privacidad y sostenibilidad), propone la alineación local como respuesta y enseña a elaborar un mapa de riesgos.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.4-Retos/1.4-Retos.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-tareas-expuestas",
+                "prompt": "¿Qué tipo de tareas del arquitecto están más expuestas a la IA generativa?",
+                "options": [
+                  {
+                    "text": "La dirección de obra y la resolución de imprevistos",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Las tareas cognitivas rutinarias basadas en lenguaje y documentos, como memorias, mediciones o actas",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "La negociación con el cliente y la coordinación entre personas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "La firma y la responsabilidad legal del proyecto",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La IA generativa empezó por el despacho: las tareas más expuestas son las rutinarias basadas en lenguaje y documentos."
+              },
+              {
+                "id": "q2-objetivo-mal-especificado",
+                "prompt": "Un agente al que se pide «reduce el presupuesto un 10 %» rebaja el aislamiento hasta incumplir el DB-HE. ¿Qué situación del problema del control ilustra?",
+                "options": [
+                  {
+                    "text": "Un objetivo mal especificado: cumple la letra del encargo y rompe un requisito no escrito",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Un sesgo algorítmico derivado de datos de otro mercado",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Una alucinación por falta de datos en el entrenamiento",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección pone este caso como ejemplo de objetivo mal especificado: el sistema cumplió el objetivo dado, no el que se tenía en la cabeza."
+              },
+              {
+                "id": "q3-alineacion-local",
+                "prompt": "¿Cuáles son las cuatro piezas de la «alineación local»?",
+                "options": [
+                  {
+                    "text": "Modelo más grande, temperatura alta, más datos y menos revisión",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Anonimizar, usar planes de empresa, trabajar en la UE y contabilizar costes",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Objetivos claros y medibles, herramientas limitadas, criterios de validación previos y humano en el bucle",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Reducir plantilla, automatizar la documentación, delegar en agentes y medir horas",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La alineación local combina objetivos claros, herramientas limitadas a la tarea, validación definida antes y aprobación humana de los cambios irreversibles."
+              },
+              {
+                "id": "q4-privacidad",
+                "prompt": "Antes de subir un documento de un cliente a un servicio de IA, ¿qué preguntas propone la lección?",
+                "options": [
+                  {
+                    "text": "Quién lo almacena y cuánto tiempo, si se usa para entrenar el modelo y si se guarda en la UE o con garantías equivalentes",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Cuántos tokens ocupa, qué temperatura usar y qué modelo es más rápido",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Si el cliente es una persona física, si el proyecto es público y si el archivo es un PDF",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Las tres preguntas de la lección son sobre almacenamiento, uso para entrenamiento y ubicación de los datos."
+              },
+              {
+                "id": "q5-sostenibilidad",
+                "prompt": "¿Qué medida propone la lección para reducir la huella ambiental del uso de IA?",
+                "options": [
+                  {
+                    "text": "Usar siempre el modelo de razonamiento más potente para asegurar la calidad",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Generar muchas imágenes para tener más donde elegir",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Usar el modelo más pequeño que resuelva la tarea y dirigir bien las generaciones en lugar de producir cientos sin criterio",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "La lección recomienda el modelo más pequeño suficiente, pocas imágenes bien dirigidas y contabilizar el coste; el ejemplo del concurso muestra que sostenibilidad y calidad van juntas."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m1-5-ecosistema",
+          "title": "El ecosistema actual de herramientas",
+          "description": "Mapa de herramientas de IA en cuatro categorías (texto, imagen, vídeo y BIM+IA) con su fase de proyecto, criterios para elegir entre propietario y código abierto, un kit mínimo y cómo probar y medir una herramienta.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.5-Ecosistema/1.5-Ecosistema.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-capacidades",
+                "prompt": "¿Qué lección extrae el tema del cierre de Sora?",
+                "options": [
+                  {
+                    "text": "Que las herramientas de vídeo con IA no tienen futuro en arquitectura",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que las herramientas caducan, pero las categorías y capacidades mucho menos, así que conviene formarse en capacidades",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Que solo hay que usar herramientas de código abierto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que conviene esperar a que el mercado se estabilice antes de usar IA",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El tema insiste en que los productos cambian cada pocos meses, mientras las capacidades y sus límites son estables."
+              },
+              {
+                "id": "q2-propietario-abierto",
+                "prompt": "Según la regla práctica de la lección, ¿cuándo conviene pasar de un modelo propietario a uno de código abierto?",
+                "options": [
+                  {
+                    "text": "Desde el principio, porque no tiene ningún coste",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Cuando se busca la máxima calidad y la interfaz más cuidada",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Cuando la privacidad o la personalización lo exijan",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Propietario para empezar; código abierto cuando la privacidad (datos en tu servidor) o la personalización (LoRA, ajuste fino) lo requieran, asumiendo coste de hardware y conocimiento técnico."
+              },
+              {
+                "id": "q3-cuatro-preguntas",
+                "prompt": "¿Cuál de estas es una de las cuatro preguntas de criterio para elegir una herramienta?",
+                "options": [
+                  {
+                    "text": "¿Es la herramienta más popular en redes sociales?",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "¿Qué datos vas a subir y qué privacidad necesitan?",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "¿Cuántas versiones ha publicado el proveedor este año?",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "¿Genera los resultados en menos de un minuto?",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Las cuatro preguntas son: fase del proyecto, datos y privacidad, coste por persona y año, e integración con lo que ya usa el estudio."
+              },
+              {
+                "id": "q4-tiempo-ahorrado",
+                "prompt": "Al probar una herramienta, ¿cómo debe medirse el tiempo ahorrado?",
+                "options": [
+                  {
+                    "text": "Después de descontar el tiempo de revisión y corrección del resultado",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Comparando solo lo que tarda la herramienta en generar con lo que tardaba una persona",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Según los datos que publica el proveedor en su demo",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La idea clave del tema es que el ahorro se mide después de la revisión: generar en cinco minutos algo que exige hora y media de corrección ahorra mucho menos de lo que parece."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "m2-prompting-y-asistentes",
+      "title": "Prompting profesional y asistentes documentales",
+      "lessons": [
+        {
+          "id": "m2-1-ecosistema",
+          "title": "El ecosistema de IA: Claude, ChatGPT y Gemini",
+          "description": "Compara ChatGPT, Claude y Gemini por ecosistema, privacidad y coste, explica sus cuatro superficies de uso y cómo elegir plataforma y plan para unificar el uso de IA en un estudio.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.1-Ecosistema/2.1-Ecosistema.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-criterios",
+                "prompt": "Según la lección, ¿con qué criterios debe decidir un estudio qué plataforma de IA adoptar?",
+                "options": [
+                  {
+                    "text": "Por la que gane la última comparativa de rendimiento",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Por ecosistema, privacidad y coste",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Por la que ya use la mayoría del equipo en su cuenta gratuita",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Por la que tenga la demostración más espectacular",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Las plataformas convergen en capacidades y los rankings caducan rápido; la decisión se toma por ecosistema, privacidad y coste."
+              },
+              {
+                "id": "q2-privacidad",
+                "prompt": "¿Cuál es la regla práctica de la lección sobre los datos de cliente?",
+                "options": [
+                  {
+                    "text": "Pueden usarse en cuentas personales si se desactiva el entrenamiento",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Pueden subirse a cualquier plataforma si el proyecto no tiene datos personales",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Solo deben tratarse en un plan de empresa",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Los planes de empresa no entrenan con los datos de la organización por defecto y dan control de administrador; por eso los datos de cliente, solo en plan de empresa."
+              },
+              {
+                "id": "q3-superficies",
+                "prompt": "De las cuatro superficies en las que viven estas herramientas, ¿cuáles señala la lección como la puerta a la integración con BIM?",
+                "options": [
+                  {
+                    "text": "La web y el escritorio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "La aplicación móvil con voz y cámara",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "La API y los plugins o conectores",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "El chat, por ser la superficie más visible",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La API permite integrar el modelo en herramientas propias y los conectores (como MCP) lo llevan a Revit; el chat es solo la superficie más visible."
+              },
+              {
+                "id": "q4-plan",
+                "prompt": "De las tres preguntas para elegir herramienta en una tarea, ¿qué deciden las relativas a la confidencialidad de los datos y a quién lo va a usar?",
+                "options": [
+                  {
+                    "text": "El tipo de plan: si hay datos de cliente o lo usa todo el equipo, plan de empresa",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "La plataforma concreta: Claude, ChatGPT o Gemini",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Si conviene usar la API o el móvil",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección subraya que esas dos preguntas no eligen plataforma sino plan: con datos de cliente o uso por todo el equipo, plan de empresa."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m2-2-prompting",
+          "title": "Prompt engineering profesional",
+          "description": "Enseña a convertir peticiones vagas en prompts profesionales (rol, objetivo, contexto y formato) y a aplicar delimitadores, ejemplos guía, razonamiento paso a paso, prompts negativos y descomposición.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.2-Prompting/2.2-Prompting.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-anatomia",
+                "prompt": "¿Qué cuatro elementos forman la base de un prompt profesional según la lección?",
+                "options": [
+                  {
+                    "text": "Rol, objetivo, contexto y formato",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Saludo, pregunta, ejemplos y despedida",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Rol, prohibiciones, longitud y tono",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Objetivo, plataforma, modelo y precio",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Un prompt profesional es rol + objetivo + contexto + formato, más permiso para dudar y delimitadores cuando se pega material."
+              },
+              {
+                "id": "q2-delimitadores",
+                "prompt": "¿Qué riesgo evitan los delimitadores (###, comillas triples o etiquetas) al pegar un pliego en el prompt?",
+                "options": [
+                  {
+                    "text": "Que el modelo supere la ventana de contexto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que una frase del documento se interprete como una orden",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Que el resultado tenga un tono demasiado comercial",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Los delimitadores separan instrucciones de material; sin ellos, una frase del pliego puede leerse como una orden y cambiar la tarea."
+              },
+              {
+                "id": "q3-tecnicas",
+                "prompt": "¿Para qué tipo de tarea recomienda la lección el razonamiento paso a paso?",
+                "options": [
+                  {
+                    "text": "Para fijar el estilo de actas e informes del estudio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Para acotar la longitud y el tono del texto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Para comprobaciones y cálculos, como verificar normativa",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Para separar las órdenes del material pegado",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El razonamiento paso a paso sirve para verificar: hace revisable el trabajo y deja trazabilidad; los ejemplos guía fijan el estilo y los negativos acotan."
+              },
+              {
+                "id": "q4-permiso-dudar",
+                "prompt": "¿Por qué la instrucción «si un dato no está, escribe [DATO PENDIENTE]» reduce las alucinaciones?",
+                "options": [
+                  {
+                    "text": "Porque obliga al modelo a buscar el dato en internet",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque le da una salida alternativa a inventar la continuación más plausible",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque hace que el modelo use un modo de razonamiento interno",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El modelo está diseñado para producir siempre una continuación plausible; el permiso para dudar le ofrece otra salida y evita que invente."
+              },
+              {
+                "id": "q5-descomposicion",
+                "prompt": "¿Cuál es la principal ventaja de descomponer una tarea grande en varios prompts encadenados?",
+                "options": [
+                  {
+                    "text": "Permite revisar cada resultado intermedio antes de seguir y no arrastrar errores",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Elimina la necesidad de que una persona verifique el resultado final",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Reduce el coste porque cada mensaje es más corto",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Cada paso se revisa antes de construir encima, como un punto de inspección; la verificación final la sigue haciendo una persona."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m2-3-asistente",
+          "title": "Proyectos, plugins, skills y Spaces: el asistente configurado",
+          "description": "Explica qué es un asistente configurado, sus tres piezas (instrucciones, documentos y herramientas), cómo redactar el system prompt como un procedimiento y cómo verificarlo antes de abrirlo al equipo.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.3-Asistente/2.3-Asistente.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-piezas",
+                "prompt": "¿Cuáles son las tres piezas de un asistente configurado?",
+                "options": [
+                  {
+                    "text": "El modelo elegido, la plataforma y el plan de pago contratado",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Instrucciones de sistema, documentos de conocimiento y herramientas",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Un prompt largo, varios ejemplos guía y delimitadores claros",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El nombre del asistente, su descripción y sus metadatos",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Instrucciones + documentos + herramientas (estas últimas opcionales) forman el asistente especializado del estudio."
+              },
+              {
+                "id": "q2-system-prompt",
+                "prompt": "¿Cuál es el error típico al redactar las instrucciones de sistema, según la lección?",
+                "options": [
+                  {
+                    "text": "Escribirlas como un deseo («sé un buen asistente») en lugar de como un procedimiento",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Incluir un procedimiento con pasos antes de responder",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Indicar cómo citar documento, artículo y página",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Un system prompt es un procedimiento con seis partes (rol, normativa, formato, restricciones, procedimiento y cómo citar), no un deseo."
+              },
+              {
+                "id": "q3-documentos",
+                "prompt": "¿Qué regla da la lección sobre los documentos de conocimiento?",
+                "options": [
+                  {
+                    "text": "Cuantos más documentos, mejor, incluidos catálogos y revistas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Basta con subir memorias antiguas; el modelo ya conoce el CTE",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Menos documentos, pero los correctos y actualizados",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Hay que subir lo que el modelo no conoce y más necesita; un documento obsoleto produce respuestas obsoletas aunque suenen seguras."
+              },
+              {
+                "id": "q4-verificar",
+                "prompt": "Antes de abrir un asistente al equipo, ¿cómo propone la lección verificarlo?",
+                "options": [
+                  {
+                    "text": "Confiar en él porque usa documentos propios y ya no alucina",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Hacerle preguntas de respuesta conocida, incluida alguna «trampa», y comprobar cada cita",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Pedir al propio asistente que evalúe la calidad de sus respuestas",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Un asistente configurado también alucina; se mide con preguntas de control, verificando las citas en el original y registrando cada respuesta como correcta, incompleta o alucinación."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m2-4-skills",
+          "title": "Caso de uso: Skills",
+          "description": "Presenta las Skills como procedimientos empaquetados en formato abierto, el papel del nombre y la descripción, su estructura en objetivo, entradas, proceso y salida, y cómo elegir dónde construir el asistente.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.4-Skills/2.4-Skills.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-que-es",
+                "prompt": "¿Qué es una Skill según la lección?",
+                "options": [
+                  {
+                    "text": "Un chat con instrucciones que se aplican a todas sus conversaciones",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Un procedimiento empaquetado para una tarea concreta que el modelo carga cuando la tarea encaja",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Un prompt que se pega manualmente cada vez que se necesita",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Una Skill es conocimiento empaquetado una vez (normalmente en un SKILL.md) que se activa solo cuando la tarea encaja."
+              },
+              {
+                "id": "q2-descripcion",
+                "prompt": "¿Por qué es tan importante la descripción en los metadatos de un SKILL.md?",
+                "options": [
+                  {
+                    "text": "Porque es el único texto que el modelo usa para redactar la salida",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque define el formato exacto del entregable",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque el agente solo lee esa línea al principio y decide con ella cuándo cargar la Skill",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Con la carga progresiva, el agente lee solo la descripción y carga el resto cuando la tarea encaja: la descripción decide cuándo, el cuerpo decide cómo."
+              },
+              {
+                "id": "q3-bloques",
+                "prompt": "Respecto a la estructura de un prompt (rol, objetivo, contexto y formato), ¿qué añade sobre todo una Skill con sus cuatro bloques?",
+                "options": [
+                  {
+                    "text": "El proceso, con pasos ordenados, comprobaciones y criterios",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Un rol más detallado del asistente",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Una lista de plataformas compatibles",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Ejemplos de conversaciones anteriores",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Objetivo, entradas, proceso y salida: la Skill añade el proceso, que es donde vive el conocimiento del estudio, y precisa lo que entra y sale."
+              },
+              {
+                "id": "q4-candidatas",
+                "prompt": "¿Qué tarea es mejor candidata a convertirse en Skill?",
+                "options": [
+                  {
+                    "text": "Una consulta puntual que solo se hará una vez",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Una tarea que se repite en cada proyecto, sigue los mismos pasos y tiene un formato de salida fijo",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Una tarea que abarque normativa, imágenes, presupuestos y correos a la vez",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Las buenas candidatas se repiten, siguen siempre los mismos pasos y tienen formato fijo; la regla es que un prompt repetido tres veces merece ser una Skill."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m2-5-rag",
+          "title": "Introducción a la metodología RAG",
+          "description": "Explica qué es RAG y sus cinco pasos (fragmentar, embeddings, indexar, recuperar y generar), las decisiones de diseño clave y cuándo un estudio necesita un RAG propio.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.5-RAG/2.5-RAG.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-idea",
+                "prompt": "¿Cuál es la idea central de RAG?",
+                "options": [
+                  {
+                    "text": "Reentrenar el modelo con los documentos del estudio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Subir toda la biblioteca del estudio a la ventana de contexto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Recuperar primero los fragmentos relevantes y generar después la respuesta con ellos",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "RAG significa generación aumentada por recuperación: el modelo responde con los fragmentos recuperados delante, no de memoria."
+              },
+              {
+                "id": "q2-troceado",
+                "prompt": "En normativa, ¿por qué conviene trocear los documentos por artículo en lugar de por tamaño?",
+                "options": [
+                  {
+                    "text": "Porque cada fragmento tiene sentido completo y conserva su número de artículo y página para citar",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque así se generan menos vectores y la base de datos es más barata",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque evita tener que guardar metadatos",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Trocear por tamaño puede cortar una idea y perder el artículo; por artículo, cada fragmento es una unidad citable."
+              },
+              {
+                "id": "q3-embeddings",
+                "prompt": "¿Qué permiten los embeddings que no permite la búsqueda por palabras (Ctrl+F)?",
+                "options": [
+                  {
+                    "text": "Encontrar solo coincidencias literales de forma exacta y predecible",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Buscar por significado, encontrando textos parecidos aunque no compartan palabras",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Garantizar que el fragmento recuperado siempre es el correcto",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Los embeddings colocan los textos en un espacio de significado donde los parecidos quedan cerca, aunque puedan traer algo parecido que no es lo buscado."
+              },
+              {
+                "id": "q4-topk",
+                "prompt": "¿Qué ocurre si se elige un top-k demasiado grande?",
+                "options": [
+                  {
+                    "text": "Se puede dejar fuera el artículo que importa",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El modelo deja de citar las fuentes",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Se vuelve a llenar el contexto de ruido",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Con k pequeño se puede perder el fragmento clave y con k grande se llena el contexto de ruido; se suele empezar con valores de 3 a 10 y ajustar."
+              },
+              {
+                "id": "q5-errores",
+                "prompt": "¿Cuál de estas afirmaciones sobre RAG es correcta según la lección?",
+                "options": [
+                  {
+                    "text": "Con RAG el modelo deja de equivocarse porque siempre cita la fuente",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Basta con subir los PDF de la normativa para obtener buena calidad",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Reduce las alucinaciones, pero hay que revisar la cita y actualizar el índice",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Se monta una sola vez y después no requiere ningún mantenimiento",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "RAG puede recuperar el fragmento equivocado, depende del troceado y las pruebas, y el índice debe actualizarse cuando cambia la normativa."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "m3-imagen-y-video",
+      "title": "Generación y edición de imágenes y vídeo",
+      "lessons": [
+        {
+          "id": "m3-1-difusion",
+          "title": "Modelos de difusión: funcionamiento y tipos",
+          "description": "Cómo aprende un modelo de difusión a quitar ruido y cómo genera imágenes a partir de él, los tres mandos de toda generación (prompt, semilla y pasos) y las cuatro familias de modelos.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.1-Difusion/3.1-Difusion.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-entrenamiento",
+                "prompt": "¿Qué aprende exactamente un modelo de difusión durante su entrenamiento?",
+                "options": [
+                  {
+                    "text": "A recortar y combinar fragmentos de las imágenes de su base de datos",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "A predecir qué parte de una imagen ruidosa es ruido",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "A predecir la siguiente palabra de una descripción de la imagen",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "A dibujar fachadas, sombras y texturas a partir de reglas explícitas",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "En el entrenamiento se añade ruido a imágenes reales y la red aprende a predecir qué ruido se ha añadido; no guarda fotos ni aprende reglas de dibujo."
+              },
+              {
+                "id": "q2-composicion",
+                "prompt": "¿Por qué un control de geometría como ControlNet actúa sobre todo en los primeros pasos de la generación?",
+                "options": [
+                  {
+                    "text": "Porque en los primeros pasos, con mucho ruido, se decide la composición general: masas, volúmenes y encuadre",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque en los primeros pasos se fijan las texturas y los reflejos",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque el prompt solo se consulta en el último paso",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Los primeros pasos deciden la composición y los últimos el detalle fino; por eso la geometría se impone al principio y conviene soltar el control al final."
+              },
+              {
+                "id": "q3-semilla",
+                "prompt": "Quieres comprobar el efecto de cambiar solo el material de fachada en una imagen que te gusta. ¿Qué debes hacer?",
+                "options": [
+                  {
+                    "text": "Cambiar la semilla y el material a la vez para ganar tiempo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Subir los pasos para que el cambio de material se aprecie mejor",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Mantener fija la semilla (y el resto de ajustes) y cambiar solo la palabra del material",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Generar veinte imágenes con semillas aleatorias y elegir la mejor",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La regla de oro: cambia la semilla para explorar y fíjala para refinar; si cambias dos cosas a la vez no sabes cuál produjo el efecto."
+              },
+              {
+                "id": "q4-pasos",
+                "prompt": "Un compañero sube los pasos a 150 porque las imágenes salen flojas. Según la lección, ¿qué debería revisar antes?",
+                "options": [
+                  {
+                    "text": "La versión del codificador VAE",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que el prompt sea concreto y que haya explorado suficientes semillas",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Que la escala de guía esté por encima de 15",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Más pasos no significa más calidad: a partir de 20–40 la mejora es mínima, y la calidad depende antes del prompt, el modelo y la semilla."
+              },
+              {
+                "id": "q5-familias",
+                "prompt": "¿Qué familia de modelos elegirías para cambiar el material de una foto existente respetando su geometría?",
+                "options": [
+                  {
+                    "text": "Modelos propietarios de alta estética, como Midjourney",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Modelos de vídeo por difusión espacio-temporal",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Editores por instrucción, como Nano Banana o ChatGPT Imágenes",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Los editores por instrucción parten de tu imagen y cambian solo lo que indicas; los propietarios de alta estética no respetan tu geometría."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m3-2-lora",
+          "title": "Personalización de modelos: DreamBooth y LoRA",
+          "description": "Cómo enseñar a un modelo de imagen un estilo, producto o edificio propio con un puñado de imágenes y un token, cuándo merece la pena entrenar y cómo elegir entre DreamBooth y LoRA.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.2-LoRA/3.2-LoRA.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-token",
+                "prompt": "¿Por qué conviene que el token o palabra gatillo sea una palabra rara, como «kestudio»?",
+                "options": [
+                  {
+                    "text": "Para que el modelo no lo mezcle con significados que ya conoce",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque las plataformas solo aceptan palabras inventadas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Para que el LoRA pese menos megas",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Si eligieras una palabra conocida como «mediterráneo», el modelo mezclaría su idea previa con tu estilo."
+              },
+              {
+                "id": "q2-escalera",
+                "prompt": "Un estudio necesita tres imágenes de ambiente para una propuesta. Según la «escalera» de la lección, ¿qué debería hacer?",
+                "options": [
+                  {
+                    "text": "Entrenar un LoRA con 20 imágenes del estudio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Reentrenar el modelo con DreamBooth para máxima fidelidad",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Probar primero un prompt preciso y una imagen de referencia de estilo",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Contratar una plataforma con GPU propia",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Antes de entrenar se prueba lo barato; entrenar compensa por coherencia de equipo, volumen o fidelidad a un sujeto, no para tres imágenes."
+              },
+              {
+                "id": "q3-dreambooth-lora",
+                "prompt": "¿Cuál es la diferencia principal entre DreamBooth y LoRA?",
+                "options": [
+                  {
+                    "text": "DreamBooth añade un adaptador ligero de pocos MB; LoRA reentrena el modelo entero",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "DreamBooth produce un modelo nuevo de varios GB; LoRA añade un adaptador de pocos MB",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Ambos generan un archivo pequeño y reutilizable, pero solo LoRA admite un token",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "LoRA es el «anexo» al pliego: ligero, combinable y compartible; DreamBooth reescribe el pliego y se reserva para la máxima fidelidad a un sujeto."
+              },
+              {
+                "id": "q4-variedad",
+                "prompt": "Tu LoRA solo genera viviendas vistas desde la misma esquina. ¿Qué ha pasado con más probabilidad?",
+                "options": [
+                  {
+                    "text": "Faltaban pies de foto en el dataset y el modelo ignoró el token",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Todas las fotos compartían ángulo y el modelo aprendió el ángulo, no el estilo",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "El peso del LoRA al generar las imágenes era demasiado bajo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Hubo subajuste por dar muy pocos pasos de entrenamiento al modelo",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El modelo aprende lo que se repite y descarta lo que cambia; si todas las fotos comparten encuadre, aprende el encuadre. Se corrige variando encuadres, luces y fondos."
+              },
+              {
+                "id": "q5-modelo-base",
+                "prompt": "¿Por qué hay que guardar el dataset y los pies de foto después de entrenar un LoRA?",
+                "options": [
+                  {
+                    "text": "Porque la plataforma los borra y deja de funcionar el LoRA",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque el LoRA queda ligado a su modelo base y, si este cambia, habrá que reentrenar",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque cada vez que se usa el LoRA hay que volver a subir las imágenes",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Un LoRA solo funciona con su modelo base o su familia; sin dataset ni pies de foto, reentrenar obliga a empezar de cero."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m3-3-controlnet",
+          "title": "ControlNet: de croquis a imagen fotorrealista",
+          "description": "Cómo ControlNet condiciona un modelo de difusión con una imagen de control para respetar la geometría de tu proyecto, qué tipo de control elegir y qué ajustes deciden el resultado.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.3-ControlNet/3.3-ControlNet.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-reparto",
+                "prompt": "En un flujo con ControlNet, ¿qué decide la imagen de control y qué decide el prompt?",
+                "options": [
+                  {
+                    "text": "La imagen de control decide los materiales y el prompt la perspectiva",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Ambos deciden la geometría; el prompt solo añade el estilo fotográfico",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "La imagen de control decide la geometría y el prompt la apariencia (materiales, luz, ambiente)",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Tú das el replanteo (geometría) con la imagen de control; la IA pone los acabados según el prompt."
+              },
+              {
+                "id": "q2-scribble",
+                "prompt": "Tienes un croquis rápido a mano alzada con líneas auxiliares. ¿Qué control es el más adecuado?",
+                "options": [
+                  {
+                    "text": "Scribble, que respeta la intención de los trazos sueltos",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Canny, que respeta cada arista del dibujo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Segmentation, que trabaja con zonas de color",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Normal, que captura la orientación de las superficies",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Canny interpreta cada temblor y línea auxiliar como borde; para un croquis suelto se usa Scribble."
+              },
+              {
+                "id": "q3-lineas-ocultas",
+                "prompt": "¿Por qué conviene exportar desde Revit una vista en líneas ocultas en lugar de una vista realista con sombras?",
+                "options": [
+                  {
+                    "text": "Porque las vistas realistas no se pueden exportar como imagen",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque las sombras ayudan al modelo a entender mejor el volumen y conviene reservarlas para Depth",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque las líneas ocultas obligan al modelo a inventar la geometría",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque las sombras se convierten en bordes falsos y una vista limpia produce mejores bordes",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Una vista de líneas ocultas limpia da mejores bordes; las sombras generan aristas falsas que confunden al modelo."
+              },
+              {
+                "id": "q4-peso-fase",
+                "prompt": "¿Qué peso del control es coherente con un proyecto ya definido en el que no debe cambiar ni un hueco?",
+                "options": [
+                  {
+                    "text": "0,4–0,6",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "0,8–1,0",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "0,1–0,3",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección asocia 0,4–0,6 a ideas tempranas, 0,6–0,8 a anteproyecto y 0,8–1,0 a proyecto definido."
+              },
+              {
+                "id": "q5-intencion",
+                "prompt": "¿Cómo debes presentar al cliente una imagen generada con ControlNet a partir de un croquis?",
+                "options": [
+                  {
+                    "text": "Como render definitivo del proyecto, ya que respeta la geometría",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Sin ninguna indicación, porque el cliente no necesita saber cómo se hizo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Como imagen de intención, indicando que materiales, luz y detalles los ha propuesto la IA",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Son imágenes de intención: la lección recomienda decírselo al cliente, por transparencia y responsabilidad profesional."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m3-4-midjourney",
+          "title": "Midjourney: generación de imágenes arquitectónicas",
+          "description": "Para qué fases sirve Midjourney, cómo escribir prompts de siete bloques ordenados por importancia, qué parámetros usar, cómo refinar una imagen y qué plan elegir según la privacidad.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.4-Midjourney/3.4-Midjourney.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-uso",
+                "prompt": "¿Para qué es adecuado Midjourney según la lección?",
+                "options": [
+                  {
+                    "text": "Para el render final del proyecto con su geometría exacta",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Para moodboards, primeras ideas e imágenes de concurso en fase temprana",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Para cambiar el material de un render existente sin tocar nada más",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Midjourney es la referencia estética para concepto, pero no respeta tu geometría; para eso están ControlNet o Veras."
+              },
+              {
+                "id": "q2-orden",
+                "prompt": "¿Por qué importa el orden de los siete bloques del prompt en Midjourney?",
+                "options": [
+                  {
+                    "text": "Porque los parámetros deben ir al principio para que se apliquen",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque Midjourney ignora todo lo que va después del tercer bloque",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque añadir palabras de relleno al final mejora la calidad",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque lo que va primero pesa más, así que se ordena de lo más a lo menos importante",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "En Midjourney lo primero pesa más: tipo de imagen, edificio, materiales, entorno, luz, referencia fotográfica y, al final, los parámetros."
+              },
+              {
+                "id": "q3-no",
+                "prompt": "¿Por qué es más fiable usar «--no cars» que escribir «sin coches» dentro de la frase?",
+                "options": [
+                  {
+                    "text": "Porque nombrar «coches» en la frase, aunque sea para negarlos, puede hacerlos aparecer",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque Midjourney no entiende bien las instrucciones escritas en español",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque --no reduce el tiempo de cálculo y abarata cada generación",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El parámetro --no funciona como prompt negativo; nombrar el elemento en la frase puede provocar justo lo contrario."
+              },
+              {
+                "id": "q4-chaos",
+                "prompt": "¿Cómo se usa --chaos a lo largo del trabajo?",
+                "options": [
+                  {
+                    "text": "Bajo para explorar ideas distintas y alto para refinar una dirección",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Alto para explorar ideas distintas y bajo para refinar variaciones de la misma idea",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Siempre a 0, porque cualquier variación estropea la serie",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "--chaos regula cuánto se parecen las cuatro imágenes: alto para explorar, bajo para refinar."
+              },
+              {
+                "id": "q5-stealth",
+                "prompt": "Tu estudio prepara un concurso confidencial. ¿Qué debe decidir el plan de Midjourney?",
+                "options": [
+                  {
+                    "text": "Que incluya el modo Stealth, disponible solo en los planes Pro y Mega",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Que sea el plan Basic, porque genera menos imágenes públicas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que permita usar Discord en lugar de la web",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "En Basic y Standard las imágenes son visibles en la galería pública; solo Pro y Mega las mantienen privadas con Stealth."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m3-5-plataformas",
+          "title": "Plataformas especializadas en arquitectura",
+          "description": "Qué aportan las plataformas de imagen especializadas en arquitectura, con Veras y sus dos mandos como eje, el nicho de cada herramienta y cómo elegir con tres preguntas.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.5-Plataformas/3.5-Plataformas.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-geometria",
+                "prompt": "¿Cuál es la diferencia de fondo entre un generador general y una plataforma especializada?",
+                "options": [
+                  {
+                    "text": "La plataforma especializada usa un tipo de IA distinto de la difusión",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El generador general siempre ofrece más calidad estética",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Quién decide la geometría: en la especializada llega de tu material (modelo, croquis o foto) como control",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "En el generador general el modelo imagina el edificio; en la plataforma especializada es difusión controlada por tu material de partida."
+              },
+              {
+                "id": "q2-sin-exportar",
+                "prompt": "¿Por qué es tan relevante que Veras lea la vista del modelo sin exportar?",
+                "options": [
+                  {
+                    "text": "Porque cada cambio de diseño se refleja en la siguiente imagen sin rehacer escenas",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque así las imágenes generadas no consumen créditos de la plataforma",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque permite obtener imágenes aunque no exista un modelo 3D",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque garantiza que la IA nunca modifique la geometría del proyecto",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Sin exportar, la imagen se convierte en una herramienta de diseño: puedes generar una cada vez que tomas una decisión."
+              },
+              {
+                "id": "q3-mandos",
+                "prompt": "En proyecto de ejecución, ¿cómo deberías regular Geometry Override y Creativity Strength en Veras?",
+                "options": [
+                  {
+                    "text": "Ambos altos, para obtener la imagen más atractiva posible para el cliente",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Geometry Override alto y Creativity Strength bajo, para explorar con control",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Geometry Override bajo y Creativity Strength bajo-medio, sin sorpresas",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Mandos altos para explorar; en ejecución se bajan porque la imagen tiene que ser tu proyecto, sin sorpresas."
+              },
+              {
+                "id": "q4-krea",
+                "prompt": "¿En qué momento brilla especialmente el tiempo real de Krea?",
+                "options": [
+                  {
+                    "text": "En las primeras ideas, cuando aún se busca el concepto",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "En las imágenes finales de ejecución que exigen fidelidad geométrica",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "En la redecoración de estancias a partir de fotos",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El tiempo real prima la velocidad sobre la precisión: ideal para explorar, no sustituye a una imagen desde el modelo."
+              },
+              {
+                "id": "q5-errores",
+                "prompt": "¿Cuál de estas prácticas es uno de los errores frecuentes que señala la lección?",
+                "options": [
+                  {
+                    "text": "Probar la plataforma con tu propio modelo antes de decidir",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Avisar al cliente de que una imagen con Geometry Override alto es una interpretación",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Entregar a un cliente imágenes hechas con un plan que no permite uso comercial",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Los tres errores son elegir por la demo, presentar geometría reinventada como proyecto y usar un plan sin uso comercial para un encargo."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m3-6-edicion",
+          "title": "Edición de imágenes con IA",
+          "description": "Cómo editar renders y fotos por instrucción en lenguaje natural sin alterar la geometría, qué herramienta usar para cada tarea y cómo montar un flujo de postproducción repetible.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.6-Edicion/3.6-Edicion.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-editar",
+                "prompt": "¿Qué diferencia práctica hay entre generar desde cero y editar por instrucción?",
+                "options": [
+                  {
+                    "text": "Al editar, cada intento produce una imagen totalmente nueva",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Al editar se parte de tu imagen y se conserva su geometría, cambiando solo lo que pides",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Al generar desde cero se conserva la geometría de tu render",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Editar por instrucción modifica solo lo pedido: tu render sigue siendo tu render."
+              },
+              {
+                "id": "q2-herramienta",
+                "prompt": "¿Qué herramienta recomienda la lección para borrar una grúa de una foto de obra?",
+                "options": [
+                  {
+                    "text": "GPT Imagen, por su capacidad de escribir texto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Nano Banana con varias imágenes de referencia",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Midjourney con --no crane",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Clipdrop Cleanup, una utilidad de un clic",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Clipdrop para utilidades rápidas; Nano Banana o GPT Imagen para cambios con significado como un material o la hora del día."
+              },
+              {
+                "id": "q3-cuatro-piezas",
+                "prompt": "¿Qué pieza de una instrucción de edición protege tu proyecto y suele olvidarse?",
+                "options": [
+                  {
+                    "text": "Nombrar lo que debe mantenerse, cerrando con «sin alterar el resto de la imagen»",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Indicar la resolución de salida",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Añadir adjetivos como «espectacular» o «realista»",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Las cuatro piezas son operación, elemento, nuevo valor y lo que se mantiene; si no dices qué conservar, el modelo puede cambiar cosas que no pediste."
+              },
+              {
+                "id": "q4-una-operacion",
+                "prompt": "¿Por qué se recomienda una operación por mensaje?",
+                "options": [
+                  {
+                    "text": "Porque las herramientas de edición no admiten mensajes largos ni varias órdenes",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque cada paso queda revisable y se puede volver atrás si algo sale mal",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque así se consume menos tiempo de cálculo y la imagen sale antes",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Como las órdenes de cambio en obra: una orden, un cambio, un registro, guardando cada versión."
+              },
+              {
+                "id": "q5-flujo",
+                "prompt": "En el flujo de postproducción de cinco pasos, ¿por qué el reescalado va al final?",
+                "options": [
+                  {
+                    "text": "Porque reescalar antes de editar da archivos más pesados y cada edición puede degradar el detalle ganado",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque el reescalado solo funciona sobre imágenes con personas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque el reescalado cambia los materiales de la fachada",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El orden importa: limpieza, luego lo estructural (materiales y luz), lo decorativo y, al final, el acabado y el reescalado."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m3-7-video",
+          "title": "Generación de vídeo con IA",
+          "description": "Las tres modalidades de vídeo generativo, el vocabulario de cámara para dirigirlas, el prompt de vídeo en seis piezas y cómo convertir un render en un clip corto sin artefactos.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.7-Video/3.7-Video.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-modalidad",
+                "prompt": "¿Cuál es la modalidad profesional para presentar tu proyecto en vídeo?",
+                "options": [
+                  {
+                    "text": "Text to video, porque inventa la escena completa",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Video to video sobre cualquier vídeo de referencia",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Image to video a partir de un render aprobado",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Con image to video controlas geometría, materiales y encuadre y el modelo solo añade movimiento; con text to video el edificio no es el tuyo."
+              },
+              {
+                "id": "q2-video-to-video",
+                "prompt": "¿En qué situación encaja mejor video to video?",
+                "options": [
+                  {
+                    "text": "Cuando no tienes ninguna imagen ni recorrido del proyecto y partes de cero",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Cuando ya tienes un recorrido de Enscape o Twinmotion y quieres otro acabado",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Cuando quieres un plano de ambiente que no muestre el edificio del proyecto",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Video to video transforma un vídeo base con un nuevo estilo conservando la trayectoria de cámara."
+              },
+              {
+                "id": "q3-lento",
+                "prompt": "¿Por qué una órbita de 180 grados tiene mucho más riesgo de artefactos que una cámara fija?",
+                "options": [
+                  {
+                    "text": "Porque el modelo tiene que inventar fachadas que no aparecen en tu imagen de partida",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque las órbitas solo se pueden generar en text to video",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque una órbita exige más de 24 fotogramas por segundo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque la cámara fija no permite mover el entorno",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Cuanto más cambia la escena entre fotogramas, más tiene que inventar el modelo; de ahí la regla «lento y sutil gana»."
+              },
+              {
+                "id": "q4-restricciones",
+                "prompt": "¿Cuál es la pieza más importante del prompt de vídeo en seis piezas?",
+                "options": [
+                  {
+                    "text": "La duración exacta del clip y su resolución de salida",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Los elementos que se mueven en la escena: personas, coches y vegetación",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Qué no debe cambiar: geometría, materiales y composición de la imagen",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "La lección señala que fijar lo que no cambia es la pieza más importante, porque protege el edificio."
+              },
+              {
+                "id": "q5-clip-falla",
+                "prompt": "Un clip muestra una ventana que se estira. ¿Qué recomienda la lección?",
+                "options": [
+                  {
+                    "text": "Añadir más texto descriptivo al prompt",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Simplificar el movimiento: menos velocidad, menos elementos móviles y restricciones más claras",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Cambiar a text to video para que el modelo tenga más libertad",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Si un clip falla, no se arregla con más texto, sino simplificando el movimiento."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m3-8-proceso-l35",
+          "title": "El proceso L35: del render al vídeo",
+          "description": "Un método de cuatro pasos (imagen, describir, prompt y vídeo) en el que un modelo de lenguaje multimodal traduce un render en instrucciones de movimiento, y cómo integrar imagen y vídeo en cada fase del proyecto.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.8-Proceso-L35/3.8-Proceso-L35.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-papel-modelo",
+                "prompt": "En el proceso L35, ¿qué papel tiene el modelo de lenguaje multimodal?",
+                "options": [
+                  {
+                    "text": "Genera directamente el vídeo final a partir del render del proyecto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Decide qué imágenes del proyecto merece la pena animar y cuáles no",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Describe el render y redacta las instrucciones de movimiento",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "El arquitecto decide y el modelo redacta: traduce la imagen a las instrucciones que necesita el generador de vídeo."
+              },
+              {
+                "id": "q2-imagen",
+                "prompt": "¿Por qué el proceso empieza siempre por un render limpio y aprobado?",
+                "options": [
+                  {
+                    "text": "Porque la calidad del vídeo nunca supera la de la imagen y cualquier error se multiplica en cada fotograma",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque los generadores de vídeo no aceptan imágenes de baja resolución",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque así el modelo de lenguaje no tiene que describir nada",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Si la imagen tiene un error, el vídeo lo multiplica; por eso se corrige antes con edición por instrucción."
+              },
+              {
+                "id": "q3-describir",
+                "prompt": "¿Por qué es útil el paso 2 (describir) aunque todavía no se genere vídeo?",
+                "options": [
+                  {
+                    "text": "Porque sustituye la revisión fotograma a fotograma",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque te obliga a mirar la imagen como la mirará el generador y a detectar bordes o elementos problemáticos",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque en este paso el modelo ya propone el movimiento de cámara definitivo",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La descripción ordenada revela elementos que no interesa animar o bordes problemáticos; en ese paso aún no se propone movimiento."
+              },
+              {
+                "id": "q4-cuatro-bloques",
+                "prompt": "¿Cuáles son los cuatro bloques del prompt de vídeo en el proceso L35?",
+                "options": [
+                  {
+                    "text": "Tipo de imagen, edificio, materiales y parámetros",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Operación, elemento, nuevo valor y lo que se mantiene",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Encuadre, materiales, luz y hora del día",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Cámara, movimiento en la escena, luz y restricciones",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Son las seis piezas de la lección 3.7 agrupadas: la velocidad va con la cámara y la duración con las restricciones."
+              },
+              {
+                "id": "q5-correccion",
+                "prompt": "Un travelling deforma las lamas de la fachada al final del recorrido. ¿Cómo se corrige según la lección?",
+                "options": [
+                  {
+                    "text": "Reescribiendo el prompt entero desde cero",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Añadiendo más personas y elementos en movimiento para distraer",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Ajustando poco: cámara más lenta y recorrido corto, y reforzando la restricción de que las lamas sigan rectas",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "No se reescribe todo: se baja la velocidad, se reducen los elementos móviles y se refuerzan las restricciones."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "m4-ia-bim-agentes-y-copilotos",
+      "title": "IA+BIM: Revit, agentes y copilotos",
+      "lessons": [
+        {
+          "id": "m4-1-agentes",
+          "title": "Asistentes frente a agentes de IA",
+          "description": "Distingue consulta, asistente configurado y agente autónomo, explica el ciclo del agente y enseña a redactar objetivos seguros con intervención humana en los momentos críticos.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.1-Agentes/4.1-Agentes.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-diferencia",
+                "prompt": "Según la lección, ¿en qué se diferencia realmente un agente de un asistente?",
+                "options": [
+                  {
+                    "text": "El agente usa un modelo de lenguaje más inteligente y potente",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "En la autonomía (cuántas decisiones toma sin preguntarte) y en el acceso a tus sistemas",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "En que el agente no necesita instrucciones ni documentos del proyecto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "En que el agente solo trabaja con modelos locales instalados en el estudio",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Ambos pueden usar el mismo modelo; la diferencia es de autonomía y de acceso, y por eso el agente exige más gobierno."
+              },
+              {
+                "id": "q2-nivel-bajo",
+                "prompt": "¿Qué regla propone la lección para elegir entre consulta, asistente o agente?",
+                "options": [
+                  {
+                    "text": "Usar siempre el agente, porque es el que más tiempo ahorra",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Usar el asistente configurado para todo, como término medio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Usar el nivel más bajo que resuelva la tarea",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Cada nivel suma autonomía y riesgo; solo compensa subir cuando la tarea es repetitiva, de muchos pasos y el ahorro justifica configurar límites."
+              },
+              {
+                "id": "q3-ciclo",
+                "prompt": "¿Cuál es el ciclo con el que trabaja un agente según la lección?",
+                "options": [
+                  {
+                    "text": "Pregunta, respuesta y cierre de la conversación",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Planificación, ejecución y entrega, en línea recta",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Acción, validación y percepción, sin planificación previa",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Percepción, planificación, acción y validación, repetidas en bucle",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "El agente percibe, planifica, actúa y valida; si algo no cuadra vuelve a percibir y replanifica, a diferencia de un chat que responde y termina."
+              },
+              {
+                "id": "q4-humano",
+                "prompt": "En el esquema de «humano en el bucle», ¿cuándo debe intervenir la persona?",
+                "options": [
+                  {
+                    "text": "Al fijar el objetivo y los límites, y antes de cualquier acción irreversible",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Aprobando cada uno de los pasos que da el agente",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Solo al final, revisando el informe cuando el agente ha terminado",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "No se trata de aprobar cada paso, lo que haría inútil al agente, sino de fijar bien el objetivo y aprobar lo que no tiene vuelta atrás."
+              },
+              {
+                "id": "q5-objetivo-seguro",
+                "prompt": "En el caso de las 140 vistas borradas, ¿qué cuatro componentes debería haber tenido el objetivo para ser seguro?",
+                "options": [
+                  {
+                    "text": "Rol, objetivo, contexto y formato",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Criterio, excepciones, confirmación y copia",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Objetivo, herramientas, memoria y registro",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Velocidad, precisión, alcance y presupuesto",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El fallo estuvo en un objetivo ambiguo, sin excepciones, sin revisión previa y sin copia; la fórmula criterio, excepciones, confirmación y copia lo corrige."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-2-hermes-openclaw",
+          "title": "Agentes de IA en arquitectura: Hermes y OpenClaw",
+          "description": "Presenta Hermes Agent y OpenClaw como agentes generalistas de código abierto, sus riesgos de seguridad y cómo configurarlos en un estudio con una ficha de cuatro elementos y cinco reglas.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.2-Hermes-OpenClaw/4.2-Hermes-OpenClaw.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-generalistas",
+                "prompt": "¿Qué son Hermes Agent y OpenClaw según la lección?",
+                "options": [
+                  {
+                    "text": "Productos especializados en BIM y normativa con funciones ISO 19650 de fábrica",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Complementos oficiales de Autodesk para Revit",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Agentes personales de código abierto y propósito general, cuyo uso en arquitectura depende de tu configuración",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "No son productos para arquitectura: todos los usos de estudio de la lección son configuraciones posibles, no funciones del producto."
+              },
+              {
+                "id": "q2-inyeccion",
+                "prompt": "¿En qué consiste la inyección de instrucciones (prompt injection)?",
+                "options": [
+                  {
+                    "text": "En que un contenido que el agente lee, como un PDF o un mensaje, esconde órdenes que el agente puede obedecer",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "En instalar una versión del agente sin actualizar los parches de seguridad",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "En dar al agente más herramientas de las que necesita la tarea",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "En que el agente guarde datos de clientes en su memoria persistente",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El modelo no distingue bien entre las instrucciones del usuario y el texto que lee, por lo que órdenes ocultas en un documento pueden ejecutarse."
+              },
+              {
+                "id": "q3-integrado",
+                "prompt": "¿Qué recomienda la lección como primer paso más seguro para la mayoría de estudios?",
+                "options": [
+                  {
+                    "text": "Instalar OpenClaw en el servidor del estudio para que todos lo usen por mensajería",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Usar un agente integrado en una plataforma con plan de empresa",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Instalar Hermes con todas las skills de la comunidad disponibles",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El agente integrado delega instalación, permisos y mantenimiento en el proveedor; los autoinstalados tienen sentido cuando alguien técnico puede mantenerlos."
+              },
+              {
+                "id": "q4-ficha",
+                "prompt": "¿Cuáles son los cuatro elementos de la ficha para configurar cualquier agente?",
+                "options": [
+                  {
+                    "text": "Rol, objetivo, contexto y formato",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Modelo, memoria, skills y mensajería",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Criterio, excepciones, copia y registro",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Objetivo, herramientas, contexto y validación",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Es la versión agéntica de la fórmula del Módulo 2: el formato se sustituye por herramientas y validación porque el resultado son acciones."
+              },
+              {
+                "id": "q5-minimo-privilegio",
+                "prompt": "¿Qué significa la regla de mínimo privilegio aplicada a un agente?",
+                "options": [
+                  {
+                    "text": "Que el agente debe usar el modelo de lenguaje más barato que haya disponible",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que solo una persona del estudio puede dar órdenes al agente y revisar su trabajo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que el agente no debe tener más herramientas de las necesarias para su tarea",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Cada herramienta es una puerta más; el agente debe recibir solo las imprescindibles para su tarea."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-3-autodesk",
+          "title": "Autodesk Forma y Autodesk Assistant",
+          "description": "Explica cómo usar Forma para analizar y comparar implantaciones con indicadores, qué hace Autodesk Assistant en Revit 2027 y sus controles, y la apertura de Revit mediante APIs y MCP.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.3-Autodesk/4.3-Autodesk.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-analisis-rapido",
+                "prompt": "¿Para qué conviene usar los análisis rápidos de viento y ruido de Forma, basados en aprendizaje automático?",
+                "options": [
+                  {
+                    "text": "Para dar la cifra final de un informe y justificar el cumplimiento normativo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Para comparar variantes y descartar pronto las peores",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Para sustituir definitivamente los estudios acústicos y de viento especializados",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Son como un predimensionado: sirven para comparar; la cifra final la da el análisis detallado o el estudio especializado."
+              },
+              {
+                "id": "q2-superficie",
+                "prompt": "¿Qué error frecuente señala la lección al comparar variantes en Forma?",
+                "options": [
+                  {
+                    "text": "Comparar variantes que no tienen la misma superficie edificada",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Analizar el soleamiento el 21 de diciembre en lugar de en verano",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Comparar más de dos variantes a la vez",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Importar los edificios vecinos en el contexto del solar",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Una opción con menos techo «gana» en sol y ruido por simple falta de volumen; hay que igualar la superficie o usar indicadores por m²."
+              },
+              {
+                "id": "q3-controles",
+                "prompt": "¿Qué controles se añadieron a Autodesk Assistant en las versiones 2027.3 y 2027.4?",
+                "options": [
+                  {
+                    "text": "Biblioteca de prompts, modo oscuro y exportación a IFC",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Aprobación obligatoria de cada clic y bloqueo del modelo central",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Registro en el diario de Revit, cambios de IA identificados en el menú deshacer y botón de parada",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Estos controles responden a los principios de la lección 4.1: trazabilidad, reversibilidad y posibilidad de que el humano intervenga."
+              },
+              {
+                "id": "q4-limites",
+                "prompt": "¿Cuál es el principal límite de Autodesk Assistant según la lección?",
+                "options": [
+                  {
+                    "text": "Solo responde dudas sobre Revit y no puede consultar el modelo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Funciona bien en consultas y tareas sencillas, pero falla en tareas complejas o de muchos pasos",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Solo funciona con modelos guardados en la nube de Autodesk",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Está en vista previa técnica; hay que revisar siempre el resultado en el modelo y deshacer si algo no cuadra."
+              },
+              {
+                "id": "q5-ecosistema",
+                "prompt": "¿Por qué es estratégico que Revit pueda controlarse mediante el protocolo MCP?",
+                "options": [
+                  {
+                    "text": "Porque cualquier asistente compatible, no solo el de Autodesk, puede consultarlo y, con permiso, operarlo",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque elimina la necesidad de copias de seguridad del modelo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque obliga a usar exclusivamente el Autodesk Assistant",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque permite exportar archivos de Revit sin licencia",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Un protocolo estándar permite al estudio elegir herramienta sin quedar atado a un único proveedor de IA."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-4-mcp",
+          "title": "MCP: Model Context Protocol",
+          "description": "Explica qué problema resuelve MCP, su arquitectura cliente-servidor y los mensajes que intercambian, su uso con Revit 2027 y cómo evaluar servidores con reglas de seguridad para el estudio.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.4-MCP/4.4-MCP.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-nxm",
+                "prompt": "¿Qué problema resuelve MCP?",
+                "options": [
+                  {
+                    "text": "Convierte las N x M integraciones a medida entre modelos y herramientas en N + M conectores al estándar",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Hace que los modelos de IA sean más precisos al razonar sobre BIM",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Garantiza que cualquier herramienta conectada sea segura",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Sustituye al formato IFC para intercambiar modelos entre programas",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Cada herramienta y cada modelo se conectan una sola vez al estándar, y cualquier cliente compatible habla con cualquier servidor compatible."
+              },
+              {
+                "id": "q2-componentes",
+                "prompt": "¿Qué tres tipos de cosas expone un servidor MCP?",
+                "options": [
+                  {
+                    "text": "Modelos, agentes y memorias",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Herramientas, recursos y prompts",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Clientes, conectores y skills",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Las herramientas son acciones que decide usar el modelo, los recursos son datos para leer y los prompts son plantillas reutilizables que elige el usuario."
+              },
+              {
+                "id": "q3-descripcion",
+                "prompt": "¿Por qué es tan importante la descripción en lenguaje natural de cada herramienta en el catálogo de un servidor?",
+                "options": [
+                  {
+                    "text": "Porque es el texto que se muestra al cliente final del proyecto en cada informe",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque determina el precio de cada llamada al modelo y el consumo del estudio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque el modelo la lee para decidir cuándo usar cada herramienta y si escribe o lee",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Tras el descubrimiento (tools/list), el modelo decide a partir de esas descripciones qué herramienta llamar con tools/call."
+              },
+              {
+                "id": "q4-variante-read",
+                "prompt": "¿Con qué variante del Revit Public MCP Server recomienda empezar la lección?",
+                "options": [
+                  {
+                    "text": "Write, para poder corregir el modelo directamente",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Experimental, porque incluye todas las funciones",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Read, porque cubre auditorías, recuentos y comprobaciones sin riesgo para el modelo",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Write se reserva para tareas concretas sobre una copia, y Experimental para pruebas fuera de proyectos reales."
+              },
+              {
+                "id": "q5-tres-preguntas",
+                "prompt": "¿Cuáles son las tres preguntas para evaluar cualquier servidor MCP?",
+                "options": [
+                  {
+                    "text": "Qué herramientas expone, cuáles escriben y qué datos devuelve al modelo",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Quién lo programó, cuánto cuesta y en qué lenguaje está escrito",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Si es oficial, si es de código abierto y si funciona con Claude",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Cuántos usuarios tiene, qué versión es y si tiene interfaz gráfica",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Lo que escribe necesita confirmación y copia, y todo lo que devuelve sale del ordenador hacia el proveedor del modelo."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-5-plataformas-bim",
+          "title": "Plataformas BIM + IA generativa",
+          "description": "Compara Spacio, Architechtures y Snaptrude para las fases iniciales del proyecto y enseña a elegir plataforma según la pregunta del encargo y a revisar qué sobrevive a la exportación BIM.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.5-Plataformas-BIM/4.5-Plataformas-BIM.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-elegir",
+                "prompt": "Según la lección, ¿cómo se debe elegir una plataforma generativa?",
+                "options": [
+                  {
+                    "text": "Por la demostración comercial más espectacular que hayas visto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Por la pregunta del encargo y cómo llega el resultado a tu herramienta",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Por la que ofrezca más funciones de IA generativa en un mismo paquete",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección insiste en elegir por la pregunta, no por la demo, y en mirar la calidad del paso a Revit u otra herramienta de continuidad."
+              },
+              {
+                "id": "q2-plataforma-pregunta",
+                "prompt": "Un promotor quiere saber cuántas viviendas caben en una parcela y si salen los números. ¿Qué plataforma encaja mejor?",
+                "options": [
+                  {
+                    "text": "Spacio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Snaptrude",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Architechtures",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "WiseBIM",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Architechtures está especializada en vivienda colectiva y genera plantas, verificación, mediciones, presupuesto e informe de viabilidad."
+              },
+              {
+                "id": "q3-verificacion",
+                "prompt": "¿Qué limitación tiene la verificación normativa de Architechtures?",
+                "options": [
+                  {
+                    "text": "Solo comprueba los criterios que tú le introduces: si te equivocas en la ordenanza, cumplirá un dato equivocado",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Solo funciona con la normativa de municipios noruegos",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "No comprueba parámetros urbanísticos, solo criterios de diseño",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La verificación es tan buena como los parámetros introducidos; hay que leer la ordenanza y revisar cada dato."
+              },
+              {
+                "id": "q4-exportacion",
+                "prompt": "¿Qué diferencia de exportación hacia Revit destaca la lección entre Architechtures y Snaptrude?",
+                "options": [
+                  {
+                    "text": "Ninguna de las dos puede exportar geometría utilizable hacia Revit",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Architechtures exporta RVT nativo, mientras que Snaptrude solo exporta DXF",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Las dos exportan únicamente en IFC, sin ningún complemento para Revit",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Architechtures usa IFC y DXF como puente; Snaptrude exporta nativo a Revit",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Architechtures no exporta un archivo nativo de Revit; Snaptrude ofrece un puente bidireccional que conserva familias y parámetros."
+              },
+              {
+                "id": "q5-calculo-previo",
+                "prompt": "¿Para qué sirve hacer un cálculo previo a mano antes de usar la plataforma en el caso de viabilidad?",
+                "options": [
+                  {
+                    "text": "Para sustituir a la plataforma cuando hay poco tiempo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Para detectar si el resultado generado es razonable y descubrir parámetros mal introducidos",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Para obtener directamente el presupuesto por partidas",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El cálculo rápido no sustituye a la herramienta, pero permite ver, por ejemplo, que 55 viviendas con ese techo indican un error de parámetros."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-6-catalogo",
+          "title": "Catálogo de plataformas BIM+IA",
+          "description": "Sitúa siete plataformas BIM+IA en un mapa por fase y escala, enseña a compararlas con una ficha de seis campos y a decidir con una prueba piloto medible.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.6-Catalogo/4.6-Catalogo.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-pregunta-correcta",
+                "prompt": "Según la lección, ¿qué pregunta conviene hacerse al elegir una plataforma BIM+IA?",
+                "options": [
+                  {
+                    "text": "¿Cuál es la plataforma más completa del mercado?",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "¿Qué plataforma tiene la demo más convincente?",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "¿En qué fase pierde más tiempo o dinero mi estudio?",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "¿Qué plataforma usan más mis competidores?",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Ninguna plataforma hace el proyecto entero; cada una resuelve una fase, así que se elige según la fase en la que más pierde el estudio."
+              },
+              {
+                "id": "q2-testfit-architechtures",
+                "prompt": "¿Qué diferencia principal señala la lección entre TestFit y Architechtures?",
+                "options": [
+                  {
+                    "text": "TestFit responde «¿cuánto cabe y cuál es el rendimiento?» para el promotor; Architechtures, cuántas viviendas caben y si cumple la normativa indicada",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "TestFit genera planos de ejecución y Architechtures simula la evolución de regiones",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "TestFit trabaja a escala urbana y Architechtures solo en documentación",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Ambas responden exactamente a la misma pregunta; solo cambia el precio",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "TestFit está orientada a la due diligence del promotor; Architechtures, a la viabilidad residencial con verificación de parámetros, mediciones e informe."
+              },
+              {
+                "id": "q3-ficha-seis-campos",
+                "prompt": "¿Cuál es la utilidad principal de la ficha de seis campos?",
+                "options": [
+                  {
+                    "text": "Sustituir la prueba piloto, ya que con ella se puede decidir sin probar",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Obligar a responder las mismas preguntas para todas las plataformas y convertir la impresión en una comparación",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Registrar únicamente el precio de cada plataforma",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La ficha, siempre la misma (fase, entrada, salida, integración BIM, precio y encaje), hace que la decisión pase de impresión a comparación."
+              },
+              {
+                "id": "q4-piloto-criterio-salida",
+                "prompt": "En un piloto bien diseñado, ¿cuándo deben fijarse las métricas y el criterio de salida?",
+                "options": [
+                  {
+                    "text": "Al final del piloto, cuando ya se conocen los resultados",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Cuando el fabricante entregue su informe de rendimiento",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Solo si el equipo no está convencido a mitad del piloto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Antes de empezar, cuando nadie está aún enamorado ni decepcionado de la herramienta",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "La lección insiste en fijar métricas y criterio de salida antes de empezar, junto con un proyecto real y una duración cerrada."
+              },
+              {
+                "id": "q5-exportacion-bim",
+                "prompt": "Una plataforma ahorra 10 horas pero obliga a remodelar 8 horas tras exportar a Revit. ¿Qué error frecuente ilustra este caso?",
+                "options": [
+                  {
+                    "text": "Decidir por la demo del fabricante",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "No comprobar qué sobrevive a la exportación BIM",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Hacer un piloto sin fecha de fin",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Hay que exportar un caso y revisar qué se mantiene (muros, niveles, habitaciones, parámetros); en el ejemplo el ahorro real es de 2 horas, no de 10."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-7-adarcus",
+          "title": "Adarcus: el agente IA que habla con Revit",
+          "description": "Presenta Adarcus, un agente conversacional dentro de Revit que consulta, crea tablas, modifica en lote y exporta, y enseña a pedirle cambios de forma segura y verificable.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.7-Adarcus/4.7-Adarcus.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-diferencia-chat",
+                "prompt": "¿Cuál es la diferencia esencial entre Adarcus y un chat de IA normal?",
+                "options": [
+                  {
+                    "text": "Adarcus solo responde en inglés técnico de Revit",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Adarcus no solo contesta: también puede cambiar el proyecto",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Adarcus funciona sin conexión y no usa modelos de IA",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Adarcus solo puede leer archivos PDF externos",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Por poder modificar el modelo se aplican las reglas de agentes: humano en el bucle, lectura por defecto y escritura con copia."
+              },
+              {
+                "id": "q2-riesgo-lote",
+                "prompt": "Según la tabla de riesgos de la lección, ¿qué tipo de petición tiene mayor riesgo?",
+                "options": [
+                  {
+                    "text": "Una consulta sobre el número de muros por tipo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Crear una tabla de planificación",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Un cambio en lote de parámetros",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "El cambio en lote modifica el modelo y puede producir errores masivos; exige alcance acotado, vista previa, copia y verificación."
+              },
+              {
+                "id": "q3-tipo-instancia",
+                "prompt": "Si la resistencia al fuego es un parámetro de tipo en las familias de puerta, ¿qué ocurre al cambiarlo?",
+                "options": [
+                  {
+                    "text": "Afecta a todas las puertas de ese tipo en el proyecto, estén o no en el ámbito deseado",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Solo afecta a las puertas seleccionadas en la vista activa",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "No afecta a ninguna puerta hasta sincronizar con el modelo central",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Solo cambia las puertas de la planta activa",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Un parámetro de tipo lo comparten todos los elementos del tipo; en ese caso puede ser mejor crear un tipo nuevo y reasignar solo las puertas afectadas."
+              },
+              {
+                "id": "q4-secuencia-segura",
+                "prompt": "¿Qué secuencia propone la lección como regla del módulo para trabajar con un agente que modifica el modelo?",
+                "options": [
+                  {
+                    "text": "Aplicación → verificación → consulta → exportación",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Vista previa → aplicación → consulta → sincronización",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Consulta → aplicación → vista previa → exportación",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Consulta → vista previa → confirmación → aplicación → verificación",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Saltarse un paso convierte un agente útil en un riesgo; el punto de confirmación llega tras revisar la vista previa."
+              },
+              {
+                "id": "q5-responsabilidad",
+                "prompt": "¿Quién responde del resultado de una tabla o un cambio generado por Adarcus?",
+                "options": [
+                  {
+                    "text": "El fabricante, Tecora Technologies",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Quien firma el proyecto: el agente propone y la persona decide",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "El proveedor del modelo de IA que usa el agente",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección es clara: revisa cada resultado antes de usarlo; si envías un error sin revisar, el error es tuyo, no del software."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-8-pele-ai",
+          "title": "Pele AI: copiloto de lenguaje natural en Revit",
+          "description": "Explica cómo Pele AI automatiza la documentación en Revit (vistas, planos, cotas, filtros y nomenclatura) con peticiones en lenguaje natural y comandos personalizados, y cómo medir su ahorro.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.8-Pele-AI/4.8-Pele-AI.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-como-funciona",
+                "prompt": "¿Por qué Pele AI funciona mejor en tareas claras y repetitivas que en peticiones ambiguas?",
+                "options": [
+                  {
+                    "text": "Porque genera geometría nueva y necesita referencias visuales precisas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque solo admite comandos escritos en inglés y con sintaxis estricta",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque traduce la frase a acciones de Revit y una petición ambigua confunde",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Pele no improvisa geometría: convierte la petición en acciones de Revit como crear vistas, aplicar plantillas o renombrar."
+              },
+              {
+                "id": "q2-frente-adarcus",
+                "prompt": "¿Cómo se reparten el terreno Adarcus y Pele AI según la lección?",
+                "options": [
+                  {
+                    "text": "Adarcus responde qué hay en el modelo; Pele AI prepara cómo se entrega",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Compiten en lo mismo, así que hay que elegir uno de los dos",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Adarcus produce planos y Pele AI gestiona parámetros en lote",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Pele AI convierte planos 2D en BIM y Adarcus genera scripts",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Se complementan: Adarcus es fuerte en datos del modelo y Pele AI en producción de documentación."
+              },
+              {
+                "id": "q3-cuatro-piezas",
+                "prompt": "¿Qué cuatro piezas debe tener una petición fiable para Pele AI?",
+                "options": [
+                  {
+                    "text": "Rol, objetivo, contexto y formato de la respuesta",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Fase del proyecto, entrada, salida y precio estimado",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Escala, cajetín, autor del plano y fecha de emisión",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Qué elementos, qué acción, qué estándar y qué excepciones",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Cuanto más concreta es la petición en esas cuatro piezas, más fiable es el resultado."
+              },
+              {
+                "id": "q4-no-delegar",
+                "prompt": "En el comando «Preparar entrega», ¿qué paso no se delega al copiloto?",
+                "options": [
+                  {
+                    "text": "La revisión de advertencias de Revit",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "La creación de planos A1 con el cajetín",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El renombrado según el BEP",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Las advertencias mezclan problemas triviales y serios; decidir cuáles se aceptan requiere criterio de proyecto."
+              },
+              {
+                "id": "q5-medir",
+                "prompt": "Al medir el ahorro de un copiloto antes de comprar, ¿qué debe incluir el tiempo «con copiloto»?",
+                "options": [
+                  {
+                    "text": "Solo lo que tarda el complemento en ejecutar la petición",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El tiempo de ejecución más tu revisión del resultado",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "El tiempo estimado por el fabricante en su web",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Únicamente el tiempo de preparar el comando personalizado",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección pide contar los minutos con el copiloto incluida la revisión, y medir también errores y peticiones consumidas."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-9-wisebim",
+          "title": "WiseBIM: de plano 2D a modelo BIM",
+          "description": "Enseña el proceso de cuatro pasos de WiseBIM (importar, detectar, revisar y generar) para convertir planos 2D en modelos nativos de Revit, sus límites y los encargos en que compensa.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.9-WiseBIM/4.9-WiseBIM.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-escala",
+                "prompt": "¿Por qué fijar la escala en el paso de importación «lo cambia todo»?",
+                "options": [
+                  {
+                    "text": "Porque determina el tipo de muro que se asigna por defecto",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque solo los planos con escala fijada se pueden exportar a IFC",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque si la escala está mal, todo el modelo estará mal en todas las plantas",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Marcando una cota conocida la herramienta calcula cuánto mide cada píxel; un error de escala se arrastra a todo el modelo."
+              },
+              {
+                "id": "q2-revision",
+                "prompt": "¿Por qué la revisión es el paso más importante del proceso?",
+                "options": [
+                  {
+                    "text": "Porque cada error que se deja pasar se hereda en el modelo, donde cuesta más corregirlo",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque es el único paso en el que se fija la escala",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque en ella la IA aprende de tus correcciones para la siguiente planta",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque sin revisión no se pueden asignar fases de Revit",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "En la revisión corregir un muro es un clic; en el modelo generado hay que borrar, redibujar y revisar uniones, multiplicado por plantas."
+              },
+              {
+                "id": "q3-error-sistematico",
+                "prompt": "Si en la revisión todos los espesores de muro salen irregulares, ¿qué recomienda la lección?",
+                "options": [
+                  {
+                    "text": "Corregir los muros uno a uno antes de generar",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Generar el modelo y corregir los espesores después en Revit",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Cambiar el tipo de muro por defecto y volver a detectar",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Volver al paso de importación y recalibrar la escala o revisar el escaneo",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Un error repetido indica un problema de preparación, no de detección; corregirlo elemento a elemento es la forma más cara de perder el ahorro."
+              },
+              {
+                "id": "q4-elementos-confirmados",
+                "prompt": "¿Qué elementos confirma el fabricante que WiseBIM detecta?",
+                "options": [
+                  {
+                    "text": "Muros, puertas, ventanas y losas",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Muros, pilares, vigas y escaleras",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Todos los elementos, incluidas instalaciones",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Aunque el material escrito incluía pilares, vigas y escaleras, el fabricante solo confirma muros, puertas, ventanas y losas; el resto se modela a mano."
+              },
+              {
+                "id": "q5-cuando-compensa",
+                "prompt": "¿En qué tipo de encargo no compensa usar WiseBIM?",
+                "options": [
+                  {
+                    "text": "Rehabilitación de un edificio con planos escaneados",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Obra nueva",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Recuperación del archivo histórico del estudio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Documentación final de obra (as built)",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "En obra nueva no hay plano previo que leer y modelar desde cero es el camino natural."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m4-10-glyph",
+          "title": "Glyph y scripts con IA: automatizar Revit con gobierno",
+          "description": "Explica qué automatiza Glyph en la documentación de Revit, lo compara con generar scripts de pyRevit con un modelo de lenguaje y fija las reglas para revisar, probar y gobernar ese código.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.10-Glyph/4.10-Glyph.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-glyph-no-scripts",
+                "prompt": "¿Qué corrección importante hace la lección sobre Glyph respecto al material escrito?",
+                "options": [
+                  {
+                    "text": "Glyph no funciona dentro de Revit, sino en el navegador",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Glyph solo genera scripts de Dynamo, no de Python",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Glyph no genera scripts de Python ni de Dynamo: ejecuta tareas configuradas",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Según Chaos, Glyph ejecuta tareas configuradas; para obtener código se usa un modelo de lenguaje más pyRevit."
+              },
+              {
+                "id": "q2-bundle",
+                "prompt": "¿Qué es un bundle en Glyph?",
+                "options": [
+                  {
+                    "text": "Una secuencia guardada de tareas que se ejecuta con un clic y se comparte con el equipo",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Un paquete de peticiones que se compra por adelantado",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Un script de Python empaquetado como botón de pyRevit",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Una copia de seguridad del modelo antes de documentar",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El bundle encadena tareas (vistas, planos, etiquetas, cotas) y hace que el estándar de documentación se ejecute."
+              },
+              {
+                "id": "q3-elegir-camino",
+                "prompt": "¿Para qué tarea recomienda la lección el camino «LLM + pyRevit» en lugar de Glyph?",
+                "options": [
+                  {
+                    "text": "Crear en serie vistas, secciones y planos según el estándar",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Etiquetar puertas y ventanas en todas las plantas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Montar planos desde el índice en Excel",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Comprobaciones de control de calidad a medida y cambios masivos de parámetros",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "La documentación en serie es el terreno natural de Glyph; las comprobaciones a medida y los parámetros masivos, del código con pyRevit."
+              },
+              {
+                "id": "q4-solo-lectura",
+                "prompt": "Al leer el script de ejemplo, ¿qué indica que es de solo lectura?",
+                "options": [
+                  {
+                    "text": "Que usa parámetros internos BuiltInParameter",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que no contiene ninguna transacción",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Que muestra el resultado en una tabla",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "En Revit los cambios van dentro de una transacción; sin ninguna transacción, el script no escribe nada en el modelo."
+              },
+              {
+                "id": "q5-gobierno",
+                "prompt": "¿Cuál de estas prácticas forma parte de las reglas de gobierno del código generado que propone la lección?",
+                "options": [
+                  {
+                    "text": "Guardar cada script en el ordenador de quien lo creó para que sea su responsable",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Ejecutar el script primero en el modelo central para comprobar que funciona",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Repositorio del estudio con versiones y revisión por pares antes de pasar a producción",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Aceptar el código si el modelo de lenguaje asegura que es correcto",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Las cinco reglas son repositorio, revisión por pares, transacciones y copias, registro de cambios y propiedad del estudio."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "m5-datos-legal-y-gobernanza",
+      "title": "Datos, legal y gobernanza",
+      "lessons": [
+        {
+          "id": "m5-1-datos",
+          "title": "IA para datos de proyecto: mediciones, presupuestos y análisis",
+          "description": "Por qué un modelo de lenguaje falla al hacer cuentas de cabeza y acierta cuando ejecuta código, con prompts para mediciones, certificaciones y modelos BIM, y cómo hacer defendible un análisis.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-5-Datos-Legal-y-Gobernanza/5.1-Datos/5.1-Datos.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-regla-principal",
+                "prompt": "¿Cuál es la regla principal de la lección para trabajar con datos de proyecto?",
+                "options": [
+                  {
+                    "text": "Pegar las tablas en el chat para que el modelo las lea completas y razone sobre ellas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Si son números, que escriba y ejecute código; si es texto, que razone; nunca al revés",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Usar el código tanto para las cifras como para explicar las causas de las desviaciones",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Pedir primero la interpretación y después los números que la confirmen",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección pide calcular con código y reservar el razonamiento para la interpretación, siempre en ese orden: primero las cifras y luego el texto."
+              },
+              {
+                "id": "q2-por-que-falla",
+                "prompt": "¿Por qué un modelo de lenguaje puede dar un total equivocado de un presupuesto con total seguridad?",
+                "options": [
+                  {
+                    "text": "Porque predice texto y no tiene una calculadora interna que acumule valores fila a fila",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque los modelos actuales no saben escribir código para sumar tablas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque solo falla con modelos gratuitos o de mala calidad",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "El modelo predice el siguiente token; con cientos de filas aproxima y omite partidas, y la respuesta errónea tiene el mismo tono que una correcta."
+              },
+              {
+                "id": "q3-correspondencias",
+                "prompt": "Al comparar las mediciones del modelo BIM con el presupuesto, ¿cuál es el paso más delicado que debes revisar tú?",
+                "options": [
+                  {
+                    "text": "El formato y la presentación del Excel final de tres hojas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El gráfico de desviaciones agrupadas por capítulo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "La correspondencia entre los nombres de partida de ambas fuentes",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "El cálculo de la desviación porcentual de cada partida",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Un emparejamiento erróneo entre partidas invalida toda la comparación, que puede salir limpia pero ser falsa; por eso hay que revisarlo."
+              },
+              {
+                "id": "q4-defendible",
+                "prompt": "Según la lección, ¿qué dos garantías mínimas hacen defendible un análisis hecho con IA?",
+                "options": [
+                  {
+                    "text": "Usar un plan de pago y una plataforma de un fabricante conocido",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Código visible y una muestra de resultados comprobada a mano",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Repetir la misma pregunta en dos chats distintos y comparar las respuestas",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "La lección propone pedir y leer el código y verificar a mano al menos dos resultados, además de anotar supuestos y guardar código y archivos."
+              },
+              {
+                "id": "q5-modelo-sustituto",
+                "prompt": "¿Qué es un modelo sustituto y cómo debe usarse en ingeniería del edificio?",
+                "options": [
+                  {
+                    "text": "Una simulación completa que sustituye a la herramienta exigida por la normativa",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Un copiloto que modifica directamente el modelo de Revit",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Una red entrenada con muchas simulaciones que aproxima resultados en milisegundos para explorar opciones, que luego verifica la simulación",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "El modelo sustituto es menos preciso pero rápido; la regla es que la IA explora y la simulación verifica, y solo es fiable dentro del rango de sus datos de entrenamiento."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m5-2-legal",
+          "title": "Marco legal y ético: datos, autoría, responsabilidad y AI Act",
+          "description": "Los cinco frentes legales y éticos del uso de la IA en un estudio: protección de datos, autoría, responsabilidad profesional según la LOE, el Reglamento europeo de IA y la deontología.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-5-Datos-Legal-y-Gobernanza/5.2-Legal/5.2-Legal.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-quien-responde",
+                "prompt": "Una memoria firmada cita un artículo inexistente del CTE redactado por un chat. ¿Quién responde?",
+                "options": [
+                  {
+                    "text": "La empresa que ofrece el chat, porque generó el error",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Nadie, si se usó una herramienta profesional",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "El técnico municipal que debía detectarlo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Quien firma la memoria",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "La firma no se delega: la LOE no contempla transferir responsabilidad a una herramienta y los proveedores excluyen la suya."
+              },
+              {
+                "id": "q2-seudonimizar",
+                "prompt": "Sustituyes el nombre del promotor por «Promotor A» pero dejas la dirección y la referencia catastral. ¿Cómo queda el dato?",
+                "options": [
+                  {
+                    "text": "Seudonimizado: la persona sigue siendo identificable y sigue siendo dato personal",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Anonimizado: ya puede subirse a cualquier herramienta",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Anonimizado, siempre que se use un plan de empresa",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Si quedan datos que permiten identificar a alguien combinándolos, el dato está seudonimizado y para el RGPD sigue siendo personal."
+              },
+              {
+                "id": "q3-autoria",
+                "prompt": "¿Qué proceso ofrece una autoría más sólida sobre una imagen generada con IA?",
+                "options": [
+                  {
+                    "text": "Un prompt detallado con muchas iteraciones",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Un prompt suelto muy descriptivo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Usar ControlNet sobre tu propio modelo 3D y editar después con criterio",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Pedir la imagen «al estilo de» un estudio reconocido",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "A más intervención creativa humana, más sólida la autoría: con tu geometría y tu edición, el proyecto y la composición son tuyos."
+              },
+              {
+                "id": "q4-ai-act-riesgo",
+                "prompt": "Según el Reglamento europeo de IA, ¿en qué situación quedan la mayoría de usos habituales de un estudio?",
+                "options": [
+                  {
+                    "text": "En alto riesgo, con gestión de riesgos y registro obligatorios",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "En riesgo mínimo o en obligaciones de transparencia, aunque la alfabetización del personal ya aplica",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Fuera del Reglamento si el estudio es pequeño",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Redactar, generar imágenes o analizar datos son de riesgo mínimo o de transparencia; aun así, la alfabetización y la transparencia aplican a cualquier estudio, sea cual sea su tamaño."
+              },
+              {
+                "id": "q5-subir-datos",
+                "prompt": "¿Qué implica jurídicamente subir a un servicio de IA un documento con datos personales de un cliente?",
+                "options": [
+                  {
+                    "text": "Nada especial, siempre que el servicio de IA sea de pago",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Solo una cuestión de autoría sobre el documento que se genera",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Una comunicación de datos a un tercero, con base legal y contrato de encargado",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "El proveedor trata los datos en sus servidores, así que se aplica el RGPD como a cualquier servicio en la nube; un plan de pago ayuda pero no basta por sí solo."
+              }
+            ]
+          }
+        },
+        {
+          "id": "m5-3-gobernanza",
+          "title": "Gobernanza: la política de IA del estudio",
+          "description": "Cómo convertir el uso disperso de la IA en un sistema del estudio con una política de una página: herramientas, semáforo de datos, reglas, roles, formación y métricas de impacto.",
+          "video": {
+            "provider": "r2",
+            "key": "TODO"
+          },
+          "sourceFile": "TEMARIO/Modulo-5-Datos-Legal-y-Gobernanza/5.3-Gobernanza/5.3-Gobernanza.html",
+          "quiz": {
+            "questions": [
+              {
+                "id": "q1-condiciones",
+                "prompt": "¿Qué tres condiciones debe cumplir la política de IA del estudio para funcionar?",
+                "options": [
+                  {
+                    "text": "Que sea exhaustiva, la firme un abogado y se revise cada cinco años",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que quepa en una página, la conozca todo el equipo y se revise cada seis meses",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Que la conozcan los socios, prohíba las herramientas gratuitas y se revise cada año",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Si no cabe en una página no se lee; debe conocerla todo el equipo, incluidos colaboradores, y revisarse cada seis meses porque las herramientas cambian rápido."
+              },
+              {
+                "id": "q2-semaforo",
+                "prompt": "En el semáforo de datos, ¿dónde se sitúan los documentos de proyecto sin anonimizar?",
+                "options": [
+                  {
+                    "text": "Verde: cualquier herramienta aprobada",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Rojo: nunca pueden subirse a ninguna herramienta",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Ámbar: solo en un plan de empresa con contrato de encargado del tratamiento",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "Verde es información pública o anonimizada; ámbar, documentos sin anonimizar en plan con contrato; rojo, datos personales de clientes."
+              },
+              {
+                "id": "q3-responsable",
+                "prompt": "Respecto a los roles, ¿qué considera la lección imprescindible para que la política se cumpla?",
+                "options": [
+                  {
+                    "text": "Un responsable de IA con nombre y apellidos",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Un organigrama detallado con un comité en cualquier estudio",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Que cada usuario apruebe sus propias herramientas",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Contratar a un especialista externo en IA",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Bastan tres roles, pero lo importante es que haya un responsable concreto; sin él, la política no se cumple."
+              },
+              {
+                "id": "q4-metricas",
+                "prompt": "¿Cuál de estas es una métrica de impacto adecuada para presentar a los socios?",
+                "options": [
+                  {
+                    "text": "Número de prompts escritos al mes por el equipo",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Número de imágenes generadas para los proyectos",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Minutos de uso de la herramienta por persona",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Horas ahorradas al mes frente a una línea base",
+                    "isCorrect": true
+                  }
+                ],
+                "explanation": "La regla es medir impacto, no actividad, y medir antes y después: sin línea base no se puede demostrar la mejora."
+              },
+              {
+                "id": "q5-prohibir",
+                "prompt": "¿Por qué la lección desaconseja una política que lo prohíba todo?",
+                "options": [
+                  {
+                    "text": "Porque el Reglamento europeo de IA obliga a los estudios a usarla",
+                    "isCorrect": false
+                  },
+                  {
+                    "text": "Porque el equipo la seguirá usando a escondidas y sin ninguna regla",
+                    "isCorrect": true
+                  },
+                  {
+                    "text": "Porque una política con tantas prohibiciones no cabe en una página",
+                    "isCorrect": false
+                  }
+                ],
+                "explanation": "Prohibirlo todo lleva al peor escenario, el uso oculto sin ninguna regla, por lo que conviene ofrecer alternativas seguras aprobadas."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Precio pendiente: no aparece ni en la ficha docente ni en el HTML del curso. Fíjalo desde el panel.",
+    "Vídeos pendientes (key TODO): R2 no está configurado. Los originales están en Drive, VIDEOS_CLASES/out/ (M<módulo>-<n>-<tema>.mp4, no los -ligero).",
+    "Título y descripción tomados de Curso_IA_Arquitectura_IDESIE.html ('IA Aplicada a la Arquitectura'); el curso se conocía internamente como 'IA para arquitectos'.",
+    "Profesor: José Carlos Martín Mateos (email de la ficha docente). Se asignará cuando tenga cuenta y se reimporte.",
+    "Se ha supuesto que el curso entra en la suscripción (no se indica en el material).",
+    "Títulos de módulo tomados del HTML del curso; el módulo 5 no aparece en la ficha docente.",
+    "Quizzes generados a partir del HTML de cada lección (TEMARIO/). No se han usado los Test-Modulo-N.html ni las secciones extra del HTML del curso (Fundamentos, examen final, proyecto integrador)."
+  ]
+}
