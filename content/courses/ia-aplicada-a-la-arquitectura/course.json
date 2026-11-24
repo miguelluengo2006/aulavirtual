@@ -22,7 +22,8 @@
           "description": "Presenta las cuatro definiciones de referencia de la IA, el mapa de la disciplina hasta la IA generativa, la IA simbólica frente a la conexionista, los niveles de IA y el test de Turing invertido aplicado al estudio.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m1-1-que-es-la-ia/index.m3u8",
+            "durationSeconds": 458
           },
           "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.1-Que-es-la-IA/1.1-Que-es-la-IA.html",
           "quiz": {
@@ -143,7 +144,8 @@
           "description": "Recorre los hitos de la IA del Perceptrón al Transformer y los Nobel de 2024, explica los dos inviernos y los tres factores del resurgimiento de 2012, y ofrece un filtro para leer titulares sobre IA.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m1-2-historia/index.m3u8",
+            "durationSeconds": 433
           },
           "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.2-Historia/1.2-Historia.html",
           "quiz": {
@@ -260,7 +262,8 @@
           "description": "Explica sin matemáticas cómo se entrena un modelo de lenguaje, qué son la fecha de corte, los embeddings, la atención y los tokens, por qué alucina y cómo escribir prompts con rol, objetivo, contexto y formato.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m1-3-como-funciona/index.m3u8",
+            "durationSeconds": 511
           },
           "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.3-Como-funciona/1.3-Como-funciona.html",
           "quiz": {
@@ -381,7 +384,8 @@
           "description": "Analiza cinco grandes retos de la IA para el estudio (empleo, control, sesgo, privacidad y sostenibilidad), propone la alineación local como respuesta y enseña a elaborar un mapa de riesgos.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m1-4-retos/index.m3u8",
+            "durationSeconds": 414
           },
           "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.4-Retos/1.4-Retos.html",
           "quiz": {
@@ -498,7 +502,8 @@
           "description": "Mapa de herramientas de IA en cuatro categorías (texto, imagen, vídeo y BIM+IA) con su fase de proyecto, criterios para elegir entre propietario y código abierto, un kit mínimo y cómo probar y medir una herramienta.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m1-5-ecosistema/index.m3u8",
+            "durationSeconds": 396
           },
           "sourceFile": "TEMARIO/Modulo-1-Introduccion-a-la-IA/1.5-Ecosistema/1.5-Ecosistema.html",
           "quiz": {
@@ -602,7 +607,8 @@
           "description": "Compara ChatGPT, Claude y Gemini por ecosistema, privacidad y coste, explica sus cuatro superficies de uso y cómo elegir plataforma y plan para unificar el uso de IA en un estudio.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m2-1-ecosistema/index.m3u8",
+            "durationSeconds": 459
           },
           "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.1-Ecosistema/2.1-Ecosistema.html",
           "quiz": {
@@ -700,7 +706,8 @@
           "description": "Enseña a convertir peticiones vagas en prompts profesionales (rol, objetivo, contexto y formato) y a aplicar delimitadores, ejemplos guía, razonamiento paso a paso, prompts negativos y descomposición.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m2-2-prompting/index.m3u8",
+            "durationSeconds": 467
           },
           "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.2-Prompting/2.2-Prompting.html",
           "quiz": {
@@ -817,7 +824,8 @@
           "description": "Explica qué es un asistente configurado, sus tres piezas (instrucciones, documentos y herramientas), cómo redactar el system prompt como un procedimiento y cómo verificarlo antes de abrirlo al equipo.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m2-3-asistente/index.m3u8",
+            "durationSeconds": 450
           },
           "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.3-Asistente/2.3-Asistente.html",
           "quiz": {
@@ -911,7 +919,8 @@
           "description": "Presenta las Skills como procedimientos empaquetados en formato abierto, el papel del nombre y la descripción, su estructura en objetivo, entradas, proceso y salida, y cómo elegir dónde construir el asistente.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m2-4-skills/index.m3u8",
+            "durationSeconds": 405
           },
           "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.4-Skills/2.4-Skills.html",
           "quiz": {
@@ -1005,7 +1014,8 @@
           "description": "Explica qué es RAG y sus cinco pasos (fragmentar, embeddings, indexar, recuperar y generar), las decisiones de diseño clave y cuándo un estudio necesita un RAG propio.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m2-5-rag/index.m3u8",
+            "durationSeconds": 459
           },
           "sourceFile": "TEMARIO/Modulo-2-Prompting-y-Asistentes/2.5-RAG/2.5-RAG.html",
           "quiz": {
@@ -1124,7 +1134,8 @@
           "description": "Cómo aprende un modelo de difusión a quitar ruido y cómo genera imágenes a partir de él, los tres mandos de toda generación (prompt, semilla y pasos) y las cuatro familias de modelos.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m3-1-difusion/index.m3u8",
+            "durationSeconds": 397
           },
           "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.1-Difusion/3.1-Difusion.html",
           "quiz": {
@@ -1241,7 +1252,8 @@
           "description": "Cómo enseñar a un modelo de imagen un estilo, producto o edificio propio con un puñado de imágenes y un token, cuándo merece la pena entrenar y cómo elegir entre DreamBooth y LoRA.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m3-2-lora/index.m3u8",
+            "durationSeconds": 373
           },
           "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.2-LoRA/3.2-LoRA.html",
           "quiz": {
@@ -1358,7 +1370,8 @@
           "description": "Cómo ControlNet condiciona un modelo de difusión con una imagen de control para respetar la geometría de tu proyecto, qué tipo de control elegir y qué ajustes deciden el resultado.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m3-3-controlnet/index.m3u8",
+            "durationSeconds": 388
           },
           "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.3-ControlNet/3.3-ControlNet.html",
           "quiz": {
@@ -1475,7 +1488,8 @@
           "description": "Para qué fases sirve Midjourney, cómo escribir prompts de siete bloques ordenados por importancia, qué parámetros usar, cómo refinar una imagen y qué plan elegir según la privacidad.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m3-4-midjourney/index.m3u8",
+            "durationSeconds": 388
           },
           "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.4-Midjourney/3.4-Midjourney.html",
           "quiz": {
@@ -1588,7 +1602,8 @@
           "description": "Qué aportan las plataformas de imagen especializadas en arquitectura, con Veras y sus dos mandos como eje, el nicho de cada herramienta y cómo elegir con tres preguntas.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m3-5-plataformas/index.m3u8",
+            "durationSeconds": 384
           },
           "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.5-Plataformas/3.5-Plataformas.html",
           "quiz": {
@@ -1701,7 +1716,8 @@
           "description": "Cómo editar renders y fotos por instrucción en lenguaje natural sin alterar la geometría, qué herramienta usar para cada tarea y cómo montar un flujo de postproducción repetible.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m3-6-edicion/index.m3u8",
+            "durationSeconds": 376
           },
           "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.6-Edicion/3.6-Edicion.html",
           "quiz": {
@@ -1814,7 +1830,8 @@
           "description": "Las tres modalidades de vídeo generativo, el vocabulario de cámara para dirigirlas, el prompt de vídeo en seis piezas y cómo convertir un render en un clip corto sin artefactos.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m3-7-video/index.m3u8",
+            "durationSeconds": 372
           },
           "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.7-Video/3.7-Video.html",
           "quiz": {
@@ -1927,7 +1944,8 @@
           "description": "Un método de cuatro pasos (imagen, describir, prompt y vídeo) en el que un modelo de lenguaje multimodal traduce un render en instrucciones de movimiento, y cómo integrar imagen y vídeo en cada fase del proyecto.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m3-8-proceso-l35/index.m3u8",
+            "durationSeconds": 380
           },
           "sourceFile": "TEMARIO/Modulo-3-Imagen-y-Video-con-IA/3.8-Proceso-L35/3.8-Proceso-L35.html",
           "quiz": {
@@ -2046,7 +2064,8 @@
           "description": "Distingue consulta, asistente configurado y agente autónomo, explica el ciclo del agente y enseña a redactar objetivos seguros con intervención humana en los momentos críticos.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-1-agentes/index.m3u8",
+            "durationSeconds": 409
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.1-Agentes/4.1-Agentes.html",
           "quiz": {
@@ -2167,7 +2186,8 @@
           "description": "Presenta Hermes Agent y OpenClaw como agentes generalistas de código abierto, sus riesgos de seguridad y cómo configurarlos en un estudio con una ficha de cuatro elementos y cinco reglas.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-2-hermes-openclaw/index.m3u8",
+            "durationSeconds": 378
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.2-Hermes-OpenClaw/4.2-Hermes-OpenClaw.html",
           "quiz": {
@@ -2284,7 +2304,8 @@
           "description": "Explica cómo usar Forma para analizar y comparar implantaciones con indicadores, qué hace Autodesk Assistant en Revit 2027 y sus controles, y la apertura de Revit mediante APIs y MCP.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-3-autodesk/index.m3u8",
+            "durationSeconds": 382
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.3-Autodesk/4.3-Autodesk.html",
           "quiz": {
@@ -2401,7 +2422,8 @@
           "description": "Explica qué problema resuelve MCP, su arquitectura cliente-servidor y los mensajes que intercambian, su uso con Revit 2027 y cómo evaluar servidores con reglas de seguridad para el estudio.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-4-mcp/index.m3u8",
+            "durationSeconds": 454
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.4-MCP/4.4-MCP.html",
           "quiz": {
@@ -2518,7 +2540,8 @@
           "description": "Compara Spacio, Architechtures y Snaptrude para las fases iniciales del proyecto y enseña a elegir plataforma según la pregunta del encargo y a revisar qué sobrevive a la exportación BIM.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-5-plataformas-bim/index.m3u8",
+            "durationSeconds": 403
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.5-Plataformas-BIM/4.5-Plataformas-BIM.html",
           "quiz": {
@@ -2635,7 +2658,8 @@
           "description": "Sitúa siete plataformas BIM+IA en un mapa por fase y escala, enseña a compararlas con una ficha de seis campos y a decidir con una prueba piloto medible.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-6-catalogo/index.m3u8",
+            "durationSeconds": 362
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.6-Catalogo/4.6-Catalogo.html",
           "quiz": {
@@ -2756,7 +2780,8 @@
           "description": "Presenta Adarcus, un agente conversacional dentro de Revit que consulta, crea tablas, modifica en lote y exporta, y enseña a pedirle cambios de forma segura y verificable.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-7-adarcus/index.m3u8",
+            "durationSeconds": 396
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.7-Adarcus/4.7-Adarcus.html",
           "quiz": {
@@ -2877,7 +2902,8 @@
           "description": "Explica cómo Pele AI automatiza la documentación en Revit (vistas, planos, cotas, filtros y nomenclatura) con peticiones en lenguaje natural y comandos personalizados, y cómo medir su ahorro.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-8-pele-ai/index.m3u8",
+            "durationSeconds": 365
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.8-Pele-AI/4.8-Pele-AI.html",
           "quiz": {
@@ -2998,7 +3024,8 @@
           "description": "Enseña el proceso de cuatro pasos de WiseBIM (importar, detectar, revisar y generar) para convertir planos 2D en modelos nativos de Revit, sus límites y los encargos en que compensa.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-9-wisebim/index.m3u8",
+            "durationSeconds": 437
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.9-WiseBIM/4.9-WiseBIM.html",
           "quiz": {
@@ -3119,7 +3146,8 @@
           "description": "Explica qué automatiza Glyph en la documentación de Revit, lo compara con generar scripts de pyRevit con un modelo de lenguaje y fija las reglas para revisar, probar y gobernar ese código.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m4-10-glyph/index.m3u8",
+            "durationSeconds": 387
           },
           "sourceFile": "TEMARIO/Modulo-4-IA-BIM-Agentes-y-Copilotos/4.10-Glyph/4.10-Glyph.html",
           "quiz": {
@@ -3246,7 +3274,8 @@
           "description": "Por qué un modelo de lenguaje falla al hacer cuentas de cabeza y acierta cuando ejecuta código, con prompts para mediciones, certificaciones y modelos BIM, y cómo hacer defendible un análisis.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m5-1-datos/index.m3u8",
+            "durationSeconds": 397
           },
           "sourceFile": "TEMARIO/Modulo-5-Datos-Legal-y-Gobernanza/5.1-Datos/5.1-Datos.html",
           "quiz": {
@@ -3363,7 +3392,8 @@
           "description": "Los cinco frentes legales y éticos del uso de la IA en un estudio: protección de datos, autoría, responsabilidad profesional según la LOE, el Reglamento europeo de IA y la deontología.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m5-2-legal/index.m3u8",
+            "durationSeconds": 477
           },
           "sourceFile": "TEMARIO/Modulo-5-Datos-Legal-y-Gobernanza/5.2-Legal/5.2-Legal.html",
           "quiz": {
@@ -3480,7 +3510,8 @@
           "description": "Cómo convertir el uso disperso de la IA en un sistema del estudio con una política de una página: herramientas, semáforo de datos, reglas, roles, formación y métricas de impacto.",
           "video": {
             "provider": "r2",
-            "key": "TODO"
+            "key": "cursos/ia-aplicada-a-la-arquitectura/m5-3-gobernanza/index.m3u8",
+            "durationSeconds": 505
           },
           "sourceFile": "TEMARIO/Modulo-5-Datos-Legal-y-Gobernanza/5.3-Gobernanza/5.3-Gobernanza.html",
           "quiz": {
