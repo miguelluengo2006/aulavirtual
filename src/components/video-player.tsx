@@ -30,16 +30,38 @@ export function VideoPlayer({ lessonId, watermark, startAt = 0 }: Props) {
     let destroy = () => {};
     let cancelled = false;
 
+    const resume = startAt > 5 ? startAt : -1;
+    // Solo para Safari (HLS nativo): hls.js ya empieza a cargar directamente en `resume`.
     const seekToStart = () => {
-      if (startAt > 5 && video.duration && startAt < video.duration - 5) video.currentTime = startAt;
+      if (resume > 0 && video.duration && resume < video.duration - 5) video.currentTime = resume;
     };
-    video.addEventListener("loadedmetadata", seekToStart, { once: true });
 
     (async () => {
       const { default: Hls } = await import("hls.js");
       if (cancelled) return;
       if (Hls.isSupported()) {
-        const hls = new Hls({ enableWorker: true });
+        const retry = { maxNumRetry: 6, retryDelayMs: 500, maxRetryDelayMs: 8000 };
+        const hls = new Hls({
+          enableWorker: true,
+          // Empieza a descargar donde lo dejó el alumno, no desde el principio.
+          startPosition: resume,
+          // Pide el primer segmento mientras aún se prepara el reproductor.
+          startFragPrefetch: true,
+          // ~30 s por delante (hasta 90 s si la conexión va sobrada) y suelta lo visto
+          // hace más de 60 s para no llenar la memoria en móviles y vídeos largos.
+          maxBufferLength: 30,
+          maxMaxBufferLength: 90,
+          backBufferLength: 60,
+          // Redes inestables (móvil, wifi de obra): más reintentos antes de rendirse.
+          fragLoadPolicy: {
+            default: {
+              maxTimeToFirstByteMs: 10_000,
+              maxLoadTimeMs: 60_000,
+              timeoutRetry: retry,
+              errorRetry: retry,
+            },
+          },
+        });
         hls.on(Hls.Events.ERROR, (_e, data) => {
           if (!data.fatal) return;
           const status = (data.response as { code?: number } | undefined)?.code;
@@ -53,6 +75,7 @@ export function VideoPlayer({ lessonId, watermark, startAt = 0 }: Props) {
         hls.attachMedia(video);
         destroy = () => hls.destroy();
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.addEventListener("loadedmetadata", seekToStart, { once: true });
         video.src = src; // Safari reproduce HLS de forma nativa
       } else {
         setError("Tu navegador no puede reproducir este vídeo.");
@@ -173,6 +196,7 @@ export function VideoPlayer({ lessonId, watermark, startAt = 0 }: Props) {
         className="h-full w-full"
         controls
         playsInline
+        preload="metadata"
         // Pantalla completa propia (botón abajo) para que la marca de agua no desaparezca.
         controlsList="nodownload nofullscreen noremoteplayback"
         disablePictureInPicture

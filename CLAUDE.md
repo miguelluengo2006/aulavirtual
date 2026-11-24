@@ -220,6 +220,13 @@ Para un curso entero, `npm run videos:course -- <course.json> <carpeta-con-los-m
 - El reproductor (`src/components/video-player.tsx`, hls.js; HLS nativo en Safari) pone una marca de agua móvil con el email del alumno, quita el menú contextual y el botón de descarga, y usa su propia pantalla completa para que la marca no desaparezca.
 - Nada de esto impide grabar la pantalla; la marca de agua es lo que disuade.
 
+### Rendimiento
+
+- **Firmas estables** (`stableSigning` en `src/lib/hls.ts`, con tests): las URLs de los segmentos se firman con la fecha redondeada a ventanas de 10 min, así son idénticas entre peticiones y el navegador reutiliza lo descargado (volver atrás, repetir, recargar). Llevan `response-cache-control: private, max-age=<ttl>, immutable`; `R2_SEGMENT_BROWSER_CACHE=off` lo desactiva si R2 diera problemas. `video:prepare` sube además los segmentos con ese `Cache-Control`.
+- **Caché en memoria** (`TtlCache`, `src/lib/ttl-cache.ts`): playlists y claves leídas de R2 se guardan 10 min por instancia (`getObjectBytesCached`). El acceso se comprueba antes, en cada petición. La playlist reescrita va con `private, max-age=60`; la clave sigue `no-store`.
+- **Reproductor**: hls.js empieza a cargar en el punto donde lo dejó el alumno (`startPosition`), precarga el primer segmento, mantiene ~30 s de búfer (hasta 90 s), suelta lo visto hace más de 60 s y reintenta más en redes inestables. La página de la lección hace `preconnect` al origen de R2.
+- **Pendiente si hace falta más**: el bucket `idesie-av-videos` está en Norteamérica (ENAM); para alumnos en España iría mejor uno en Europa occidental (WEUR). Y una segunda calidad (480p) para móviles con mala conexión.
+
 ### Configuración de R2
 
 1. Crear el bucket (privado, sin dominio público).

@@ -91,6 +91,29 @@ export async function rewritePlaylist(
   return out.join("\n");
 }
 
+/** Ventana en la que las firmas de los segmentos no cambian (para que el navegador reutilice lo descargado). */
+export const SIGNING_WINDOW_SECONDS = 10 * 60;
+
+/**
+ * Firma "estable": todas las peticiones de la misma ventana de 10 min firman con la
+ * misma fecha, así la URL de cada segmento es idéntica y el navegador la saca de su
+ * caché al volver atrás, repetir o recargar. La validez se alarga lo que haya pasado
+ * desde el inicio de la ventana, para que cada URL siga durando al menos `ttlSeconds`.
+ */
+export function stableSigning(
+  nowMs: number,
+  ttlSeconds: number,
+  windowSeconds = SIGNING_WINDOW_SECONDS,
+): { signingDate: Date; expiresIn: number; cacheSeconds: number } {
+  const windowMs = windowSeconds * 1000;
+  const start = Math.floor(nowMs / windowMs) * windowMs;
+  const expiresIn = Math.min(ttlSeconds + windowSeconds, 7 * 24 * 3600); // máximo de S3/R2
+  // Va dentro de la URL firmada, así que tiene que ser fijo en toda la ventana. Como
+  // siempre quedan al menos `ttlSeconds` de firma, el navegador nunca guarda una URL caducada.
+  const cacheSeconds = Math.min(ttlSeconds, expiresIn);
+  return { signingDate: new Date(start), expiresIn, cacheSeconds };
+}
+
 /** Validez de las URLs firmadas de los segmentos: lo que dura el vídeo + margen. */
 export function segmentUrlTtl(durationSeconds: number | null | undefined): number {
   const base = (durationSeconds ?? 3600) + 30 * 60; // 30 min de margen para pausas

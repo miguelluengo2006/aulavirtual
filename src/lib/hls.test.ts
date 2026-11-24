@@ -5,6 +5,7 @@ import {
   resolveInside,
   rewritePlaylist,
   segmentUrlTtl,
+  stableSigning,
 } from "./hls";
 
 const rw = {
@@ -89,5 +90,30 @@ describe("segmentUrlTtl", () => {
     expect(segmentUrlTtl(60)).toBe(60 + 1800);
     expect(segmentUrlTtl(10 * 3600)).toBe(4 * 3600);
     expect(segmentUrlTtl(null)).toBe(3600 + 1800);
+  });
+});
+
+describe("stableSigning", () => {
+  const W = 600;
+  it("firma igual dentro de la misma ventana y cambia en la siguiente", () => {
+    const a = stableSigning(1_200_000_000, 2400, W);
+    const b = stableSigning(1_200_000_000 + 500_000, 2400, W);
+    const c = stableSigning(1_200_000_000 + 700_000, 2400, W);
+    expect(a).toEqual(b);
+    expect(c.signingDate.getTime()).not.toBe(a.signingDate.getTime());
+  });
+
+  it("cada URL sigue valiendo al menos el tiempo pedido y la caché nunca lo supera", () => {
+    for (const offset of [0, 1, 299_000, 599_999]) {
+      const now = 1_800_000_000_000 + offset;
+      const s = stableSigning(now, 2400, W);
+      const remaining = s.signingDate.getTime() / 1000 + s.expiresIn - now / 1000;
+      expect(remaining).toBeGreaterThanOrEqual(2400);
+      expect(s.cacheSeconds).toBeLessThanOrEqual(remaining);
+    }
+  });
+
+  it("respeta el máximo de 7 días de S3/R2", () => {
+    expect(stableSigning(0, 30 * 24 * 3600).expiresIn).toBe(7 * 24 * 3600);
   });
 });

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
+import { preconnect } from "react-dom";
 import { LessonQuiz } from "@/components/lesson-quiz";
 import { VideoPlayer } from "@/components/video-player";
 import { canAccessCourse } from "@/lib/access";
@@ -12,6 +13,7 @@ import {
   getQuizForStudent,
 } from "@/lib/course-data";
 import { formatDuration } from "@/lib/format";
+import { r2Origin } from "@/lib/r2";
 import { requireUser } from "@/lib/session";
 
 export default function LessonPage({ params }: PageProps<"/cursos/[slug]/[leccion]">) {
@@ -42,6 +44,10 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
     getQuizForStudent(lesson.id),
   ]);
   const lastAttempt = quiz ? await getLastAttempt(user.id, quiz.id) : null;
+
+  // Abre ya la conexión con R2: el primer segmento llega antes.
+  const videoOrigin = r2Origin();
+  if (videoOrigin) preconnect(videoOrigin, { crossOrigin: "anonymous" });
   const mine = progress.get(lesson.id);
   const done = all.filter((l) => progress.get(l.id)?.completed).length;
 

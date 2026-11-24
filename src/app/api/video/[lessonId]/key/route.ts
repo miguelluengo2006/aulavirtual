@@ -1,6 +1,6 @@
 import { lessonVideoPrefix } from "@/lib/hls";
 import { lessonForRequest } from "@/lib/lesson-access";
-import { getObjectBytes, R2NotFoundError } from "@/lib/r2";
+import { getObjectBytesCached, R2NotFoundError } from "@/lib/r2";
 
 // Clave AES-128 del vídeo. Es lo que hace inútiles los segmentos fuera de la
 // plataforma: solo se entrega a usuarios con acceso al curso y nunca se firma.
@@ -21,7 +21,7 @@ export async function GET(request: Request, ctx: RouteContext<"/api/video/[lesso
   }
 
   try {
-    const bytes = await getObjectBytes(key);
+    const bytes = await getObjectBytesCached(key);
     return new Response(new Uint8Array(bytes), {
       headers: {
         "Content-Type": "application/octet-stream",

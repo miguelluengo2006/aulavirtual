@@ -1,7 +1,13 @@
 import { posix } from "node:path";
-import { lessonVideoPrefix, PlaylistError, rewritePlaylist, segmentUrlTtl } from "@/lib/hls";
+import {
+  lessonVideoPrefix,
+  PlaylistError,
+  rewritePlaylist,
+  segmentUrlTtl,
+  stableSigning,
+} from "@/lib/hls";
 import { lessonForRequest } from "@/lib/lesson-access";
-import { getObjectText, presignGet, R2NotFoundError } from "@/lib/r2";
+import { getObjectTextCached, presignGet, R2NotFoundError } from "@/lib/r2";
 
 // Devuelve la playlist HLS de una lección, reescrita:
 // segmentos → URLs firmadas de R2; clave y sub-playlists → este mismo servidor.
@@ -27,18 +33,24 @@ export async function GET(
     return new Response("Ruta no permitida", { status: 400 });
   }
 
-  const ttl = segmentUrlTtl(lesson.durationSeconds);
+  // Firmas estables durante 10 min: mismas URLs → el navegador reutiliza los segmentos.
+  const signing = stableSigning(Date.now(), segmentUrlTtl(lesson.durationSeconds));
+  // Interruptor por si R2 dejara de aceptar `response-cache-control`: R2_SEGMENT_BROWSER_CACHE=off.
+  const cacheSeconds = process.env.R2_SEGMENT_BROWSER_CACHE === "off" ? undefined : signing.cacheSeconds;
   const base = `/api/video/${lesson.id}`;
   try {
-    const body = await rewritePlaylist(await getObjectText(playlistKey), playlistKey, prefix, {
-      segment: (key) => presignGet(key, ttl),
+    const body = await rewritePlaylist(await getObjectTextCached(playlistKey), playlistKey, prefix, {
+      segment: (key) =>
+        presignGet(key, signing.expiresIn, { signingDate: signing.signingDate, cacheSeconds }),
       key: (key) => `${base}/key?p=${encodeURIComponent(key)}`,
       playlist: (key) => `${base}/playlist?p=${encodeURIComponent(key)}`,
     });
     return new Response(body, {
       headers: {
         "Content-Type": "application/vnd.apple.mpegurl",
-        "Cache-Control": "private, no-store",
+        // Breve y solo en el navegador del alumno: si vuelve a la lección enseguida
+        // no hace falta pedirla otra vez. Las URLs que lleva duran mucho más.
+        "Cache-Control": "private, max-age=60",
       },
     });
   } catch (e) {

@@ -109,7 +109,10 @@ if (upload) {
   let n = 0;
   for (const f of files) {
     const ext = f.split(".").pop()!;
-    await putObject(`${dest}/${f}`, await readFile(join(outDir, f)), types[ext] ?? "application/octet-stream");
+    // Los segmentos no cambian nunca: el navegador puede guardarlos (siguen cifrados).
+    // La playlist y la clave no se guardan (la clave solo se entrega tras comprobar el acceso).
+    const cache = ext === "ts" ? "private, max-age=14400, immutable" : "no-store";
+    await putObject(`${dest}/${f}`, await readFile(join(outDir, f)), types[ext] ?? "application/octet-stream", cache);
     process.stdout.write(`\r  Subiendo a R2… ${++n}/${files.length}`);
   }
   console.log(`\n✓ Subido a R2 en ${dest}/`);
