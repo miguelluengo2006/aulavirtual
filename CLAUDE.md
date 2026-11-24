@@ -141,7 +141,7 @@ El build no necesita la base de datos (`src/db/index.ts` solo exige `DATABASE_UR
 ## Estabilidad y carga
 
 - **Región**: las funciones de Vercel van en Frankfurt (`vercel.json` → `fra1`), junto a la base de datos. No cambiarla sin mover también la base de datos.
-- **Pool de BD** (`src/db/index.ts`): 8 conexiones por instancia en Vercel, con tiempo máximo de conexión (8 s) y de consulta (15 s) y manejador de errores de conexiones en reposo. No quitar `pool.on("error")`: sin él, un corte de red tumba el proceso.
+- **Pool de BD** (`src/db/index.ts`): 8 conexiones por instancia en Vercel, con tiempo máximo de conexión (5 s) y de consulta (15 s) y manejador de errores de conexiones en reposo. No quitar `pool.on("error")`: sin él, un corte de red tumba el proceso. `RetryingPool` reintenta una vez **abrir** la conexión si falla por algo transitorio (arranques en frío que se quedan a medias en la autenticación con Supavisor, cortes del pooler); nunca repite una consulta ya enviada. Lógica en `src/db/retry.ts` (con tests).
 - **Caché del catálogo**: `getPublishedCourses` y `getCourseOutline` (`src/lib/course-data.ts`) usan `"use cache"` con la etiqueta `courses` (1 min). `adminAction` la vacía con `updateTag("courses")` en cada cambio; una importación por script tarda hasta 1 min en verse. **Nunca cachear nada que dependa del usuario ni `canAccessCourse`.**
 - `canAccessCourse` es **una sola consulta** (se ejecuta en cada latido y cada petición de vídeo) y `getCurrentUser` lee la sesión una vez por petición (`cache` de React). Mantenerlo así.
 - Páginas de error en español: `src/app/(site)/error.tsx`, `src/app/admin/error.tsx`, `src/app/not-found.tsx` y `src/app/global-error.tsx`.
