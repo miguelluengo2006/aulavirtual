@@ -220,6 +220,15 @@ Para un curso entero, `npm run videos:course -- <course.json> <carpeta-con-los-m
 - El reproductor (`src/components/video-player.tsx`, hls.js; HLS nativo en Safari) pone una marca de agua móvil con el email del alumno, quita el menú contextual y el botón de descarga, y usa su propia pantalla completa para que la marca no desaparezca.
 - Nada de esto impide grabar la pantalla; la marca de agua es lo que disuade.
 
+### Capturas de pantalla (`src/components/capture-guard.tsx`)
+
+Ninguna web puede impedir una captura (la hace el sistema operativo) ni una grabación o una foto con el móvil; `CaptureGuard` envuelve el contenido de la lección para **disuadir e identificar**:
+- Marca de agua suave en mosaico por toda la lección (y la móvil del vídeo) con **email y fecha** (calculada en el servidor, hora de Madrid): cualquier recorte identifica a quien la hizo.
+- Imprimir pantalla, Cmd+Mayús+3/4/5/6 y Win+Mayús+S: tapa la lección 2,5 s, pausa el vídeo y, con Imprimir pantalla, sustituye la imagen del portapapeles. El sistema puede capturar antes de que el navegador reaccione.
+- Si la ventana pierde el foco (recortes, grabadores, otra app), pausa el vídeo y oculta la lección hasta volver.
+- Sin seleccionar, copiar, arrastrar ni menú contextual; al imprimir (`@media print` en `globals.css`) la lección no sale.
+- Bloqueo real de grabación solo con DRM (Widevine/FairPlay), que exige otro proveedor de vídeo.
+
 ### Rendimiento
 
 - **Firmas estables** (`stableSigning` en `src/lib/hls.ts`, con tests): las URLs de los segmentos se firman con la fecha redondeada a ventanas de 10 min, así son idénticas entre peticiones y el navegador reutiliza lo descargado (volver atrás, repetir, recargar). Llevan `response-cache-control: private, max-age=<ttl>, immutable`; `R2_SEGMENT_BROWSER_CACHE=off` lo desactiva si R2 diera problemas. `video:prepare` sube además los segmentos con ese `Cache-Control`.

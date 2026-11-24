@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { preconnect } from "react-dom";
+import { CaptureGuard } from "@/components/capture-guard";
 import { LessonQuiz } from "@/components/lesson-quiz";
 import { VideoPlayer } from "@/components/video-player";
 import { canAccessCourse } from "@/lib/access";
@@ -45,6 +46,9 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
   ]);
   const lastAttempt = quiz ? await getLastAttempt(user.id, quiz.id) : null;
 
+  // Email y fecha en la marca de agua: cualquier captura o grabación queda identificada.
+  const mark = `${user.email} · ${new Date().toLocaleDateString("es-ES", { timeZone: "Europe/Madrid" })}`;
+
   // Abre ya la conexión con R2: el primer segmento llega antes.
   const videoOrigin = r2Origin();
   if (videoOrigin) preconnect(videoOrigin, { crossOrigin: "anonymous" });
@@ -53,37 +57,41 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-      <div className="min-w-0 space-y-6">
-        <VideoPlayer
-          lessonId={lesson.id}
-          watermark={user.email}
-          // Retoma donde lo dejó, salvo que ya la haya terminado.
-          startAt={mine && !mine.completed ? mine.position : 0}
-        />
+      {/* Protección frente a capturas: ver CaptureGuard. */}
+      <CaptureGuard watermark={mark}>
+        <div className="min-w-0 space-y-6">
+          <VideoPlayer
+            lessonId={lesson.id}
+            watermark={mark}
+            // Retoma donde lo dejó, salvo que ya la haya terminado.
+            startAt={mine && !mine.completed ? mine.position : 0}
+          />
 
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
-            <Link href={`/cursos/${course.slug}`} className="text-sm text-muted hover:text-white">
-              {course.title}
-            </Link>
-            <h1 className="text-3xl">{lesson.title}</h1>
-          </div>
-          <div className="flex shrink-0 gap-2">
-            {prev && (
-              <Link href={`/cursos/${course.slug}/${prev.externalId}`} className="btn btn-ghost btn-sm">
-                Anterior
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="space-y-1">
+              <Link href={`/cursos/${course.slug}`} className="text-sm text-muted hover:text-white">
+                {course.title}
               </Link>
-            )}
-            {next && (
-              <Link href={`/cursos/${course.slug}/${next.externalId}`} className="btn btn-primary btn-sm">
-                Siguiente lección
-              </Link>
-            )}
+              <h1 className="text-3xl">{lesson.title}</h1>
+            </div>
+            <div className="flex shrink-0 gap-2">
+              {prev && (
+                <Link href={`/cursos/${course.slug}/${prev.externalId}`} className="btn btn-ghost btn-sm">
+                  Anterior
+                </Link>
+              )}
+              {next && (
+                <Link href={`/cursos/${course.slug}/${next.externalId}`} className="btn btn-primary btn-sm">
+                  Siguiente lección
+                </Link>
+              )}
+            </div>
           </div>
+
+          {quiz && <LessonQuiz quiz={quiz} lastAttempt={lastAttempt} />}
         </div>
 
-        {quiz && <LessonQuiz quiz={quiz} lastAttempt={lastAttempt} />}
-      </div>
+      </CaptureGuard>
 
       <aside className="glass h-fit space-y-5 p-4 lg:sticky lg:top-24">
         <div className="space-y-2 px-2 pt-2">

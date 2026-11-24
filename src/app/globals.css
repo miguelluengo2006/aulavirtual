@@ -396,3 +396,16 @@ h3 {
     background: #f8fafd;
   }
 }
+
+/* Lecciones: no se imprimen (ver CaptureGuard). */
+@media print {
+  .capture-guard {
+    display: none !important;
+  }
+  body::before {
+    content: "El contenido de los cursos de IDESIE AV no se puede imprimir.";
+    display: block;
+    padding: 2rem;
+    color: #000;
+  }
+}
