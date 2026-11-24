@@ -136,7 +136,7 @@ Despliegue automático desde GitHub (`main` → producción). Variables de entor
 - `RESEND_API_KEY` y `EMAIL_FROM`: emails de confirmación y recuperación. Sin ellos no se exige confirmar el email y no se puede recuperar la contraseña.
 - `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`: para los vídeos.
 
-El build no necesita la base de datos (`src/db/index.ts` solo exige `DATABASE_URL` fuera de `next build`). En Vercel el pool usa 3 conexiones por función.
+El build no necesita la base de datos (`src/db/index.ts` solo exige `DATABASE_URL` fuera de `next build`). 
 
 ## Estabilidad y carga
 
@@ -323,3 +323,18 @@ npm run typecheck
 - [x] Fase 4: panel de admin completo y blindado (cursos, contenido, quizzes, profesores, accesos, usuarios, actividad)
 - [ ] Fase 5: dudas por lección y foro por curso
 - [ ] Fase 6: panel de métricas
+
+## Trabajo en curso: primer curso (noviembre de 2026)
+
+Producción: https://av.idesie.com (Vercel, proyecto `aulavirtual` del equipo `idesie`). Admin: miguel.luengo@idesie.com.
+
+**Curso "IA para arquitectos"**: el contenido está en Google Drive, carpeta `curso_IA_Arquitectos` (id `1ob5FL9mWxNrzz698jxKXa7vN0K4y-1ik`, unidad compartida):
+- `VIDEOS_CLASES/out/` (id `1xnoEoWcglEMvTVClnS-U9ZpmyfMWAH59`): 31 vídeos `M<módulo>-<n>-<tema>.mp4` (~200-270 MB cada uno, ~6,9 GB). Usar los originales, no los `-ligero`.
+- `TEMARIO/` (id `1qtK7dVPqkokBB1z51oNy309iHEBUYxF9`): una carpeta por módulo (5 módulos: 5, 5, 8, 10 y 3 lecciones) con el HTML de referencia para los quizzes.
+- `Curso_IA_Arquitectura_IDESIE.html` y `Ficha_Docente_...docx` en la raíz: descripción, y quizá precio y profesor (si no están, dejarlos pendientes; no inventar).
+
+Pendiente, por orden:
+1. Crear el manifiesto y los quizzes de las 31 lecciones e importarlo como borrador (vídeos en `"TODO"` hasta subirlos).
+2. **R2 sin configurar**: faltan el bucket, su CORS (`https://av.idesie.com`) y las variables `R2_*` en Vercel. Lo hace el admin en Cloudflare; las claves no se piden por el chat.
+3. Subir los vídeos con `npm run video:prepare -- <mp4> cursos/<slug>/<id-leccion> --upload` desde un entorno que tenga los vídeos, las claves de R2 y salida a `*.r2.cloudflarestorage.com`.
+4. Después: Stripe (fase 3), dudas y foro (fase 5), métricas con limpieza de `watch_events` (fase 6), copias de seguridad de Supabase.
