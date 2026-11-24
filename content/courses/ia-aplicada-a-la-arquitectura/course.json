@@ -3627,7 +3627,7 @@
   ],
   "notes": [
     "Precio: 249,99 €, fijado por el admin desde el panel (24/11/2026).",
-    "Vídeos pendientes (key TODO): R2 no está configurado. Los originales están en Drive, VIDEOS_CLASES/out/ (M<módulo>-<n>-<tema>.mp4, no los -ligero).",
+    "Vídeos: los 31 subidos a R2 (bucket idesie-av-videos) el 24/11/2026 como HLS cifrado; comprobar que se reproducen antes de publicar.",
     "Título y descripción tomados de Curso_IA_Arquitectura_IDESIE.html ('IA Aplicada a la Arquitectura'); el curso se conocía internamente como 'IA para arquitectos'.",
     "Profesor: José Carlos Martín Mateos (email de la ficha docente). Se asignará cuando tenga cuenta y se reimporte.",
     "Se ha supuesto que el curso entra en la suscripción (no se indica en el material).",
