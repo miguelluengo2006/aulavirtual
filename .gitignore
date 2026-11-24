@@ -43,3 +43,6 @@ next-env.d.ts
 
 # vídeos convertidos localmente (scripts/video-prepare.ts)
 /.video-out
+
+# Ajustes locales de Claude Code
+/.claude/settings.local.json

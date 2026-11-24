@@ -4,7 +4,7 @@
   "title": "IA Aplicada a la Arquitectura",
   "description": "Un curso para integrar la inteligencia artificial generativa en el flujo de trabajo del arquitecto de forma sistemática, crítica y profesional: desde entender cómo funciona un LLM hasta operar agentes dentro de Revit.",
   "pricing": {
-    "priceCents": null,
+    "priceCents": 24999,
     "currency": "eur",
     "includedInSubscription": true
   },
@@ -3595,7 +3595,7 @@
     }
   ],
   "notes": [
-    "Precio pendiente: no aparece ni en la ficha docente ni en el HTML del curso. Fíjalo desde el panel.",
+    "Precio: 249,99 €, fijado por el admin desde el panel (24/11/2026).",
     "Vídeos pendientes (key TODO): R2 no está configurado. Los originales están en Drive, VIDEOS_CLASES/out/ (M<módulo>-<n>-<tema>.mp4, no los -ligero).",
     "Título y descripción tomados de Curso_IA_Arquitectura_IDESIE.html ('IA Aplicada a la Arquitectura'); el curso se conocía internamente como 'IA para arquitectos'.",
     "Profesor: José Carlos Martín Mateos (email de la ficha docente). Se asignará cuando tenga cuenta y se reimporte.",
