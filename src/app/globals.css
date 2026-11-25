@@ -409,3 +409,8 @@ h3 {
     color: #000;
   }
 }
+
+/* Dentro de una lección protegida se puede seleccionar lo que escribe el alumno. */
+.capture-guard :is(input, textarea) {
+  user-select: text;
+}

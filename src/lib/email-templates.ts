@@ -88,3 +88,25 @@ export function inviteTemplate(name: string, url: string, role: "admin" | "teach
     text: `Hola, ${name}\n\nTe hemos creado una cuenta en IDESIE AV ${what}. Elige tu contraseña aquí:\n${url}\n\nEl enlace caduca en 7 días y solo se puede usar una vez.`,
   };
 }
+
+/** Aviso a los profesores de un curso: duda nueva en una lección o hilo nuevo en el foro. */
+export function newQuestionTemplate(opts: {
+  kind: "lesson" | "forum";
+  where: string;
+  author: string;
+  excerpt: string;
+  url: string;
+}) {
+  const place = opts.kind === "lesson" ? `en la lección "${opts.where}"` : `en el foro del curso "${opts.where}"`;
+  const excerpt = opts.excerpt.length > 400 ? `${opts.excerpt.slice(0, 400)}…` : opts.excerpt;
+  return {
+    subject: opts.kind === "lesson" ? `Nueva duda: ${opts.where}` : `Nuevo tema en el foro: ${opts.where}`,
+    html: layout({
+      title: opts.kind === "lesson" ? "Hay una duda nueva" : "Hay un tema nuevo en el foro",
+      intro: `${escape(opts.author)} ha escrito ${escape(place)}:<br><br><span style="color:#ffffff">${escape(excerpt).replace(/\n/g, "<br>")}</span>`,
+      button: { label: "Responder", url: opts.url },
+      outro: "Recibes este email porque eres profesor de este curso en IDESIE AV.",
+    }),
+    text: `${opts.author} ha escrito ${place}:\n\n${excerpt}\n\nResponder: ${opts.url}\n\nRecibes este email porque eres profesor de este curso en IDESIE AV.`,
+  };
+}

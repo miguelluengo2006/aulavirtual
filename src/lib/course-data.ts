@@ -12,6 +12,7 @@ import {
   quizAttempts,
   quizzes,
 } from "@/db/schema";
+import { drawQuestions, shuffle } from "./quiz";
 
 // El catálogo y los temarios son iguales para todos y cambian poco, así que se
 // guardan en caché: con muchos alumnos a la vez no se repite la misma consulta
@@ -66,7 +67,14 @@ export async function getCourseOutline(slug: string) {
         with: {
           lessons: {
             orderBy: asc(lessons.position),
-            columns: { id: true, externalId: true, title: true, durationSeconds: true },
+            columns: {
+              id: true,
+              externalId: true,
+              title: true,
+              description: true,
+              keyPoints: true,
+              durationSeconds: true,
+            },
           },
         },
       },
@@ -101,7 +109,12 @@ export async function getProgressMap(userId: string, lessonIds: string[]) {
 }
 
 /** Quiz de una lección SIN las respuestas correctas (va al navegador). */
-export async function getQuizForStudent(lessonId: string) {
+/**
+ * Quiz de una lección para un alumno: del banco de preguntas saca las de este
+ * intento (sin repetir las de su último intento mientras se pueda) y baraja
+ * preguntas y opciones. Nunca incluye cuál es la correcta.
+ */
+export async function getQuizForStudent(lessonId: string, userId: string) {
   const quiz = await db.query.quizzes.findFirst({
     where: eq(quizzes.lessonId, lessonId),
     columns: { id: true },
@@ -114,7 +127,20 @@ export async function getQuizForStudent(lessonId: string) {
     },
   });
   if (!quiz || quiz.questions.length === 0) return null;
-  return quiz;
+
+  const [last] = await db
+    .select({ answers: quizAttempts.answers })
+    .from(quizAttempts)
+    .where(and(eq(quizAttempts.userId, userId), eq(quizAttempts.quizId, quiz.id)))
+    .orderBy(desc(quizAttempts.createdAt))
+    .limit(1);
+  const seen = new Set(Object.keys(last?.answers ?? {}));
+
+  return {
+    id: quiz.id,
+    poolSize: quiz.questions.length,
+    questions: drawQuestions(quiz.questions, seen).map((q) => ({ ...q, options: shuffle(q.options) })),
+  };
 }
 
 export type StudentQuiz = NonNullable<Awaited<ReturnType<typeof getQuizForStudent>>>;

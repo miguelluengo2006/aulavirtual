@@ -189,6 +189,8 @@ export const lessons = pgTable(
     videoKey: text("video_key").notNull(),
     durationSeconds: integer("duration_seconds"),
     sourceFile: text("source_file"),
+    // Ideas principales del vídeo (sección "Resumen" de la lección).
+    keyPoints: jsonb("key_points").$type<string[]>().default([]).notNull(),
   },
   (t) => [
     uniqueIndex("lessons_course_ext_idx").on(t.courseId, t.externalId),
@@ -387,21 +389,32 @@ export const lessonQuestions = pgTable(
     status: lessonQuestionStatus("status").default("open").notNull(),
     createdAt: createdAt(),
   },
-  (t) => [index("lesson_questions_lesson_idx").on(t.lessonId, t.status)],
+  (t) => [
+    index("lesson_questions_lesson_idx").on(t.lessonId, t.status),
+    // Límite de publicación por usuario (y su clave foránea).
+    index("lesson_questions_user_idx").on(t.userId, t.createdAt),
+  ],
 );
 
-export const lessonAnswers = pgTable("lesson_answers", {
-  id: id(),
-  questionId: text("question_id")
-    .notNull()
-    .references(() => lessonQuestions.id, { onDelete: "cascade" }),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  body: text("body").notNull(),
-  isTeacher: boolean("is_teacher").default(false).notNull(),
-  createdAt: createdAt(),
-});
+export const lessonAnswers = pgTable(
+  "lesson_answers",
+  {
+    id: id(),
+    questionId: text("question_id")
+      .notNull()
+      .references(() => lessonQuestions.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    body: text("body").notNull(),
+    isTeacher: boolean("is_teacher").default(false).notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index("lesson_answers_question_idx").on(t.questionId, t.createdAt),
+    index("lesson_answers_user_idx").on(t.userId, t.createdAt),
+  ],
+);
 
 export const forumThreads = pgTable(
   "forum_threads",
@@ -418,7 +431,10 @@ export const forumThreads = pgTable(
     locked: boolean("locked").default(false).notNull(),
     createdAt: createdAt(),
   },
-  (t) => [index("forum_threads_course_idx").on(t.courseId)],
+  (t) => [
+    index("forum_threads_course_idx").on(t.courseId),
+    index("forum_threads_user_idx").on(t.userId, t.createdAt),
+  ],
 );
 
 export const forumPosts = pgTable(
@@ -435,7 +451,10 @@ export const forumPosts = pgTable(
     isTeacher: boolean("is_teacher").default(false).notNull(),
     createdAt: createdAt(),
   },
-  (t) => [index("forum_posts_thread_idx").on(t.threadId)],
+  (t) => [
+    index("forum_posts_thread_idx").on(t.threadId),
+    index("forum_posts_user_idx").on(t.userId, t.createdAt),
+  ],
 );
 
 // ─────────────────────────────────────────────────────────────

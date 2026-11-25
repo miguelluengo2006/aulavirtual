@@ -84,7 +84,13 @@ export function CaptureGuard({ watermark, children }: Props) {
     };
   }, []);
 
-  const block = (e: { preventDefault: () => void }) => e.preventDefault();
+  // Se bloquea copiar, arrastrar y el menú contextual sobre el contenido, pero no
+  // en los campos donde el alumno escribe (dudas, respuestas): ahí sí puede copiar y pegar.
+  const block = (e: { preventDefault: () => void; target: EventTarget }) => {
+    const el = e.target as HTMLElement;
+    if (el.closest?.("input, textarea, [contenteditable='true']")) return;
+    e.preventDefault();
+  };
 
   return (
     <div

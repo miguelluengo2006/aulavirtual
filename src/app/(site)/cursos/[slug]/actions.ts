@@ -5,11 +5,13 @@ import { z } from "zod";
 import { db } from "@/db";
 import { lessons, options, questions, quizAttempts, quizzes } from "@/db/schema";
 import { canAccessCourse } from "@/lib/access";
-import { gradeQuiz, type QuizResult } from "@/lib/quiz";
+import { gradeQuiz, type QuizResult, validDrawnIds } from "@/lib/quiz";
 import { getCurrentUser } from "@/lib/session";
 
 const input = z.object({
   quizId: z.string().min(1).max(64),
+  // Preguntas que le salieron en este intento (se comprueban contra el banco).
+  questionIds: z.array(z.string().max(64)).min(1).max(20),
   answers: z
     .record(z.string().max(64), z.string().max(64))
     .refine((a) => Object.keys(a).length <= 50, "Demasiadas respuestas"),
@@ -23,7 +25,7 @@ export async function submitQuiz(
 ): Promise<{ ok: true; result: QuizResult } | { ok: false; error: string }> {
   const parsed = input.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "Respuestas inválidas" };
-  const { quizId, answers } = parsed.data;
+  const { quizId, questionIds, answers } = parsed.data;
 
   const user = await getCurrentUser();
   if (!user) return { ok: false, error: "Tu sesión ha caducado. Vuelve a entrar." };
@@ -60,8 +62,13 @@ export async function submitQuiz(
     with: { options: { columns: { id: true, isCorrect: true }, orderBy: asc(options.position) } },
   });
   if (key.length === 0) return { ok: false, error: "Este quiz no tiene preguntas" };
+  // Solo se corrigen las preguntas de este intento, y tienen que ser las que tocan.
+  if (!validDrawnIds(questionIds, key.map((q) => q.id))) {
+    return { ok: false, error: "Las preguntas han cambiado. Vuelve a cargar la página." };
+  }
+  const byId = new Map(key.map((q) => [q.id, q]));
 
-  const result = gradeQuiz(key, answers);
+  const result = gradeQuiz(questionIds.map((id) => byId.get(id)!), answers);
   await db.insert(quizAttempts).values({
     userId: user.id,
     quizId,

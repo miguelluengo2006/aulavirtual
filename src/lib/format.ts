@@ -25,3 +25,15 @@ export function formatTotalMinutes(totalSeconds: number) {
   if (min < 60) return `${min} min`;
   return `${Math.floor(min / 60)} h${min % 60 ? ` ${min % 60} min` : ""}`;
 }
+
+/** Fecha y hora cortas en español, hora de Madrid ("24 nov 2026, 18:05"). */
+export function formatDateTime(d: Date | string) {
+  return new Date(d).toLocaleString("es-ES", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Madrid",
+  });
+}

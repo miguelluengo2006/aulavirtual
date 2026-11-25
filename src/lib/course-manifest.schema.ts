@@ -38,7 +38,10 @@ const lesson = z.object({
   }),
   // Archivo HTML del que se ha sacado el quiz (para trazabilidad).
   sourceFile: z.string().optional(),
-  quiz: z.object({ questions: z.array(question).min(3).max(5) }).optional(),
+  // Ideas principales del vídeo (sección "Resumen" de la lección).
+  keyPoints: z.array(z.string().trim().min(5).max(300)).max(8).optional(),
+  // Banco de preguntas: cada intento saca 5 al azar (ver src/lib/quiz.ts).
+  quiz: z.object({ questions: z.array(question).min(3).max(15) }).optional(),
 });
 
 const courseModule = z.object({

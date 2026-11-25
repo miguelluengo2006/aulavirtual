@@ -50,39 +50,56 @@ async function Course({ params }: { params: Promise<{ slug: string }> }) {
 
         <section className="space-y-4">
           <h2 className="text-2xl">Temario</h2>
-          {course.modules.map((m) => (
-            <div key={m.id} className="glass overflow-hidden p-2">
-              <h3 className="px-4 pb-2 pt-3 text-base font-medium">{m.title}</h3>
-              <ol className="space-y-1">
-                {m.lessons.map((l) => {
-                  const completed = progress.get(l.id)?.completed;
-                  const row = (
-                    <span className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm">
-                      <span
-                        aria-label={completed ? "Completada" : undefined}
-                        className={`grid size-5 shrink-0 place-items-center rounded-full text-[10px] ${completed ? "bg-accent text-navy" : "border border-white/25"}`}
-                      >
-                        {completed && "✓"}
+          {course.modules.map((m, mi) => {
+            const moduleSeconds = m.lessons.reduce((s, l) => s + (l.durationSeconds ?? 0), 0);
+            const moduleDone = m.lessons.filter((l) => progress.get(l.id)?.completed).length;
+            return (
+              <div key={m.id} className="glass overflow-hidden p-2">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 pb-2 pt-3">
+                  <h3 className="text-base font-medium">
+                    <span className="text-subtle">Módulo {mi + 1} · </span>
+                    {m.title}
+                  </h3>
+                  <span className="text-xs text-subtle">
+                    {plural(m.lessons.length, "lección", "lecciones")}
+                    {moduleSeconds > 0 && ` · ${formatTotalMinutes(moduleSeconds)}`}
+                    {hasAccess && moduleDone > 0 && ` · ${moduleDone}/${m.lessons.length} completadas`}
+                  </span>
+                </div>
+                <ol className="space-y-1">
+                  {m.lessons.map((l) => {
+                    const completed = progress.get(l.id)?.completed;
+                    const row = (
+                      <span className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm">
+                        <span
+                          aria-label={completed ? "Completada" : undefined}
+                          className={`grid size-5 shrink-0 place-items-center rounded-full text-[10px] ${completed ? "bg-accent text-navy" : "border border-white/25"}`}
+                        >
+                          {completed && "✓"}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block">{l.title}</span>
+                          {l.description && <span className="mt-0.5 line-clamp-2 text-xs text-subtle">{l.description}</span>}
+                        </span>
+                        <span className="text-subtle tabular-nums">{formatDuration(l.durationSeconds)}</span>
                       </span>
-                      <span className="flex-1">{l.title}</span>
-                      <span className="text-subtle tabular-nums">{formatDuration(l.durationSeconds)}</span>
-                    </span>
-                  );
-                  return (
-                    <li key={l.id}>
-                      {hasAccess ? (
-                        <Link href={`/cursos/${course.slug}/${l.externalId}`} className="block rounded-2xl hover:bg-white/5">
-                          {row}
-                        </Link>
-                      ) : (
-                        <span className="block text-muted">{row}</span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          ))}
+                    );
+                    return (
+                      <li key={l.id}>
+                        {hasAccess ? (
+                          <Link href={`/cursos/${course.slug}/${l.externalId}`} className="block rounded-2xl hover:bg-white/5">
+                            {row}
+                          </Link>
+                        ) : (
+                          <span className="block text-muted">{row}</span>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            );
+          })}
         </section>
       </div>
 
@@ -106,6 +123,13 @@ async function Course({ params }: { params: Promise<{ slug: string }> }) {
                 {done === 0 ? "Empezar el curso" : done === all.length ? "Repasar el curso" : "Continuar"}
               </Link>
             )}
+            <div className="inset space-y-2 px-4 py-4">
+              <p className="text-sm font-medium">Foro del curso</p>
+              <p className="text-sm text-muted">Pregunta, comparte tus ejercicios y resuelve dudas con el profesor y tus compañeros.</p>
+              <Link href={`/cursos/${course.slug}/foro`} className="btn btn-ghost btn-sm w-full">
+                Entrar en el foro
+              </Link>
+            </div>
           </>
         ) : (
           <>

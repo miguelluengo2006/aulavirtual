@@ -1,11 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { submitQuiz } from "@/app/(site)/cursos/[slug]/actions";
 import type { QuizResult } from "@/lib/quiz";
 
 type Quiz = {
   id: string;
+  poolSize: number;
   questions: { id: string; prompt: string; options: { id: string; text: string }[] }[];
 };
 
@@ -20,6 +22,7 @@ export function LessonQuiz({
   const [result, setResult] = useState<QuizResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   const byQuestion = new Map(result?.questions.map((q) => [q.questionId, q]));
   const allAnswered = quiz.questions.every((q) => answers[q.id]);
@@ -27,22 +30,30 @@ export function LessonQuiz({
   const onSubmit = () =>
     startTransition(async () => {
       setError(null);
-      const r = await submitQuiz({ quizId: quiz.id, answers });
+      const r = await submitQuiz({ quizId: quiz.id, questionIds: quiz.questions.map((q) => q.id), answers });
       if (r.ok) setResult(r.result);
       else setError(r.error);
     });
 
-  const retry = () => {
-    setAnswers({});
-    setResult(null);
-  };
+  // Otro intento con preguntas nuevas: el servidor vuelve a sortearlas
+  // evitando las que acaban de salir.
+  const retry = () =>
+    startTransition(() => {
+      setAnswers({});
+      setResult(null);
+      router.refresh();
+    });
+  const morePool = quiz.poolSize > quiz.questions.length;
 
   return (
     <section id="quiz" className="glass scroll-mt-24 space-y-6 p-6 sm:p-8">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-1">
           <h2 className="text-2xl">Preguntas clave</h2>
-          <p className="text-sm text-muted">Comprueba lo que has entendido. No cuenta para avanzar.</p>
+          <p className="text-sm text-muted">
+            Comprueba lo que has entendido del vídeo. No cuenta para avanzar.
+            {morePool && ` Cada intento te saca ${quiz.questions.length} de ${quiz.poolSize} preguntas.`}
+          </p>
         </div>
         {!result && lastAttempt && (
           <span className="chip">
@@ -114,7 +125,7 @@ export function LessonQuiz({
             Has acertado {result.score} de {result.total}
           </span>
           <button type="button" onClick={retry} className="btn btn-ghost btn-sm">
-            Volver a intentarlo
+            {morePool ? "Probar con otras preguntas" : "Volver a intentarlo"}
           </button>
         </div>
       ) : (

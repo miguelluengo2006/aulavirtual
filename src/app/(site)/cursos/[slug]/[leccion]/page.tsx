@@ -3,9 +3,10 @@ import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { preconnect } from "react-dom";
 import { CaptureGuard } from "@/components/capture-guard";
+import { LessonDoubts } from "@/components/community/lesson-doubts";
 import { LessonQuiz } from "@/components/lesson-quiz";
 import { VideoPlayer } from "@/components/video-player";
-import { canAccessCourse } from "@/lib/access";
+import { getCommunityRole } from "@/lib/community";
 import {
   flatLessons,
   getCourseOutline,
@@ -31,18 +32,21 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
 
   const course = await getCourseOutline(slug);
   if (!course) notFound();
-  if (!(await canAccessCourse(user.id, course.id))) redirect(`/cursos/${slug}`);
+  // Acceso al curso (y si modera el foro y las dudas: admin o profesor del curso).
+  const role = await getCommunityRole(user, course.id);
+  if (!role.access) redirect(`/cursos/${slug}`);
 
   const all = flatLessons(course);
   const index = all.findIndex((l) => l.externalId === leccion);
   if (index === -1) notFound();
   const lesson = all[index];
+  const moduleOf = course.modules.find((m) => m.lessons.some((l) => l.id === lesson.id));
   const next = all[index + 1];
   const prev = all[index - 1];
 
   const [progress, quiz] = await Promise.all([
     getProgressMap(user.id, all.map((l) => l.id)),
-    getQuizForStudent(lesson.id),
+    getQuizForStudent(lesson.id, user.id),
   ]);
   const lastAttempt = quiz ? await getLastAttempt(user.id, quiz.id) : null;
 
@@ -69,10 +73,17 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
 
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="space-y-1">
-              <Link href={`/cursos/${course.slug}`} className="text-sm text-muted hover:text-white">
-                {course.title}
-              </Link>
+              <p className="text-sm text-muted">
+                <Link href={`/cursos/${course.slug}`} className="hover:text-white">
+                  {course.title}
+                </Link>
+                {moduleOf && <span className="text-subtle"> · {moduleOf.title}</span>}
+              </p>
               <h1 className="text-3xl">{lesson.title}</h1>
+              <p className="text-sm text-subtle">
+                Lección {index + 1} de {all.length}
+                {lesson.durationSeconds ? ` · ${formatDuration(lesson.durationSeconds)}` : ""}
+              </p>
             </div>
             <div className="flex shrink-0 gap-2">
               {prev && (
@@ -88,7 +99,48 @@ async function Lesson({ params }: { params: Promise<{ slug: string; leccion: str
             </div>
           </div>
 
+          {/* Índice de la lección: cada apartado a un clic. */}
+          <nav aria-label="Apartados de la lección" className="flex flex-wrap gap-2">
+            {(lesson.description || lesson.keyPoints.length > 0) && (
+              <a href="#resumen" className="btn btn-ghost btn-sm">
+                Resumen
+              </a>
+            )}
+            {quiz && (
+              <a href="#quiz" className="btn btn-ghost btn-sm">
+                Test
+              </a>
+            )}
+            <a href="#dudas" className="btn btn-ghost btn-sm">
+              Dudas
+            </a>
+            <Link href={`/cursos/${course.slug}/foro`} className="btn btn-ghost btn-sm">
+              Foro del curso
+            </Link>
+          </nav>
+
+          {(lesson.description || lesson.keyPoints.length > 0) && (
+            <section id="resumen" aria-labelledby="resumen-titulo" className="glass scroll-mt-24 space-y-4 p-6 sm:p-8">
+              <h2 id="resumen-titulo" className="text-2xl">
+                Resumen del vídeo
+              </h2>
+              {lesson.description && <p className="text-muted">{lesson.description}</p>}
+              {lesson.keyPoints.length > 0 && (
+                <ul className="space-y-2">
+                  {lesson.keyPoints.map((k, i) => (
+                    <li key={i} className="flex gap-3 text-sm leading-relaxed">
+                      <span aria-hidden className="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent" />
+                      <span>{k}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+
           {quiz && <LessonQuiz quiz={quiz} lastAttempt={lastAttempt} />}
+
+          <LessonDoubts lessonId={lesson.id} userId={user.id} role={role} forumUrl={`/cursos/${course.slug}/foro`} />
         </div>
 
       </CaptureGuard>

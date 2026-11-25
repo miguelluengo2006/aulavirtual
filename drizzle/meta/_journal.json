@@ -43,6 +43,13 @@
       "when": 1795370114114,
       "tag": "0005_perf_indexes",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795564574311,
+      "tag": "0006_community_and_key_points",
+      "breakpoints": true
     }
   ]
 }

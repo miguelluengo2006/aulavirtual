@@ -124,6 +124,7 @@ export async function importCourse(
           videoKey: les.video.key,
           durationSeconds: les.video.durationSeconds ?? null,
           sourceFile: les.sourceFile ?? null,
+          keyPoints: les.keyPoints ?? [],
         };
         const [dbLesson] = await tx
           .insert(lessons)
