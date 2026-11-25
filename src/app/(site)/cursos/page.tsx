@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { buyingFaqs, CourseList, Faq, FinalCta, Plans, SectionHeading } from "@/components/landing/marketing";
+import { buyingFaqs, CourseList, Faq, FinalCta, UpcomingCourses, Plans, SectionHeading } from "@/components/landing/marketing";
 import { getPublishedCourses } from "@/lib/course-data";
 import { formatTotalMinutes } from "@/lib/format";
 
@@ -41,10 +41,11 @@ export default function StorePage() {
         </div>
       </header>
 
-      <section id="catalogo" aria-label="Catálogo" className="scroll-mt-28">
+      <section id="catalogo" aria-label="Catálogo" className="scroll-mt-28 space-y-12">
         <Suspense fallback={<p className="text-subtle">Cargando cursos…</p>}>
           <CourseList />
         </Suspense>
+        <UpcomingCourses />
       </section>
 
       <section id="precios" className="scroll-mt-28 space-y-10">

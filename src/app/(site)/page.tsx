@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { HeroDemo } from "@/components/landing/hero-demo";
-import { Check, CourseList, FeatureIcon, features, FinalCta, SectionHeading } from "@/components/landing/marketing";
+import { Check, CourseList, FeatureIcon, features, FinalCta, UpcomingCourses, SectionHeading } from "@/components/landing/marketing";
 
 // Portada: qué es, cursos destacados y enlaces al resto de páginas.
 export default function Home() {
@@ -46,6 +46,7 @@ export default function Home() {
         <Suspense fallback={<p className="text-subtle">Cargando cursos…</p>}>
           <CourseList limit={3} />
         </Suspense>
+        <UpcomingCourses />
       </section>
 
       <section className="space-y-10">

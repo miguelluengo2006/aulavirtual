@@ -322,6 +322,41 @@ export async function CourseList({ limit }: { limit?: number } = {}) {
   );
 }
 
+/**
+ * Cursos que se están preparando (aún sin publicar). Solo título: sin precio,
+ * temario ni fechas hasta que estén confirmados. Quitar de aquí al publicarlo.
+ */
+export const upcomingCourses: readonly { slug: string; title: string }[] = [
+  { slug: "master-bim-online", title: "Master BIM Online" },
+];
+
+/** Bloque «Próximamente» con los cursos en preparación. */
+export function UpcomingCourses() {
+  if (upcomingCourses.length === 0) return null;
+  return (
+    <div className="space-y-4">
+      <h3 className="text-xl">Próximamente</h3>
+      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {upcomingCourses.map((c) => (
+          <li key={c.slug} className="glass flex h-full flex-col overflow-hidden !rounded-[2rem]">
+            <CourseCover slug={c.slug} className="h-32">
+              <div className="p-6">
+                <span className="chip border-white/20 bg-black/25 text-white">En preparación</span>
+              </div>
+            </CourseCover>
+            <div className="space-y-2 p-6">
+              <p className="text-2xl font-semibold tracking-tight">{c.title}</p>
+              <p className="text-sm text-muted">
+                Estamos preparando este curso. Crea tu cuenta y lo encontrarás aquí en cuanto se publique.
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 /** Cabecera de una página pública (un único h1 por página). */
 export function PageIntro({ eyebrow, title, text }: { eyebrow?: string; title: string; text: string }) {
   return (
