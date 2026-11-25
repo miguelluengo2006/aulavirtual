@@ -64,7 +64,7 @@ async function MyCourses() {
         <p className="text-muted">
           Aún no tienes cursos. Cuando compres uno o te suscribas, aparecerán aquí.
         </p>
-        <Link href="/#cursos" className="btn btn-primary">
+        <Link href="/cursos" className="btn btn-primary">
           Ver el catálogo
         </Link>
       </div>

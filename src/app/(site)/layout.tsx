@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { MobileNav } from "@/components/mobile-nav";
 import { UserMenu } from "@/components/user-menu";
 
 // Estructura de la web pública: cabecera, contenido y pie.
@@ -9,7 +10,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     <>
         <header className="sticky top-0 z-40 px-4 pt-4">
           <div className="glass mx-auto flex h-14 max-w-6xl items-center justify-between rounded-full bg-navy/80 px-3 pl-5">
-            <Link href="/" className="flex items-center gap-2.5 font-semibold tracking-tight">
+            <Link href="/" className="flex shrink-0 items-center gap-2.5 whitespace-nowrap font-semibold tracking-tight">
               <span
                 aria-hidden
                 className="grid size-7 place-items-center rounded-full bg-white text-sm font-semibold text-navy"
@@ -19,10 +20,11 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
               IDESIE AV
             </Link>
             <nav aria-label="Secciones" className="hidden items-center gap-1 text-sm md:flex">
-              <Link href="/#cursos" className="btn btn-sm text-muted hover:text-white">Cursos</Link>
-              <Link href="/#como-funciona" className="btn btn-sm text-muted hover:text-white">Cómo funciona</Link>
-              <Link href="/#precios" className="btn btn-sm text-muted hover:text-white">Precios</Link>
+              <Link href="/cursos" className="btn btn-sm text-muted hover:text-white">Cursos</Link>
+              <Link href="/como-funciona" className="btn btn-sm text-muted hover:text-white">Cómo funciona</Link>
+              <Link href="/sobre-nosotros" className="btn btn-sm text-muted hover:text-white">Sobre nosotros</Link>
             </nav>
+            <MobileNav />
             {/* La sesión se lee en la petición: va detrás de Suspense. */}
             <Suspense fallback={<span className="pr-3 text-sm text-subtle">…</span>}>
               <UserMenu />
@@ -44,10 +46,11 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
             <nav aria-label="Aprender" className="space-y-2">
               <p className="font-medium">Aprender</p>
               <ul className="space-y-1.5 text-muted">
-                <li><Link href="/#cursos" className="hover:text-white">Cursos</Link></li>
-                <li><Link href="/#como-funciona" className="hover:text-white">Cómo funciona</Link></li>
-                <li><Link href="/#precios" className="hover:text-white">Precios</Link></li>
-                <li><Link href="/#preguntas" className="hover:text-white">Preguntas frecuentes</Link></li>
+                <li><Link href="/cursos" className="hover:text-white">Cursos</Link></li>
+                <li><Link href="/cursos#precios" className="hover:text-white">Precios</Link></li>
+                <li><Link href="/como-funciona" className="hover:text-white">Cómo funciona</Link></li>
+                <li><Link href="/como-funciona#preguntas" className="hover:text-white">Preguntas frecuentes</Link></li>
+                <li><Link href="/sobre-nosotros" className="hover:text-white">Sobre nosotros</Link></li>
               </ul>
             </nav>
             <nav aria-label="Tu cuenta" className="space-y-2">
@@ -60,7 +63,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
             </nav>
           </div>
           <p className="mx-auto max-w-6xl px-4 pb-8 text-xs text-subtle sm:px-6">
-            © IDESIE AV
+            © IDESIE AV · Una plataforma de IDESIE Business &amp; Tech School
           </p>
         </footer>
     </>

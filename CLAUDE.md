@@ -283,6 +283,15 @@ Panel de admin (y panel del profesor, filtrado a sus cursos):
 - Límite de publicación: 5 mensajes por minuto y 40 por hora por persona, contando temas, respuestas y dudas (`POST_LIMITS`).
 - Reglas puras con tests en `src/lib/community-rules.ts`.
 
+## Web pública
+
+Cuatro páginas en `src/app/(site)/`, con piezas comunes en `src/components/landing/marketing.tsx` (`PageIntro`, `SectionHeading`, `CourseList`, `Plans`, `Faq`, `FinalCta`, textos de pasos, ventajas y preguntas frecuentes):
+- **Inicio** (`/`): portada, cursos destacados (3), tres ventajas y enlaces al resto.
+- **Tienda** (`/cursos`): catálogo completo (`#catalogo`), formas de acceso (`#precios`) y preguntas sobre la compra.
+- **Cómo funciona** (`/como-funciona`): pasos, qué hay dentro de cada lección, ventajas y preguntas frecuentes (`#preguntas`).
+- **Sobre nosotros** (`/sobre-nosotros`): **solo datos confirmados** de IDESIE (ficha docente y curso). Historia, sede, contacto o equipo se añaden cuando IDESIE los facilite; no inventar.
+- Menú: escritorio en la cabecera; en móvil, `src/components/mobile-nav.tsx` (se cierra al elegir página).
+
 ## Estructura de las páginas del curso
 
 - **Curso** (`/cursos/<slug>`): temario por módulos (número, lecciones, duración y progreso del módulo), descripción corta de cada lección y acceso al foro.
