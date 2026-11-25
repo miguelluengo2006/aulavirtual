@@ -50,6 +50,13 @@
       "when": 1795564574311,
       "tag": "0006_community_and_key_points",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795569927936,
+      "tag": "0007_course_sheet",
+      "breakpoints": true
     }
   ]
 }

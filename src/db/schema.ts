@@ -139,6 +139,10 @@ export const courses = pgTable("courses", {
   status: courseStatus("status").default("draft").notNull(),
   // Notas que dejó Claude Code al importar (suposiciones, TODOs).
   importNotes: jsonb("import_notes").$type<string[]>().default([]).notNull(),
+  // Ficha del curso: lo que se aprende, a quién va dirigido y quién lo imparte.
+  highlights: jsonb("highlights").$type<string[]>().default([]).notNull(),
+  audience: text("audience"),
+  instructors: jsonb("instructors").$type<{ name: string; role: string }[]>().default([]).notNull(),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

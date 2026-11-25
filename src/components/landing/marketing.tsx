@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { getPublishedCourses } from "@/lib/course-data";
-import { formatPrice, plural } from "@/lib/format";
+import { formatPrice, formatTotalMinutes, plural } from "@/lib/format";
 
 export const steps = [
   {
@@ -55,6 +55,37 @@ export const features = [
     text: "Los vídeos se ven solo dentro de la plataforma, con tu cuenta. Así los cursos siguen mereciendo lo que cuestan.",
   },
 ] as const;
+
+// Lo que el alumno encuentra en cada lección, en el mismo orden que en la página de la lección.
+export const lessonParts = [
+  { title: "El vídeo", text: "Una lección corta y al grano. Si lo dejas a medias, al volver sigue justo donde estabas." },
+  { title: "Resumen del vídeo", text: "Las ideas principales de la lección en unas pocas frases, para repasar de un vistazo." },
+  {
+    title: "Preguntas clave",
+    text: "5 preguntas sobre lo que se explica en el vídeo, sacadas de un banco más amplio: si repites, te salen otras. Ves la explicación de cada respuesta.",
+  },
+  { title: "Dudas", text: "Pregunta lo que no te haya quedado claro. El profesor del curso te responde en la misma lección." },
+  { title: "Foro del curso", text: "Para temas más generales: comparte tus ejercicios y aprende con el resto de alumnos." },
+];
+
+export const buyingFaqs = [
+  {
+    q: "¿Puedo ver el contenido antes de comprar?",
+    a: "Sí. En la página de cada curso tienes el temario completo, con todas las lecciones y su duración.",
+  },
+  {
+    q: "¿Cuánto tiempo tengo acceso a un curso?",
+    a: "Si lo compras suelto, para siempre. Con la suscripción, a todos los cursos incluidos mientras la tengas activa.",
+  },
+  {
+    q: "¿Puedo cancelar la suscripción?",
+    a: "Sí, cuando quieras. Mantienes el acceso hasta el final del periodo que ya has pagado, y los cursos que hayas comprado sueltos siguen siendo tuyos.",
+  },
+  {
+    q: "¿Puedo descargar los vídeos?",
+    a: "No. Todo el contenido se ve dentro de la plataforma, desde el navegador de cualquier dispositivo y con tu cuenta.",
+  },
+];
 
 export const faqs = [
   {
@@ -163,7 +194,109 @@ export function FeatureIcon({ name }: { name: (typeof features)[number]["icon"] 
   );
 }
 
-/** Tarjetas de los cursos publicados. Con `limit`, solo los primeros (portada). */
+/** Tono de la portada de cada curso: estable a partir de su dirección, dentro de la paleta azul-turquesa. */
+function coverHue(slug: string) {
+  let h = 0;
+  for (const c of slug) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return 195 + (h % 40); // 195–235: del turquesa al azul
+}
+
+/** Portada generada de un curso: degradados, retícula y brillo. Sin imágenes externas. */
+export function CourseCover({
+  slug,
+  className = "",
+  children,
+}: {
+  slug: string;
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  const hue = coverHue(slug);
+  return (
+    <div
+      className={`relative overflow-hidden ${className}`}
+      style={{
+        background: `radial-gradient(120% 140% at 0% 0%, hsl(${hue + 10} 90% 45%) 0%, hsl(${hue + 20} 80% 22%) 45%, #061430 100%)`,
+      }}
+    >
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-25 [mask-image:radial-gradient(80%_80%_at_70%_30%,black,transparent)]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgb(255 255 255 / 0.18) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.18) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-16 -right-10 size-56 rounded-full blur-3xl"
+        style={{ background: `hsl(${hue - 25} 80% 55% / 0.45)` }}
+      />
+      <div className="relative h-full">{children}</div>
+    </div>
+  );
+}
+
+type CatalogCourse = Awaited<ReturnType<typeof getPublishedCourses>>[number];
+
+function CourseMeta({ c }: { c: CatalogCourse }) {
+  return (
+    <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/80">
+      <li>{plural(c.moduleCount, "módulo", "módulos")}</li>
+      <li>{plural(c.lessonCount, "lección", "lecciones")}</li>
+      {c.totalSeconds >= 60 && <li>{formatTotalMinutes(c.totalSeconds)} de vídeo</li>}
+    </ul>
+  );
+}
+
+/** Tarjeta de un curso en la tienda. `featured`: versión ancha, para destacar. */
+export function CourseCard({ c, featured = false }: { c: CatalogCourse; featured?: boolean }) {
+  const teacher = c.instructors[0];
+  return (
+    <Link
+      href={`/cursos/${c.slug}`}
+      className={`group glass flex h-full overflow-hidden !rounded-[2rem] transition duration-300 hover:-translate-y-1 hover:border-white/25 hover:shadow-2xl hover:shadow-black/40 motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${featured ? "flex-col md:flex-row" : "flex-col"}`}
+    >
+      <CourseCover slug={c.slug} className={featured ? "min-h-56 md:w-[44%] md:shrink-0" : "h-44"}>
+        <div className="flex h-full flex-col justify-between p-6">
+          <div className="flex flex-wrap gap-2">
+            <span className="chip border-white/20 bg-black/25 text-white backdrop-blur-sm">Online · a tu ritmo</span>
+            {c.includedInSubscription && (
+              <span className="chip chip-accent backdrop-blur-sm">En la suscripción</span>
+            )}
+          </div>
+          <CourseMeta c={c} />
+        </div>
+      </CourseCover>
+      <div className="flex flex-1 flex-col gap-5 p-6 sm:p-8">
+        <div className="flex-1 space-y-3">
+          <h3 className={featured ? "text-3xl sm:text-4xl" : "text-2xl"}>{c.title}</h3>
+          <p className={`text-muted ${featured ? "line-clamp-4 text-lg" : "line-clamp-3 text-sm"}`}>{c.description}</p>
+          {teacher && (
+            <p className="flex items-center gap-2.5 pt-1 text-sm">
+              <span aria-hidden className="grid size-7 place-items-center rounded-full bg-white/10 text-xs font-semibold">
+                {teacher.name.charAt(0)}
+              </span>
+              <span className="text-muted">
+                Con <span className="text-white">{teacher.name}</span>
+              </span>
+            </p>
+          )}
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-5">
+          <span className="text-2xl font-semibold tracking-tight">{formatPrice(c.priceCents, c.currency)}</span>
+          <span className="btn btn-primary btn-sm transition group-hover:bg-white/90">Ver ficha del curso</span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+/**
+ * Cursos publicados. Con `limit`, solo los primeros (portada).
+ * Si solo hay uno, se muestra en grande (ficha destacada).
+ */
 export async function CourseList({ limit }: { limit?: number } = {}) {
   await connection();
   const all = await getPublishedCourses();
@@ -177,31 +310,12 @@ export async function CourseList({ limit }: { limit?: number } = {}) {
       </div>
     );
   }
-
+  if (list.length === 1) return <CourseCard c={list[0]} featured />;
   return (
-    <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {list.map((c) => (
         <li key={c.id}>
-          <Link
-            href={`/cursos/${c.slug}`}
-            className="glass flex h-full flex-col gap-5 overflow-hidden transition-colors hover:bg-white/10"
-          >
-            <div className="relative h-28 bg-[radial-gradient(120%_140%_at_0%_0%,#1d4ed8_0%,#0b2a5c_50%,transparent_100%)]">
-              <div className="absolute inset-0 bg-[radial-gradient(60%_80%_at_100%_100%,rgb(45_212_191/0.35),transparent_70%)]" />
-              <span className="absolute bottom-3 left-6 text-sm text-white/80">
-                {plural(c.lessonCount, "lección", "lecciones")}
-                {c.totalSeconds >= 60 && `, ${Math.round(c.totalSeconds / 60)} min de vídeo`}
-              </span>
-            </div>
-            <div className="flex-1 space-y-2 px-6">
-              <h3 className="text-xl">{c.title}</h3>
-              <p className="line-clamp-3 text-sm text-muted">{c.description}</p>
-            </div>
-            <div className="flex flex-wrap items-center justify-between gap-2 px-6 pb-6 text-sm">
-              <span className="text-lg font-semibold">{formatPrice(c.priceCents, c.currency)}</span>
-              {c.includedInSubscription && <span className="chip chip-accent">En la suscripción</span>}
-            </div>
-          </Link>
+          <CourseCard c={c} />
         </li>
       ))}
     </ul>

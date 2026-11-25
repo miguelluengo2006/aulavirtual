@@ -37,6 +37,8 @@ export async function getPublishedCourses() {
       includedInSubscription: courses.includedInSubscription,
       lessonCount: sql<number>`(select count(*)::int from "lessons" where "lessons"."course_id" = "courses"."id")`,
       totalSeconds: sql<number>`(select coalesce(sum("lessons"."duration_seconds"), 0)::int from "lessons" where "lessons"."course_id" = "courses"."id")`,
+      moduleCount: sql<number>`(select count(*)::int from "modules" where "modules"."course_id" = "courses"."id")`,
+      instructors: courses.instructors,
     })
     .from(courses)
     .where(eq(courses.status, "published"))
@@ -59,6 +61,9 @@ export async function getCourseOutline(slug: string) {
       currency: true,
       includedInSubscription: true,
       status: true,
+      highlights: true,
+      audience: true,
+      instructors: true,
     },
     with: {
       modules: {
@@ -153,4 +158,18 @@ export async function getLastAttempt(userId: string, quizId: string) {
     .orderBy(desc(quizAttempts.createdAt))
     .limit(1);
   return last ?? null;
+}
+
+/** Preguntas de repaso de un curso (para la ficha de la tienda). */
+export async function getCourseQuestionCount(courseId: string) {
+  "use cache";
+  cacheTag("courses");
+  cacheLife(COURSES_CACHE);
+  const [r] = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(questions)
+    .innerJoin(quizzes, eq(quizzes.id, questions.quizId))
+    .innerJoin(lessons, eq(lessons.id, quizzes.lessonId))
+    .where(eq(lessons.courseId, courseId));
+  return r?.n ?? 0;
 }

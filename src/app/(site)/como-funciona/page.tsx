@@ -1,23 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { faqs, FeatureIcon, features, Faq, FinalCta, PageIntro, SectionHeading, steps } from "@/components/landing/marketing";
+import { faqs, FeatureIcon, features, Faq, FinalCta, lessonParts, PageIntro, SectionHeading, steps } from "@/components/landing/marketing";
 
 export const metadata: Metadata = {
   title: "Cómo funciona",
   description: "Cómo se aprende en IDESIE AV: lecciones en vídeo, resumen, preguntas clave, dudas con el profesor y foro del curso.",
 };
-
-// Lo que el alumno encuentra en cada lección, en el mismo orden que en la página de la lección.
-const lessonParts = [
-  { title: "El vídeo", text: "Una lección corta y al grano. Si lo dejas a medias, al volver sigue justo donde estabas." },
-  { title: "Resumen del vídeo", text: "Las ideas principales de la lección en unas pocas frases, para repasar de un vistazo." },
-  {
-    title: "Preguntas clave",
-    text: "5 preguntas sobre lo que se explica en el vídeo, sacadas de un banco más amplio: si repites, te salen otras. Ves la explicación de cada respuesta.",
-  },
-  { title: "Dudas", text: "Pregunta lo que no te haya quedado claro. El profesor del curso te responde en la misma lección." },
-  { title: "Foro del curso", text: "Para temas más generales: comparte tus ejercicios y aprende con el resto de alumnos." },
-];
 
 export default function HowItWorksPage() {
   return (

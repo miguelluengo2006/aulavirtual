@@ -62,6 +62,9 @@ export async function importCourse(
       currency: m.pricing.currency,
       includedInSubscription: m.pricing.includedInSubscription,
       importNotes: m.notes,
+      highlights: m.highlights ?? [],
+      audience: m.audience ?? null,
+      instructors: m.instructors ?? [],
     };
 
     // La importación nunca cambia el estado: un curso nuevo nace como borrador.

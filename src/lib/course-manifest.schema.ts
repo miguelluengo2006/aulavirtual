@@ -57,6 +57,13 @@ export const courseManifestSchema = z
     title: z.string().min(1),
     description: z.string().min(1),
     coverImage: z.string().optional(),
+    // Ficha del curso (tienda): lo que se aprende, a quién va dirigido y quién lo imparte.
+    highlights: z.array(z.string().trim().min(5).max(300)).max(12).optional(),
+    audience: z.string().trim().min(5).max(500).optional(),
+    instructors: z
+      .array(z.object({ name: z.string().trim().min(2).max(120), role: z.string().trim().min(2).max(160) }))
+      .max(10)
+      .optional(),
     pricing: z.object({
       // null si el precio no viene en la carpeta: se fija desde el panel.
       priceCents: z.number().int().nonnegative().nullable(),

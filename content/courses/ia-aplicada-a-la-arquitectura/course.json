@@ -3,6 +3,24 @@
   "slug": "ia-aplicada-a-la-arquitectura",
   "title": "IA Aplicada a la Arquitectura",
   "description": "Un curso para integrar la inteligencia artificial generativa en el flujo de trabajo del arquitecto de forma sistemática, crítica y profesional: desde entender cómo funciona un LLM hasta operar agentes dentro de Revit.",
+  "highlights": [
+    "Integrar la IA generativa en el flujo del arquitecto de forma sistemática, crítica y profesional, eligiendo la herramienta adecuada para cada fase del proyecto.",
+    "Configurar asistentes especializados con documentación técnica, normativa y procedimientos del estudio: de uso puntual a sistema replicable y escalable.",
+    "Evaluar críticamente el impacto ético, laboral y profesional de la IA en el sector AECO.",
+    "Entender cómo funcionan los principales modelos generativos: modelos de lenguaje (LLM) y modelos de difusión.",
+    "Conocer las plataformas BIM+IA más relevantes y sus casos de uso por fase de proyecto.",
+    "Integrar IA y BIM mediante protocolos como MCP y su implementación en Revit.",
+    "Redactar prompts estructurados y Skills reutilizables para tareas recurrentes.",
+    "Generar imágenes fotorrealistas y vídeos de presentación con el flujo imagen + vídeo.",
+    "Operar agentes de IA dentro de Revit (Adarcus, Pele AI, WiseBIM, Glyph) mediante lenguaje natural."
+  ],
+  "audience": "Arquitectos e ingenieros que quieren integrar la IA generativa en su trabajo, también sin base técnica. 100 % online y a tu ritmo.",
+  "instructors": [
+    {
+      "name": "José Carlos Martín Mateos",
+      "role": "Docente de IA Aplicada a la Arquitectura · Master BIM de IDESIE"
+    }
+  ],
   "pricing": {
     "priceCents": 24999,
     "currency": "eur",
@@ -8207,6 +8225,7 @@
     "Profesor: José Carlos Martín Mateos (email de la ficha docente). Se asignará cuando tenga cuenta y se reimporte.",
     "Se ha supuesto que el curso entra en la suscripción (no se indica en el material).",
     "Títulos de módulo tomados del HTML del curso; el módulo 5 no aparece en la ficha docente.",
-    "Quizzes: banco de 10–12 preguntas por lección (5 por intento). Las 5 primeras salen del HTML de cada lección (TEMARIO/); el resto y los puntos clave, del guion de cada vídeo (VIDEOS_CLASES/narration/). Donde el guion no daba para más, hay menos preguntas. No se han usado los Test-Modulo-N.html."
+    "Quizzes: banco de 10–12 preguntas por lección (5 por intento). Las 5 primeras salen del HTML de cada lección (TEMARIO/); el resto y los puntos clave, del guion de cada vídeo (VIDEOS_CLASES/narration/). Donde el guion no daba para más, hay menos preguntas. No se han usado los Test-Modulo-N.html.",
+    "Ficha de la tienda: «Lo que aprenderás» son las competencias del curso (Curso_IA_Arquitectura_IDESIE.html y ficha docente); el público y el formato, del mismo HTML; el profesor, de la ficha docente."
   ]
 }
