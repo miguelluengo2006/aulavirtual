@@ -7,7 +7,7 @@
 1. **Con Claude Code**: el admin pasa una carpeta con los vídeos (ya subidos a Cloudflare) y HTML de referencia. Claude Code genera un manifiesto `course.json`, crea los quizzes y lo importa como **borrador**.
 2. **Desde el panel de admin**: el admin crea, edita, reordena y publica cursos, módulos, lecciones y preguntas.
 
-No hay archivos descargables. Todo el contenido se consume dentro de la plataforma.
+Los vídeos y los tests se consumen solo dentro de la plataforma. Lo único descargable son los **recursos** que el admin añade a una lección o a un módulo (ver "Recursos").
 
 ## Stack
 
@@ -51,7 +51,7 @@ Better Auth (`src/lib/auth.ts`) con email y contraseña. Pantallas en `src/compo
 Secciones (barra lateral azul marino, contenido claro):
 - **Resumen**: cifras, borradores pendientes y actividad reciente.
 - **Cursos**: lista con filtros. "Crear curso" abre un **asistente de 3 pasos** (`_components/course-wizard.tsx`): datos y precio → temario (módulos y lecciones arrastrables, "Pegar varias" con un título por línea) → revisar y crear (borrador o publicar si no falta nada). Crea todo en una sola acción (`createCourseWithContent`).
-- **Editor de curso** `/admin/cursos/<id>` por pestañas (`?tab=temario|datos|personas|ajustes`): temario con arrastrar y soltar (`_components/sortable.tsx`, dnd-kit, también con teclado; guarda con `reorderModules`/`reorderLessons`), edición de lecciones en línea, quiz de cada lección, profesores, acceso gratis y eliminar.
+- **Editor de curso** `/admin/cursos/<id>` por pestañas (`?tab=temario|recursos|datos|personas|ajustes`): temario con arrastrar y soltar (`_components/sortable.tsx`, dnd-kit, también con teclado; guarda con `reorderModules`/`reorderLessons`), edición de lecciones en línea, quiz de cada lección, profesores, acceso gratis y eliminar.
 - **Usuarios**: filtros (alumnos, profesores, admins, bloqueados), cambio de rol desde la propia lista, **invitar** (crea la cuenta con email confirmado, rol y cursos opcionales, y envía un enlace de 7 días para elegir contraseña), y ficha con bloquear/desbloquear, cerrar sesiones, enviar enlace de contraseña y dar o quitar cursos.
 - **Actividad**: registro de auditoría.
 
@@ -110,6 +110,8 @@ lesson_questions (id, lesson_id, user_id, body, status: open|answered, created_a
 lesson_answers (id, question_id, user_id, body, is_teacher, created_at)
 forum_threads (id, course_id, user_id, title, pinned, locked, created_at)
 forum_posts (id, thread_id, user_id, body, is_teacher, created_at)
+resources (id, course_id, module_id | lesson_id, kind: link|file, title, url, file_key, file_name,
+           content_type, size_bytes, position)   -- material de apoyo; uno de los dos padres
 ```
 
 `position` es un entero que empieza en 0; al reordenar desde el panel se reescriben las posiciones del grupo en una transacción.
@@ -246,10 +248,10 @@ Ninguna web puede impedir una captura (la hace el sistema operativo) ni una grab
 
 1. Crear el bucket (privado, sin dominio público).
 2. Token de API con "Object Read & Write" solo para ese bucket → `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`.
-3. **CORS del bucket** (Settings → CORS policy), imprescindible para hls.js:
+3. **CORS del bucket** (Settings → CORS policy), imprescindible para hls.js (GET) y para subir recursos desde el panel (PUT):
    ```json
    [{ "AllowedOrigins": ["http://localhost:3000", "https://<dominio-de-la-web>"],
-      "AllowedMethods": ["GET", "HEAD"], "AllowedHeaders": ["Range"], "MaxAgeSeconds": 3600 }]
+      "AllowedMethods": ["GET", "HEAD", "PUT"], "AllowedHeaders": ["Range", "Content-Type"], "MaxAgeSeconds": 3600 }]
    ```
 
 Para pruebas sin R2: `R2_ENDPOINT` apunta a un S3 local (p. ej. `python3 -m moto.server -p 4566`).
@@ -272,6 +274,14 @@ Panel de admin (y panel del profesor, filtrado a sus cursos):
 - Alumnos activos (7 y 30 días)
 - Dudas sin responder por curso y tiempo medio de respuesta del profesor
 - Ingresos: compras únicas vs. suscripciones (solo admin)
+
+## Recursos
+
+Material de apoyo de una lección o de un módulo (los de un módulo salen en todas sus lecciones): **archivos** (PDF, Office, imágenes, ZIP, DWG/DXF/IFC/RVT/RFA/NWD…, hasta 200 MB) o **enlaces** http(s).
+- Se gestionan en el panel, pestaña **Recursos** del curso (`_components/resources-panel.tsx`, acciones en `_actions/resources.ts`): añadir, renombrar, ordenar y quitar. Reglas puras con tests en `src/lib/resource-rules.ts`.
+- Los archivos van al mismo bucket R2, en `recursos/<courseId>/<uuid>/<nombre>`. El navegador del admin los sube **directamente a R2** con una URL firmada (`presignPut`), porque Vercel no acepta subidas grandes; después `addFileResource` comprueba que la clave es de ese curso y que el archivo existe y no pasa del límite. Al quitar un recurso se borra también de R2.
+- El alumno los descarga por `GET /api/recursos/<id>`: comprueba `canAccessCourse` y redirige a una URL firmada de 5 minutos que descarga con su nombre (`Content-Disposition: attachment`). Los enlaces también pasan por ahí y se abren en otra pestaña.
+- **CORS del bucket**: además de GET/HEAD, debe permitir **PUT** con la cabecera `Content-Type` desde la web (ver "Configuración de R2").
 
 ## Dudas y foro
 
@@ -297,7 +307,9 @@ Cuatro páginas en `src/app/(site)/`, con piezas comunes en `src/components/land
 ## Estructura de las páginas del curso
 
 - **Curso** (`/cursos/<slug>`): la ficha de la tienda (ver «Web pública»); con acceso muestra el progreso, «Continuar» y el foro.
-- **Lección** (`/cursos/<slug>/<lección>`): vídeo; curso, módulo y "Lección N de M"; índice de apartados (Resumen, Test, Dudas, Foro del curso); **Resumen del vídeo** (descripción + puntos clave); **Test**; **Dudas**.
+- **Aula**: el vídeo y el test van en **páginas distintas** con el mismo marco (`LessonFrame` en `src/components/classroom/lesson-frame.tsx`): ruta curso / módulo, título, "Lección N de M", pestañas **Vídeo · Test · Foro**, lección anterior y siguiente, e índice lateral con módulos desplegables (abierto el actual), progreso por módulo y, en cada lección, duración, si tiene test (y si ya lo hizo) y cuántos recursos. Los datos comunes los carga `loadLesson` (`src/lib/lesson-page.ts`), que comprueba sesión y acceso.
+- **Vídeo** (`/cursos/<slug>/<lección>`): reproductor; atajos; **Resumen del vídeo** (descripción + puntos clave); **Recursos** (de la lección y de su módulo); tarjeta para ir al test (con el mejor resultado); **Dudas**.
+- **Test** (`/cursos/<slug>/<lección>/test`): solo el test (`LessonQuiz`); si no ha visto el vídeo, se le sugiere verlo antes. Sin test, redirige al vídeo.
 
 ## Diseño
 

@@ -1,7 +1,9 @@
 // Cliente de Cloudflare R2 (API compatible con S3).
 // Sin "server-only": lo usan también los scripts. NUNCA importar desde un Client Component.
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
+  HeadObjectCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -90,7 +92,7 @@ export function r2Origin(): string | null {
 export function presignGet(
   key: string,
   expiresInSeconds: number,
-  opts: { signingDate?: Date; cacheSeconds?: number } = {},
+  opts: { signingDate?: Date; cacheSeconds?: number; downloadName?: string; contentType?: string } = {},
 ): Promise<string> {
   return getSignedUrl(
     r2(),
@@ -100,6 +102,11 @@ export function presignGet(
       ...(opts.cacheSeconds
         ? { ResponseCacheControl: `private, max-age=${opts.cacheSeconds}, immutable` }
         : {}),
+      // Recursos: se descargan con su nombre (nunca se abren como página de la web).
+      ...(opts.downloadName
+        ? { ResponseContentDisposition: `attachment; filename="${opts.downloadName.replace(/["\\]/g, "")}"` }
+        : {}),
+      ...(opts.contentType ? { ResponseContentType: opts.contentType } : {}),
     }),
     { expiresIn: expiresInSeconds, ...(opts.signingDate ? { signingDate: opts.signingDate } : {}) },
   );
@@ -120,4 +127,33 @@ export async function putObject(
       ...(cacheControl ? { CacheControl: cacheControl } : {}),
     }),
   );
+}
+
+/**
+ * URL firmada para que el navegador del admin suba un archivo directamente a R2
+ * (así no pasa por el servidor, que en Vercel no acepta archivos grandes).
+ * Requiere que el CORS del bucket permita PUT desde la web.
+ */
+export function presignPut(key: string, contentType: string, expiresInSeconds = 15 * 60): Promise<string> {
+  return getSignedUrl(
+    r2(),
+    new PutObjectCommand({ Bucket: r2Bucket(), Key: key, ContentType: contentType }),
+    { expiresIn: expiresInSeconds },
+  );
+}
+
+export async function deleteObject(key: string): Promise<void> {
+  await r2().send(new DeleteObjectCommand({ Bucket: r2Bucket(), Key: key }));
+}
+
+/** Tamaño de un objeto en R2, o null si no existe. */
+export async function objectSize(key: string): Promise<number | null> {
+  try {
+    const r = await r2().send(new HeadObjectCommand({ Bucket: r2Bucket(), Key: key }));
+    return r.ContentLength ?? 0;
+  } catch (e) {
+    const name = (e as { name?: string }).name;
+    if (name === "NotFound" || name === "NoSuchKey") return null;
+    throw e;
+  }
 }

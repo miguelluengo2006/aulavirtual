@@ -2,14 +2,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getCourseForEdit } from "@/lib/admin/queries";
+import { resourcesForCourseEdit } from "@/lib/resources";
 import { formatPrice, plural } from "@/lib/format";
 import { ContentEditor } from "../../_components/content-editor";
 import { CourseActionsBar, DeleteCourse } from "../../_components/course-actions";
 import { CourseForm } from "../../_components/course-form";
 import { AccessPanel, TeachersPanel } from "../../_components/people-panels";
+import { ResourcesPanel } from "../../_components/resources-panel";
 import { Card, PageHeader, StatusChip, Tabs } from "../../_components/ui";
 
-const TABS = ["temario", "datos", "personas", "ajustes"] as const;
+const TABS = ["temario", "recursos", "datos", "personas", "ajustes"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function AdminCoursePage({ params, searchParams }: PageProps<"/admin/cursos/[id]">) {
@@ -32,6 +34,7 @@ async function Editor({
   const tab: Tab = TABS.includes(rawTab as Tab) ? (rawTab as Tab) : "temario";
   const data = await getCourseForEdit(id);
   if (!data) notFound();
+  const courseResources = await resourcesForCourseEdit(id);
   const { course, teachers, access, progressByLesson, issues } = data;
   const lessonCount = course.modules.reduce((n, m) => n + m.lessons.length, 0);
   const purchases = access.filter((a) => a.source === "purchase").length;
@@ -66,6 +69,7 @@ async function Editor({
         active={tab}
         items={[
           { key: "temario", label: "Temario", href: href("temario"), count: lessonCount },
+          { key: "recursos", label: "Recursos", href: href("recursos"), count: courseResources.length },
           { key: "datos", label: "Datos y precio", href: href("datos") },
           { key: "personas", label: "Profesores y alumnos", href: href("personas"), count: teachers.length + access.length },
           { key: "ajustes", label: "Ajustes", href: href("ajustes") },
@@ -99,6 +103,19 @@ async function Editor({
                 progressCount: progressByLesson[l.id] ?? 0,
               })),
             }))}
+          />
+        </>
+      )}
+
+      {tab === "recursos" && (
+        <>
+          <p className="text-sm a-muted">
+            Material de apoyo que los alumnos ven en cada lección: archivos (PDF, planos, modelos…) o enlaces. Los de un módulo
+            aparecen en todas sus lecciones. Solo los ven quienes tienen acceso al curso.
+          </p>
+          <ResourcesPanel
+            modules={course.modules.map((m) => ({ id: m.id, title: m.title, lessons: m.lessons.map((l) => ({ id: l.id, title: l.title })) }))}
+            resources={courseResources}
           />
         </>
       )}

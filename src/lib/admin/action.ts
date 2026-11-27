@@ -31,7 +31,7 @@ export type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 export type AuditEntry = {
   action: string;
-  targetType: "course" | "module" | "lesson" | "quiz" | "user" | "enrollment" | "teacher";
+  targetType: "course" | "module" | "lesson" | "quiz" | "user" | "enrollment" | "teacher" | "resource";
   targetId?: string | null;
   summary: string;
   details?: Record<string, unknown>;

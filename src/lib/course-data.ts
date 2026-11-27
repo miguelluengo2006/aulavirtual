@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, inArray, max, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import {
@@ -80,6 +80,8 @@ export async function getCourseOutline(slug: string) {
               keyPoints: true,
               durationSeconds: true,
             },
+            // Solo para saber si la lección tiene test y de cuántas preguntas (nunca las respuestas).
+            with: { quiz: { columns: { id: true }, with: { questions: { columns: { id: true } } } } },
           },
         },
       },
@@ -172,4 +174,22 @@ export async function getCourseQuestionCount(courseId: string) {
     .innerJoin(lessons, eq(lessons.id, quizzes.lessonId))
     .where(eq(lessons.courseId, courseId));
   return r?.n ?? 0;
+}
+
+/** Resultado del alumno en los tests indicados: intentos y mejor nota, por id de quiz. */
+export async function getQuizResults(userId: string, quizIds: string[]) {
+  if (quizIds.length === 0) return new Map<string, { attempts: number; best: number; total: number }>();
+  const rows = await db
+    .select({
+      quizId: quizAttempts.quizId,
+      attempts: count(),
+      best: max(sql<number>`${quizAttempts.score}::float / nullif(${quizAttempts.total}, 0)`),
+      total: max(quizAttempts.total),
+    })
+    .from(quizAttempts)
+    .where(and(eq(quizAttempts.userId, userId), inArray(quizAttempts.quizId, quizIds)))
+    .groupBy(quizAttempts.quizId);
+  return new Map(
+    rows.map((r) => [r.quizId, { attempts: r.attempts, best: Number(r.best ?? 0), total: r.total ?? 0 }]),
+  );
 }

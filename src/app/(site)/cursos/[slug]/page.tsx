@@ -272,7 +272,7 @@ async function Course({ params }: { params: Promise<{ slug: string }> }) {
             <SectionHeading title="Cómo es cada lección" text="Todas siguen la misma estructura, para que sepas siempre dónde está cada cosa." />
             <ol className="grid gap-3 sm:grid-cols-2">
               {lessonParts.map((p, i) => (
-                <li key={p.title} className={`glass flex gap-4 p-5 ${i === lessonParts.length - 1 ? "sm:col-span-2" : ""}`}>
+                <li key={p.title} className="glass flex gap-4 p-5">
                   <span className="grid size-8 shrink-0 place-items-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
                     {i + 1}
                   </span>

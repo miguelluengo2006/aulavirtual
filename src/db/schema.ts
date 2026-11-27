@@ -210,6 +210,42 @@ export const quizzes = pgTable("quizzes", {
     .references(() => lessons.id, { onDelete: "cascade" }),
 });
 
+// Recursos de una lección o de un módulo (enlaces o archivos guardados en R2).
+// Exactamente uno de lesson_id o module_id. Solo los ven quienes tienen acceso al curso.
+export const resourceKind = pgEnum("resource_kind", ["link", "file"]);
+
+export const resources = pgTable(
+  "resources",
+  {
+    id: id(),
+    courseId: text("course_id")
+      .notNull()
+      .references(() => courses.id, { onDelete: "cascade" }),
+    moduleId: text("module_id").references(() => modules.id, { onDelete: "cascade" }),
+    lessonId: text("lesson_id").references(() => lessons.id, { onDelete: "cascade" }),
+    kind: resourceKind("kind").notNull(),
+    title: text("title").notNull(),
+    // Enlace (kind = link) o clave del archivo en R2 (kind = file).
+    url: text("url"),
+    fileKey: text("file_key"),
+    fileName: text("file_name"),
+    contentType: text("content_type"),
+    sizeBytes: bigint("size_bytes", { mode: "number" }),
+    position: integer("position").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index("resources_course_idx").on(t.courseId),
+    index("resources_module_idx").on(t.moduleId),
+    index("resources_lesson_idx").on(t.lessonId),
+    check("resources_one_parent", sql`(${t.moduleId} is null) <> (${t.lessonId} is null)`),
+    check(
+      "resources_kind_fields",
+      sql`(${t.kind} = 'link' and ${t.url} is not null) or (${t.kind} = 'file' and ${t.fileKey} is not null)`,
+    ),
+  ],
+);
+
 export const questions = pgTable(
   "questions",
   {
@@ -506,11 +542,19 @@ export const courseTeachersRelations = relations(courseTeachers, ({ one }) => ({
 export const modulesRelations = relations(modules, ({ one, many }) => ({
   course: one(courses, { fields: [modules.courseId], references: [courses.id] }),
   lessons: many(lessons),
+  resources: many(resources),
 }));
 
-export const lessonsRelations = relations(lessons, ({ one }) => ({
+export const lessonsRelations = relations(lessons, ({ one, many }) => ({
   module: one(modules, { fields: [lessons.moduleId], references: [modules.id] }),
   quiz: one(quizzes, { fields: [lessons.id], references: [quizzes.lessonId] }),
+  resources: many(resources),
+}));
+
+export const resourcesRelations = relations(resources, ({ one }) => ({
+  course: one(courses, { fields: [resources.courseId], references: [courses.id] }),
+  module: one(modules, { fields: [resources.moduleId], references: [modules.id] }),
+  lesson: one(lessons, { fields: [resources.lessonId], references: [lessons.id] }),
 }));
 
 export const quizzesRelations = relations(quizzes, ({ one, many }) => ({

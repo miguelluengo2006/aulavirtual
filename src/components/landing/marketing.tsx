@@ -60,9 +60,10 @@ export const features = [
 export const lessonParts = [
   { title: "El vídeo", text: "Una lección corta y al grano. Si lo dejas a medias, al volver sigue justo donde estabas." },
   { title: "Resumen del vídeo", text: "Las ideas principales de la lección en unas pocas frases, para repasar de un vistazo." },
+  { title: "Recursos", text: "Cuando la lección o el módulo los tiene: documentos, planos, modelos o enlaces para practicar." },
   {
-    title: "Preguntas clave",
-    text: "5 preguntas sobre lo que se explica en el vídeo, sacadas de un banco más amplio: si repites, te salen otras. Ves la explicación de cada respuesta.",
+    title: "Test",
+    text: "En su propia pestaña, aparte del vídeo: 5 preguntas sacadas de un banco más amplio, así que si repites te salen otras. Ves la explicación de cada respuesta.",
   },
   { title: "Dudas", text: "Pregunta lo que no te haya quedado claro. El profesor del curso te responde en la misma lección." },
   { title: "Foro del curso", text: "Para temas más generales: comparte tus ejercicios y aprende con el resto de alumnos." },
